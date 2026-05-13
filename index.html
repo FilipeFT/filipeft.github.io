@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Habana | Editor de Projetos</title>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
     <style>
         :root {
             --brand: #004a80;
@@ -159,6 +158,7 @@
             <div class="block-tools">
                 <button class="btn-tool" onclick="moveUp(this.parentElement.parentElement)">↑</button>
                 <button class="btn-tool" onclick="moveDown(this.parentElement.parentElement)">↓</button>
+                <button class="btn-tool btn-del" onclick="this.parentElement.parentElement.remove(); calc();">×</button>
             </div>
             <h2>Plano de Bolsas (Capital Humano)</h2>
             <table id="tab-bolsas">
@@ -190,6 +190,7 @@
             <div class="block-tools">
                 <button class="btn-tool" onclick="moveUp(this.parentElement.parentElement)">↑</button>
                 <button class="btn-tool" onclick="moveDown(this.parentElement.parentElement)">↓</button>
+                <button class="btn-tool btn-del" onclick="this.parentElement.parentElement.remove(); calc();">×</button>
             </div>
             <h2>Custeio e Operação</h2>
             <table id="tab-custeio">
@@ -220,8 +221,62 @@
 </div>
 
 <script>
-    const utoa = (s) => btoa(unescape(encodeURIComponent(s)));
-    const atou = (s) => decodeURIComponent(escape(atob(s)));
+    // --- CONFIGURAÇÃO DO COMPRESSOR BINÁRIO ---
+
+    // Dicionário Estático: Termos comuns que não precisam ser repetidos na URL
+    const DICT = ["", "Engenheiro", "Coordenador", "Técnico", "DTI-A", "DTI-B", "DTI-C", "EV-G", "Bolsa", "Mensalidade", "Custeio", "Equipamento", "Consumo", "Passagens", "Diárias", "CNPq", "PROSUL"];
+
+    /**
+     * Serializa uma string usando o dicionário ou texto puro
+     */
+    function writeSmartString(view, str) {
+        const dictIndex = DICT.indexOf(str);
+        if (dictIndex !== -1) {
+            view.push(dictIndex); // Byte < 128: Índice no dicionário
+        } else {
+            const encoder = new TextEncoder();
+            const bytes = encoder.encode(str);
+            view.push(bytes.length + 128); // Byte >= 128: Tamanho da string (+128)
+            bytes.forEach(b => view.push(b));
+        }
+    }
+
+    /**
+     * Lê uma string serializada
+     */
+    function readSmartString(state) {
+        const header = state.bytes[state.pos++];
+        if (header < 128) return DICT[header];
+        const len = header - 128;
+        const strBytes = state.bytes.slice(state.pos, state.pos + len);
+        state.pos += len;
+        return new TextDecoder().decode(strBytes);
+    }
+
+    /**
+     * VLQ: Escreve números de forma compacta (7 bits por byte)
+     */
+    function writeVLQ(view, num) {
+        num = Math.round(num);
+        while (num >= 128) {
+            view.push((num & 0x7F) | 0x80);
+            num >>>= 7;
+        }
+        view.push(num);
+    }
+
+    function readVLQ(state) {
+        let num = 0, shift = 0, byte;
+        do {
+            byte = state.bytes[state.pos++];
+            num |= (byte & 0x7F) << shift;
+            shift += 7;
+        } while (byte & 0x80);
+        return num;
+    }
+
+
+    // --- FUNÇÕES DE UI E MANIPULAÇÃO DO DOM ---
 
     function moveUp(el) { if(el.previousElementSibling) el.parentNode.insertBefore(el, el.previousElementSibling); }
     function moveDown(el) { if(el.nextElementSibling) el.parentNode.insertBefore(el.nextElementSibling, el); }
@@ -275,101 +330,131 @@
         alert.className = "alert-ui " + (p < 50 ? "bad" : "good");
     }
 
-    // Mapeamento para reduzir o tamanho das strings fixas
-    const TYPE_MAP = { "text": 0, "table-bolsas": 1, "table-custeio": 2 };
-    const REV_MAP = { 0: "text", 1: "table-bolsas", 2: "table-custeio" };
+    function bind() { document.querySelectorAll('[contenteditable="true"]').forEach(e => e.oninput = calc); }
+
+
+    // --- FUNÇÕES PRINCIPAIS DE SERIALIZAÇÃO ---
 
     function gerarSnapshot() {
-        // Criamos um objeto ultra-compacto
-        const snap = {
-            t: document.getElementById('proj-title').innerText,
-            s: []
-        };
+    	try {
+        	let buffer = [];
+        
+        	// 1. Título do Projeto
+        	(buffer, document.getElementById('proj-title').innerText);
+        
+        	// 2. Quantidade de Blocos
+        	const blocks = document.querySelectorAll('.block');
+        	buffer.push(blocks.length);
+        	
+        	blocks.forEach(b => {
+        	    const type = b.getAttribute('data-type');
+        	    const typeId = type === 'text' ? 0 : (type === 'table-bolsas' ? 1 : 2);
+        	    buffer.push(typeId);
+	
+        	    if (typeId === 0) { // TEXTO: Título + Parágrafo
+        	        writeSmartString(buffer, b.querySelector('h2').innerText);
+        	        writeSmartString(buffer, b.querySelector('p').innerText);
+        	    } else { // TABELAS: Qtd Linhas + Dados das Células
+        	        const rows = b.querySelectorAll('tbody tr');
+        	        buffer.push(rows.length);
+        	        rows.forEach(r => {
+        	            writeSmartString(buffer, r.cells[0].innerText); // Item/Descrição
+        	            writeVLQ(buffer, parseFloat(r.cells[1].innerText) || 0); // Valor
+        	            buffer.push(parseInt(r.cells[2].innerText) || 0); // Meses
+        	            buffer.push(parseInt(r.cells[3].innerText) || 0); // Qtd
+        	        });
+        	    }
+        	});
 
-        document.querySelectorAll('.block').forEach(b => {
-            const typeStr = b.getAttribute('data-type');
-            const typeId = TYPE_MAP[typeStr];
-            
-            if(typeId === 0) { // Texto
-                snap.s.push([
-                    typeId, 
-                    b.querySelector('h2').innerText, 
-                    b.querySelector('p').innerText
-                ]);
-            } else { // Tabelas
-                const rows = [];
-                b.querySelectorAll('tbody tr').forEach(r => {
-                    // Salvamos apenas os valores em um array simples, sem chaves
-                    rows.push([
-                        r.cells[0].innerText, // d
-                        r.cells[1].innerText, // v
-                        r.cells[2].innerText, // m
-                        r.cells[3].innerText  // q
-                    ]);
-                });
-                snap.s.push([typeId, rows]);
-            }
-        });
-
-        // Comprimimos usando LZ-String (específico para URI)
-        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(snap));
-        const url = window.location.origin + window.location.pathname + '?d=' + compressed;
-
-        navigator.clipboard.writeText(url).then(() => {
-            alert("Snapshot ultra-comprimido salvo!");
-            window.history.pushState({}, '', url);
-        });
-    }
+        	// Converte de forma segura, evitando "Maximum call stack size exceeded"
+        	const binary = buffer.map(b => String.fromCharCode(b)).join('');
+        	const compressed = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        
+        	const url = window.location.origin + window.location.pathname + '?h=' + compressed;
+        
+	        // Atualiza a URL do navegador imediatamente
+    	    window.history.pushState({}, '', url);
+    	    
+    	    // Tenta usar a API moderna de Clipboard
+    	    if (navigator.clipboard && window.isSecureContext) {
+    	        navigator.clipboard.writeText(url).then(() => {
+    	            alert("Snapshot Binário Gerado! Link copiado para a área de transferência.");
+    	        }).catch(err => {
+    	            // Se a cópia falhar por alguma permissão do usuário
+    	            prompt("Snapshot gerado! Copie o link abaixo:", url);
+    	        });
+    	    } else {
+    	        // Fallback seguro para rodar via file:// (sem https)
+    	        prompt("Snapshot gerado! Sua conexão local não permite cópia invisível. Copie o link abaixo:", url);
+    	    }
+    	} catch (error) {
+    	    console.error("Erro ao gerar snapshot:", error);
+    	    alert("Ocorreu um erro ao comprimir os dados. Verifique o console.");
+    	}
+	}
 
     function load() {
         const params = new URLSearchParams(window.location.search);
-        // Tentamos ler o parâmetro novo 'd' ou o antigo 'data' para compatibilidade
-        const rawData = params.get('d') || params.get('data');
+        const data = params.get('h');
         
-        if(!rawData) { calc(); bind(); return; }
+        // Se a pessoa estiver usando link antigo sem 'h' mas com 'data' (JSON), 
+        // poderíamos colocar um fallback aqui, mas assumiremos que é tudo novo.
+        if (!data) { calc(); bind(); return; }
 
-        let snap;
         try {
-            // Tenta descompressão LZ-String primeiro, se falhar, tenta o atou antigo
-            const decompressed = LZString.decompressFromEncodedURIComponent(rawData);
-            snap = decompressed ? JSON.parse(decompressed) : JSON.parse(decodeURIComponent(escape(atob(rawData))));
-        } catch(e) {
-            console.error("Erro ao ler dados:", e);
-            return;
-        }
+            // Decode Base64 URL-Safe
+            const base64 = data.replace(/-/g, '+').replace(/_/g, '/');
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
 
-        document.getElementById('proj-title').innerText = snap.t;
-        const main = document.getElementById('main-content');
-        main.innerHTML = '';
+            let state = { bytes, pos: 0 };
+            const title = readSmartString(state);
+            document.getElementById('proj-title').innerText = title;
 
-        snap.s.forEach(blockData => {
-            // blockData[0] é o ID do tipo (0, 1 ou 2)
-            const type = REV_MAP[blockData[0]];
-            const div = document.createElement('div'); 
-            div.className = 'block'; 
-            div.setAttribute('data-type', type);
-            
-            let tools = `<div class="block-tools"><button class="btn-tool" onclick="moveUp(this.parentElement.parentElement)">↑</button><button class="btn-tool" onclick="moveDown(this.parentElement.parentElement)">↓</button>${type==='text'?'<button class="btn-tool btn-del" onclick="this.parentElement.parentElement.remove(); calc();">×</button>':''}</div>`;
+            const numBlocks = state.bytes[state.pos++];
+            const main = document.getElementById('main-content');
+            main.innerHTML = '';
 
-            if(type === 'text') {
-                div.innerHTML = `${tools}<h2 contenteditable="true">${blockData[1]}</h2><p contenteditable="true">${blockData[2]}</p>`;
-            } else {
-                const title = type === 'table-bolsas' ? 'Plano de Bolsas' : 'Custeio e Operação';
-                const id = type === 'table-bolsas' ? 'tab-bolsas' : 'tab-custeio';
-                let rows = '';
-                // blockData[1] contém o array de linhas
-                blockData[1].forEach(r => {
-                    rows += `<tr><td contenteditable="true">${r[0]}</td><td contenteditable="true" class="e-val">${r[1]}</td><td contenteditable="true" class="e-mes">${r[2]}</td><td contenteditable="true" class="e-qtd">${r[3]}</td><td class="e-sub">0</td><td><button class="btn-del-row" onclick="this.closest('tr').remove(); calc();" style="border:none;background:none;color:#ccc;cursor:pointer">×</button></td></tr>`;
-                });
-                div.innerHTML = `${tools}<h2>${title}</h2><table id="${id}"><thead><tr><th>Item</th><th>R$</th><th>M</th><th>Q</th><th>Sub</th><th></th></tr></thead><tbody>${rows}</tbody></table><button class="btn-add-row" onclick="addRow('${id}')">+ Adicionar Item</button>`;
+            for (let i = 0; i < numBlocks; i++) {
+                const typeId = state.bytes[state.pos++];
+                const type = typeId === 0 ? 'text' : (typeId === 1 ? 'table-bolsas' : 'table-custeio');
+                
+                const div = document.createElement('div');
+                div.className = 'block';
+                div.setAttribute('data-type', type);
+                
+                let content = "";
+                if (typeId === 0) {
+                    const h = readSmartString(state);
+                    const p = readSmartString(state);
+                    content = `<h2 contenteditable="true">${h}</h2><p contenteditable="true">${p}</p>`;
+                } else {
+                    const numRows = state.bytes[state.pos++];
+                    const tableId = typeId === 1 ? 'tab-bolsas' : 'tab-custeio';
+                    const label = typeId === 1 ? 'Plano de Bolsas' : 'Custeio e Operação';
+                    let rowsHtml = "";
+                    for (let j = 0; j < numRows; j++) {
+                        const d = readSmartString(state);
+                        const v = readVLQ(state);
+                        const m = state.bytes[state.pos++];
+                        const q = state.bytes[state.pos++];
+                        rowsHtml += `<tr><td contenteditable="true">${d}</td><td class="e-val" contenteditable="true">${v}</td><td class="e-mes" contenteditable="true">${m}</td><td class="e-qtd" contenteditable="true">${q}</td><td class="e-sub">0</td><td><button class="btn-del-row" onclick="this.closest('tr').remove(); calc();" style="border:none;background:none;color:#ccc;cursor:pointer">×</button></td></tr>`;
+                    }
+                    content = `<h2>${label}</h2><table id="${tableId}"><thead><tr><th>Item</th><th>R$</th><th>M</th><th>Q</th><th>Sub</th><th></th></tr></thead><tbody>${rowsHtml}</tbody></table><button class="btn-add-row" onclick="addRow('${tableId}')">+ Item</button>`;
+                }
+                
+                const tools = `<div class="block-tools"><button class="btn-tool" onclick="moveUp(this.parentElement.parentElement)">↑</button><button class="btn-tool" onclick="moveDown(this.parentElement.parentElement)">↓</button><button class="btn-tool btn-del" onclick="this.parentElement.parentElement.remove(); calc();">×</button></div>`;
+                div.innerHTML = tools + content;
+                main.appendChild(div);
             }
-            main.appendChild(div);
-        });
+        } catch (e) {
+            console.error("Falha ao decodificar pacote Habana:", e);
+        }
         calc(); bind();
     }
 
-    function bind() { document.querySelectorAll('[contenteditable="true"]').forEach(e => e.oninput = calc); }
-
+    // Inicia a aplicação processando os parâmetros da URL ou carregando os defaults
     window.onload = load;
 </script>
 </body>
