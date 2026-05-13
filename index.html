@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Habana | Editor de Projetos</title>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
     <style>
         :root {
             --brand: #004a80;
@@ -274,37 +275,92 @@
         alert.className = "alert-ui " + (p < 50 ? "bad" : "good");
     }
 
+    // Mapeamento para reduzir o tamanho das strings fixas
+    const TYPE_MAP = { "text": 0, "table-bolsas": 1, "table-custeio": 2 };
+    const REV_MAP = { 0: "text", 1: "table-bolsas", 2: "table-custeio" };
+
     function gerarSnapshot() {
-        const snap = { t: document.getElementById('proj-title').innerText, s: [] };
+        // Criamos um objeto ultra-compacto
+        const snap = {
+            t: document.getElementById('proj-title').innerText,
+            s: []
+        };
+
         document.querySelectorAll('.block').forEach(b => {
-            const type = b.getAttribute('data-type');
-            if(type==='text') snap.s.push({type, h: b.querySelector('h2').innerText, p: b.querySelector('p').innerText});
-            else {
+            const typeStr = b.getAttribute('data-type');
+            const typeId = TYPE_MAP[typeStr];
+            
+            if(typeId === 0) { // Texto
+                snap.s.push([
+                    typeId, 
+                    b.querySelector('h2').innerText, 
+                    b.querySelector('p').innerText
+                ]);
+            } else { // Tabelas
                 const rows = [];
-                b.querySelectorAll('tbody tr').forEach(r => rows.push({d: r.cells[0].innerText, v: r.cells[1].innerText, m: r.cells[2].innerText, q: r.cells[3].innerText}));
-                snap.s.push({type, data: rows});
+                b.querySelectorAll('tbody tr').forEach(r => {
+                    // Salvamos apenas os valores em um array simples, sem chaves
+                    rows.push([
+                        r.cells[0].innerText, // d
+                        r.cells[1].innerText, // v
+                        r.cells[2].innerText, // m
+                        r.cells[3].innerText  // q
+                    ]);
+                });
+                snap.s.push([typeId, rows]);
             }
         });
-        const url = window.location.origin + window.location.pathname + '?data=' + utoa(JSON.stringify(snap));
-        navigator.clipboard.writeText(url).then(() => { alert("Snapshot salvo e link copiado!"); window.history.pushState({}, '', url); });
+
+        // Comprimimos usando LZ-String (específico para URI)
+        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(snap));
+        const url = window.location.origin + window.location.pathname + '?d=' + compressed;
+
+        navigator.clipboard.writeText(url).then(() => {
+            alert("Snapshot ultra-comprimido salvo!");
+            window.history.pushState({}, '', url);
+        });
     }
 
     function load() {
-        const data = new URLSearchParams(window.location.search).get('data');
-        if(!data) { calc(); bind(); return; }
-        const snap = JSON.parse(atou(data));
+        const params = new URLSearchParams(window.location.search);
+        // Tentamos ler o parâmetro novo 'd' ou o antigo 'data' para compatibilidade
+        const rawData = params.get('d') || params.get('data');
+        
+        if(!rawData) { calc(); bind(); return; }
+
+        let snap;
+        try {
+            // Tenta descompressão LZ-String primeiro, se falhar, tenta o atou antigo
+            const decompressed = LZString.decompressFromEncodedURIComponent(rawData);
+            snap = decompressed ? JSON.parse(decompressed) : JSON.parse(decodeURIComponent(escape(atob(rawData))));
+        } catch(e) {
+            console.error("Erro ao ler dados:", e);
+            return;
+        }
+
         document.getElementById('proj-title').innerText = snap.t;
         const main = document.getElementById('main-content');
         main.innerHTML = '';
-        snap.s.forEach(s => {
-            const div = document.createElement('div'); div.className = 'block'; div.setAttribute('data-type', s.type);
-            let tools = `<div class="block-tools"><button class="btn-tool" onclick="moveUp(this.parentElement.parentElement)">↑</button><button class="btn-tool" onclick="moveDown(this.parentElement.parentElement)">↓</button>${s.type==='text'?'<button class="btn-tool btn-del" onclick="this.parentElement.parentElement.remove(); calc();">×</button>':''}</div>`;
-            if(s.type==='text') div.innerHTML = `${tools}<h2 contenteditable="true">${s.h}</h2><p contenteditable="true">${s.p}</p>`;
-            else {
-                const title = s.type==='table-bolsas'?'Plano de Bolsas':'Custeio e Operação';
-                const id = s.type === 'table-bolsas' ? 'tab-bolsas' : 'tab-custeio';
+
+        snap.s.forEach(blockData => {
+            // blockData[0] é o ID do tipo (0, 1 ou 2)
+            const type = REV_MAP[blockData[0]];
+            const div = document.createElement('div'); 
+            div.className = 'block'; 
+            div.setAttribute('data-type', type);
+            
+            let tools = `<div class="block-tools"><button class="btn-tool" onclick="moveUp(this.parentElement.parentElement)">↑</button><button class="btn-tool" onclick="moveDown(this.parentElement.parentElement)">↓</button>${type==='text'?'<button class="btn-tool btn-del" onclick="this.parentElement.parentElement.remove(); calc();">×</button>':''}</div>`;
+
+            if(type === 'text') {
+                div.innerHTML = `${tools}<h2 contenteditable="true">${blockData[1]}</h2><p contenteditable="true">${blockData[2]}</p>`;
+            } else {
+                const title = type === 'table-bolsas' ? 'Plano de Bolsas' : 'Custeio e Operação';
+                const id = type === 'table-bolsas' ? 'tab-bolsas' : 'tab-custeio';
                 let rows = '';
-                s.data.forEach(r => rows += `<tr><td contenteditable="true">${r.d}</td><td contenteditable="true" class="e-val">${r.v}</td><td contenteditable="true" class="e-mes">${r.m}</td><td contenteditable="true" class="e-qtd">${r.q}</td><td class="e-sub">0</td><td><button class="btn-del-row" onclick="this.closest('tr').remove(); calc();" style="border:none;background:none;color:#ccc;cursor:pointer">×</button></td></tr>`);
+                // blockData[1] contém o array de linhas
+                blockData[1].forEach(r => {
+                    rows += `<tr><td contenteditable="true">${r[0]}</td><td contenteditable="true" class="e-val">${r[1]}</td><td contenteditable="true" class="e-mes">${r[2]}</td><td contenteditable="true" class="e-qtd">${r[3]}</td><td class="e-sub">0</td><td><button class="btn-del-row" onclick="this.closest('tr').remove(); calc();" style="border:none;background:none;color:#ccc;cursor:pointer">×</button></td></tr>`;
+                });
                 div.innerHTML = `${tools}<h2>${title}</h2><table id="${id}"><thead><tr><th>Item</th><th>R$</th><th>M</th><th>Q</th><th>Sub</th><th></th></tr></thead><tbody>${rows}</tbody></table><button class="btn-add-row" onclick="addRow('${id}')">+ Adicionar Item</button>`;
             }
             main.appendChild(div);
