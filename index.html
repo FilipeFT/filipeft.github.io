@@ -205,6 +205,28 @@ table.listing td.data, table.listing span.data{color:#1c6e3c}
 @keyframes pop{from{transform:translateY(-8px);opacity:0}to{transform:none;opacity:1}}
 .ribbon{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;min-height:34px;align-items:center}
 .valchip{border:1px solid #1c6e3c;color:#1c6e3c;border-radius:6px;font:700 15px var(--mono);padding:2px 10px}
+/* ---------- two rivers ---------- */
+blockquote.koan{
+  margin:1.6em 0;padding:.4em 0 .4em 1.2em;border-left:3px solid var(--accent);
+  font-style:italic;font-size:19px;color:#4c473c;
+}
+blockquote.koan .src{display:block;margin-top:.6em;font:400 13px var(--sans);font-style:normal;color:var(--faint)}
+table.mirror{border-collapse:collapse;width:100%;margin:1.2em 0;font-size:15.5px}
+table.mirror th{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);padding:5px 10px;border-bottom:1px solid var(--hair);text-align:left}
+table.mirror td{padding:8px 10px;border-bottom:1px solid #efe9da;vertical-align:top;line-height:1.5}
+table.mirror td.l, table.mirror td.f{font:13.5px var(--mono)}
+table.mirror td.s{font-style:italic;color:#4c473c}
+.forth-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:760px){.forth-grid{grid-template-columns:180px 1fr}}
+.forth-stack{display:flex;flex-direction:column;gap:4px;min-height:150px;border:1px dashed #b9b2a0;border-radius:8px;padding:8px;align-items:center}
+.fchip{border:1px solid var(--ink);border-radius:6px;font:700 15px var(--mono);padding:2px 14px;background:#fff}
+.dict-line{font:13px var(--mono);background:var(--code-bg);padding:6px 10px;border-radius:6px;margin-top:10px}
+.cons{display:flex;flex-wrap:wrap;gap:0;align-items:center;margin-top:10px;min-height:56px}
+.ccell{display:flex;border:1px solid var(--ink);border-radius:6px;overflow:hidden;background:#fff}
+.ccell .car{padding:7px 13px;min-width:88px;text-align:center;font:600 15px var(--mono)}
+.ccell .cdr{padding:7px 11px;border-left:1px solid var(--ink);color:#b9b2a0;font:15px var(--mono)}
+.carrow{font:17px var(--mono);color:var(--faint);padding:0 7px}
+.cnil{font:15px var(--mono);color:var(--faint);padding:7px 2px}
 /* ---------- tower ---------- */
 .tower-svg{width:100%;height:auto;max-width:680px;display:block;margin:1.5em auto}
 /* ---------- colophon ---------- */
@@ -217,7 +239,7 @@ footer{padding-bottom:80px}
 <nav id="topnav"><div class="inner">
   <a href="#bits">Bits</a><a href="#gates">Gates</a><a href="#adders">Arithmetic</a>
   <a href="#memory">Memory</a><a href="#turing">Turing</a><a href="#cpu">A real machine</a>
-  <a href="#recursion">Recursion</a><a href="#tower">The tower</a>
+  <a href="#recursion">Recursion</a><a href="#rivers">Two rivers</a><a href="#tower">The tower</a>
 </div></nav>
 
 <div class="wrap"><div class="prose">
@@ -226,7 +248,7 @@ footer{padding-bottom:80px}
   <p style="font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:3.2em 0 0">A primer for the curious</p>
   <h1>From Sand to Symbols</h1>
   <p class="subtitle">How a machine that only knows <em>on</em> and <em>off</em> comes, step by careful step, to understand <code>(fact 4)</code>.</p>
-  <p>Mathematics is not a spectator sport — and neither is the computer. This page builds the whole tower from the ground: a wire that is hot or cold, a gate, a bit of arithmetic, a loop of wire that <em>remembers</em>, a Turing machine, a small honest processor, and finally recursion in Scheme — which by then will feel like meeting an old friend in a foreign country. Every figure is live. Nothing is hidden: <strong>view source</strong>, and the page explains its own making.</p>
+  <p>Mathematics is not a spectator sport — and neither is the computer. This page builds the whole tower from the ground: a wire that is hot or cold, a gate, a bit of arithmetic, a loop of wire that <em>remembers</em>, a Turing machine, a small honest processor, and finally recursion in Scheme — which by then will feel like meeting an old friend in a foreign country. And because the majority view is not the only view, the climb ends by honouring a minority tradition — LISP and FORTH, the sky and the earth — and the ten-thousand-year debt that computing owes to the first astronomers and the first scribes. Every figure is live. Nothing is hidden: <strong>view source</strong>, and the page explains its own making.</p>
   <p class="epigraph">“What I cannot create, I do not understand.”<br>
   <span class="who">— Richard Feynman, quoted on his blackboard</span></p>
 </header>
@@ -385,7 +407,7 @@ footer{padding-bottom:80px}
 <p>Everything in this demo is descended from what you built by hand: the ACC is Fig.&nbsp;4’s adder with a latch on its output; PC is a row of Fig.&nbsp;5’s loops; the decoding circuit is Fig.&nbsp;2’s gates staring at <code>IR</code>’s digits.<sup class="snref">5</sup> And it is — scaled up, pipelined, predicted — the machine on which you are reading this page.</p>
 <span class="sidenote"><span class="sn">5</span>This teaching computer is the “Little Man Computer” of Stuart Madnick (1965), slightly dialectal: real instruction sets number in the hundreds, but every one of them is this table wearing more clothes. The real machine also cheats the cycle — fetching instruction n+1 while n executes — but the dance you stepped through here is still the score it improvises around.</span>
 
-<p>One more observation, and it is the bridge to the last chapter. Where did the program keep the countdown? In a <em>memory cell</em>. Where did <code>STA 8</code> put the new value? In a <em>memory cell</em>. The machine state — the “where was I” of any running program — is always, at bottom, cells. Keep that in mind.</p>
+<p>One more observation, and it is a bridge to the chapters ahead. Where did the program keep the countdown? In a <em>memory cell</em>. Where did <code>STA 8</code> put the new value? In a <em>memory cell</em>. The machine state — the “where was I” of any running program — is always, at bottom, cells. Keep that in mind.</p>
 
 <!-- ================================================================ 7 -->
 <h2 id="recursion"><span class="chnum">7</span>Recursion, at ground level</h2>
@@ -425,7 +447,103 @@ footer{padding-bottom:80px}
 <span class="sidenote"><span class="sn">6</span>Lisp (1958, John McCarthy) is the second-oldest language still in use, after Fortran. Its genius was to notice that programs are lists — data — and so programs could build programs. Turing’s blurring of code and data, you will notice, keeps reappearing at every level of the tower.</span>
 
 <!-- ================================================================ 8 -->
-<h2 id="tower"><span class="chnum">8</span>The tower, and how to build well inside it</h2>
+<h2 id="rivers"><span class="chnum">8</span>Two rivers, one sky: the minority view</h2>
+
+<p>The chapters before this one walk the road most travelled: one machine, many layers, a tower of abstraction with a program at the top. It is the majority view, and it built the industry. But there is a minority tradition — patient, mostly ignored, and, I believe, waiting at the forefront for the relationship between society and technology to mature — which holds that a language need not be an empire. The two most honest languages ever designed are also the two smallest, and they mirror one another the way the sky mirrors the earth. They appeared a decade apart and face in opposite directions. LISP (1958) turned toward mathematics, meaning, and the pattern behind things. FORTH (1968) turned toward the machine, the act, and the cost of the act. Between them they bracket the whole mystery.</p>
+
+<h3>FORTH — the word that acts</h3>
+
+<p>In the 1960s, Charles H. Moore programmed computers for astronomy, and the trade became, in his hands, a decade-long act of subtraction. Every tool struck him as heavier than the work; every language, as a bureaucratic tax on thought. His answer was to make the language disappear almost entirely. By the time he was steering radio telescopes for the National Radio Astronomy Observatory, his system — he called it FORTH — was little more than the stack you met in Chapter 7, a dictionary of <em>words</em>, and a colon for teaching the machine new words from old ones.<sup class="snref">8</sup></p>
+<span class="sidenote"><span class="sn">8</span>The name was a pun: Moore meant “FOURTH,” as in fourth-generation language; the IBM 1130 he used permitted five-character names. The system had been distilling privately since the mid-1960s and reached its essential form pointing at the radio sky — the 36-foot telescope at Kitt Peak among its first chores.</span>
+
+<p>That is not a metaphor for brevity; it is nearly the whole specification. Numbers go onto the stack; words consume what they need and leave what they made; <code>: SQUARE DUP * ;</code> teaches the machine a new word that is forever after indistinguishable from a built-in. Try the entire language on one desk:</p>
+
+<figure class="demo">
+  <div class="controls" id="forth-controls">
+    <button class="btn" data-op="3">3</button>
+    <button class="btn" data-op="5">5</button>
+    <button class="btn" data-op="8">8</button>
+    <button class="btn" data-op="+">+</button>
+    <button class="btn" data-op="*">*</button>
+    <button class="btn" data-op="-">−</button>
+    <button class="btn" data-op="DUP">DUP</button>
+    <button class="btn" data-op="DROP">DROP</button>
+    <button class="btn" data-op="SQUARE">SQUARE</button>
+    <button class="btn" data-op="DOT">.</button>
+    <button class="btn" data-op="RESET">clear</button>
+  </div>
+  <div class="forth-grid">
+    <div>
+      <div class="rec-stack-label">The stack — top on top</div>
+      <div class="forth-stack" id="forth-stack"></div>
+    </div>
+    <div>
+      <div class="outbox"><span class="outlabel">Printed</span><span id="forth-out"></span></div>
+      <div class="dict-line">: SQUARE &nbsp;DUP * ;</div>
+      <div class="decodeline" id="forth-note"></div>
+    </div>
+  </div>
+  <figcaption>Fig. 9 — The entire language, on one desk. FORTH has no operator precedence and no parentheses because it needs neither: a word simply takes what is on top of the stack — push 3, push 5, press +, press <code>.</code>, and you have printed 8. <code>: SQUARE DUP * ;</code> is DRY at machine level: you have taught the machine a word, and its vocabulary grew. The word <code>.</code> is the same print you watched as <code>OUT</code> in the countdown program; the dictionary is kept exactly like the memory of Chapter 6 — one definition standing on another. Moore’s systems steered telescopes with fewer words than this caption has clauses.</figcaption>
+</figure>
+
+<p>Notice what is absent: variables, syntax trees, precedence rules, a border between “the language” and “your program.” The program is the dictionary, and the dictionary is the machine growing a vocabulary. Postfix order — the numbers first, the word last — is how the machine itself lives: <em>fetch, fetch, act</em>. FORTH is what Chapter 6 looks like when you stop apologising for it.</p>
+
+<h3>LISP — the meaning that recurs</h3>
+
+<p>Five years earlier, and pointed the opposite way, John McCarthy wanted a language in which a machine could reason about its own thoughts — and found, to his own surprise, that almost nothing is needed. LISP is lambda calculus wearing parentheses:<sup class="snref">9</sup> one data structure (the list), one way to build it (the pair, or <em>cons cell</em>), a few primitives to take it apart, and the rule that a program is itself a list. Not “like” a list — <em>is</em> one: the catalogue and the catalogue’s reading instructions have the same shape.</p>
+<span class="sidenote"><span class="sn">9</span>Lambda calculus — Alonzo Church, 1930s — is the mathematics of substitution: functions made only of functions. McCarthy’s 1960 paper needs barely a page to define Lisp in terms of Lisp; the famous metacircular evaluator of the textbooks is Lisp defined in Lisp — a language watching itself, the way the latch of Chapter 4 is a circuit watching itself.</span>
+
+<p>A list is a chain of pairs: each cell holds one thing and a pointer to the rest; the last pointer points at nothing — <em>nil</em>. Three words are the hands for this material: <code>(cons x …)</code> attaches a new first thing; <code>(car …)</code> takes the first thing; <code>(cdr …)</code> takes the rest. Handle the sky’s catalogue yourself:</p>
+
+<figure class="demo">
+  <div class="controls" id="lisp-controls">
+    <button class="btn" data-op="car">(car x)</button>
+    <button class="btn" data-op="cdr">(cdr x)</button>
+    <button class="btn" data-op="cons">(cons ’discovery x)</button>
+    <button class="btn" data-op="RESET">restore</button>
+  </div>
+  <div class="cons" id="lisp-cells"></div>
+  <div class="decodeline" id="lisp-note"></div>
+  <figcaption>Fig. 10 — A catalogue of the sky, the way LISP sees everything: pairs pointing forward, ending in nil (the ∅). <code>car</code> takes the first entry; <code>cdr</code> keeps the rest; <code>cons</code> attaches a new discovery at the front — a list growing one cell at a time. Code has exactly this shape too, which is why Lisp programs can read, write, and be written by other Lisp programs — the recursion of Chapter 7, turned sideways.</figcaption>
+</figure>
+
+<p>Recall the factorial of Chapter 7 and you can now see both directions at once: where FORTH makes the stack itself speak, LISP makes the sentence itself compute. The stack machine and the lambda calculus are the two minimal answers to Turing’s question — “what is computation?” — and history has mostly chosen to build very large things on top of each while visiting neither.</p>
+
+<h3>The mirror</h3>
+
+<table class="mirror">
+  <tr><th>LISP, facing the sky</th><th>FORTH, facing the earth</th><th>what both know</th></tr>
+  <tr><td class="l">the list</td><td class="f">the stack</td><td class="s">one humble structure suffices for data and control alike</td></tr>
+  <tr><td class="l">lambda calculus — a page of substitution rules</td><td class="f">the stack machine — a handful of acts</td><td class="s">a tiny formal core is enough; everything else is vocabulary</td></tr>
+  <tr><td class="l">the program is a list</td><td class="f">the program is the dictionary</td><td class="s">code is data; the language can speak about itself</td></tr>
+  <tr><td class="l">macros: new meanings from old</td><td class="f">: definitions: new words from old</td><td class="s">you extend the language; you never leave it</td></tr>
+  <tr><td class="l">read — eval — print</td><td class="f">push — act — print</td><td class="s">conversation with the machine, face to face</td></tr>
+</table>
+
+<p>Read the columns as complements rather than rivals and the old Daoist shape appears. LISP is the language of the sky: pattern, recurrence, meaning growing by self-reference — recursion is celestial grammar, each cycle owing its shape to the cycle below it. FORTH is the language of the earth: the immediate word, the minimal gesture, direct contact with the stone — no representation standing between the intent and the act. The sky teaches you what things <em>are</em>; the earth teaches you what things <em>cost</em>. Neither is complete alone — a programmer who knows only meaning builds castles that cannot stand; a programmer who knows only cost builds floors with nothing above them.</p>
+
+<blockquote class="koan">
+A student came to the master and said: “I have read that LISP is the most powerful of languages, and that FORTH is the most simple. Which should I learn?”<br><br>
+The master replied: “When you look at the sky, do you see power, or do you see simplicity?”<br><br>
+The student was enlightened, and returned to his work.
+<span class="src">— a koan, after the manner of Master Foo<sup class="snref">10</sup></span>
+</blockquote>
+<span class="sidenote"><span class="sn">10</span>The Master Foo discourses are Eric S. Raymond’s <em>Rootless Root</em> — Unix-age sutras in the classical manner. The koan above is an homage of this primer, not a quotation; if it misleads, blame the student, not the tradition.</span>
+
+<h3>The oldest computation</h3>
+
+<p>Why should a telescope controller be the right place to meet this? Because the loop it closes is ten thousand years old. Astronomy was humanity’s first science, mathematics, and computation in one: people looked up, noticed that the sky is the one place where the changing masks the unchanging, and discerned cycles — of days, of seasons, of years, of the slow recurrence of planets and the shock of a predicted eclipse.<sup class="snref">11</sup> Recording those cycles forced the invention of number and of notation; predicting them was the first program execution.</p>
+<span class="sidenote"><span class="sn">11</span>Babylonian base-60, chosen for the sky, outlived the civilisation that chose it: it survives in the degrees on a telescope mount and the minutes on your clock — the sky’s units, thirty centuries old and still in daily use.</span>
+
+<p>And the second act of the same play: the earliest writing of Sumer and Egypt is not poetry or prayer — it is accounting. Tallies of sheep and grain pressed into clay; the token, the envelope, the tablet.<sup class="snref">12</sup> The state was born as a ledger. Scribes were trained by copying the record and adding to it, generation onto generation — and the archive outlives the scribe exactly as the latch of Chapter 4 outlives the signal that set it, scaled up to a civilisation. Writing, teaching, remembering: culture itself as external memory. Civilisation formed, one might say, as a form of abstract computation — the slowest and most successful information technology ever deployed.</p>
+<span class="sidenote"><span class="sn">12</span>On Denise Schmandt-Besserat’s account, writing began as bookkeeping: small clay counting tokens (as early as 8000 BCE) became impressions on envelopes, impressions became marks on flat clay, and marks became script. Literature arrived later, and inherited the clerk’s tools.</span>
+
+<p>So the deep connections, honoured: the sky taught counting; the clay taught remembering; the scribal schools taught teaching. Computing is not a novelty of the last century — it is the oldest continuous human craft: order abstracted from recurrence, written down, and passed forward. The transistor only let the craft run at the speed of light. And when Charles Moore pointed his five-character language at the radio sky, the loop quietly closed: the heavens that taught humanity to count were at last counted back through an instrument steered by a dictionary of a few dozen words.</p>
+
+<p>Between the Tigris and the Euphrates, civilisation formed on silt carried from two directions. The minority view suspects that between LISP and FORTH, silt of a similar kind is being carried — and that when the historical relationship between society and software matures, it will build its cities there.</p>
+
+<!-- ================================================================ 9 -->
+<h2 id="tower"><span class="chnum">9</span>The tower, and how to build well inside it</h2>
 
 <p>Stand back and look at what was climbed:</p>
 
@@ -453,10 +571,10 @@ footer{padding-bottom:80px}
   </g>
 </svg>
 
-<p>Each layer makes a promise — <em>“you don’t need to know how I do it”</em> — and that promise is what lets a single mind build at the top.<sup class="snref">7</sup> But every abstraction leaks a little: latency leaks, overflow leaks, the forbidden state of the latch leaks. That is why ground-up understanding matters — not to hold the whole tower in your head at once, but to be unafraid when a leak forces you to look down a floor.</p>
-<span class="sidenote"><span class="sn">7</span>“All non-trivial abstractions leak.” — Joel Spolsky, stating the occupational hazard of the tower. Feynman stated the repair procedure: <em>create</em> the layer once, and you own it forever.</span>
+<p>Each layer makes a promise — <em>“you don’t need to know how I do it”</em> — and that promise is what lets a single mind build at the top.<sup class="snref">13</sup> But every abstraction leaks a little: latency leaks, overflow leaks, the forbidden state of the latch leaks. That is why ground-up understanding matters — not to hold the whole tower in your head at once, but to be unafraid when a leak forces you to look down a floor.</p>
+<span class="sidenote"><span class="sn">13</span>“All non-trivial abstractions leak.” — Joel Spolsky, stating the occupational hazard of the tower. Feynman stated the repair procedure: <em>create</em> the layer once, and you own it forever.</span>
 
-<p>And the engineering virtues this primer honours?</p>
+<p>And the engineering virtues this primer honours? Tey were reflect the machinery itself:</p>
 
 <ul>
   <li><strong>DRY</strong> — Don’t Repeat Yourself — is the subroutine: the discovery, made at machine-code level, that a numbered cell can be <em>called</em>. The whole history of software is the war against saying the same thing twice.</li>
@@ -464,9 +582,11 @@ footer{padding-bottom:80px}
   <li><strong>YAGNI</strong> — You Aren’t Gonna Need It — is the von Neumann architecture refusing features until the program demands them. The machine that reached the Moon had 4&nbsp;KB of memory, and none of it was speculative.</li>
 </ul>
 
+<p>Forth and Lisp, you now know, are not merely chapter topics; they are the two long-running experiments in taking these three virtues as an entire worldview — languages built the way Moore built his telescope controller and McCarthy built his evaluator, from the smallest core that could possibly suffice, extended only when the sky demanded it.</p>
+
 <hr>
 
-<p>Which leaves the last rung to climb: <em>view source</em>. This page practises the sermon. It is one file, no framework, no build step, no network (KISS). One small table of gate functions drives every truth table in Chapters 2 and 3, and one shared little engine drives the three Step/Run/Reset machines in Chapters 5, 6 and 7 (DRY). It contains nothing intended for a hypothetical future feature (YAGNI). The code is meant to be read by the same person who read the prose.</p>
+<p>Which leaves the last rung to climb: <em>view source</em>. This page practises the sermon. It is one file, no framework, no build step, no network (KISS). One small table of gate functions drives every truth table in Chapters 2 and 3, one shared little engine drives the three Step/Run/Reset machines in Chapters 5, 6 and 7, and the two instruments of Chapter 8 — a stack calculator and a cons-cell sketchpad — reuse the same handful of DOM helpers (DRY, thrice). It contains nothing intended for a hypothetical future feature (YAGNI). The code is meant to be read by the same person who read the prose.</p>
 
 <p class="colophon">Colophon — set in Georgia for the text and your system’s own sans and monospace for the machinery; margin notes in the manner of Edward Tufte; demonstrations in the manner of Richard Feynman: no miracle left unexplained at the level below. Built from sand, meaning from symbols.</p>
 
@@ -1007,6 +1127,109 @@ function renderRec(s) {
   if (node) node.classList.add('active');
 }
 makePlayer('rec', { initial: recInitial, step: recStep, render: renderRec, speed: 850 });
+
+/* ================================================================
+   10 · CHAPTER 8 — FORTH: a language that is a stack         */
+/* ================================================================*/
+const FORTH = { stack: [], out: [], note: 'Push numbers, then let words act on them.' };
+function forthRender() {
+  const s = FORTH.stack;
+  $('#forth-stack').innerHTML = s.length
+    ? s.slice().reverse().map(v => `<div class="fchip">${v}</div>`).join('')
+    : '<div class="cnil">empty — the machine is listening</div>';
+  $('#forth-out').innerHTML = FORTH.out.length
+    ? FORTH.out.map(v => `<span class="outchip">${v}</span>`).join(' ')
+    : '<span style="font:13px var(--sans);color:var(--faint)">nothing printed</span>';
+  $('#forth-note').textContent = FORTH.note;
+}
+function forthOp(op) {
+  if (op === 'RESET') { FORTH.stack = []; FORTH.out = []; FORTH.note = 'cleared.'; return; }
+  const s = FORTH.stack;
+  const lbl = op === 'DOT' ? '.' : op;
+  const need = (k) => {
+    if (s.length < k) { FORTH.note = `${lbl} needs ${k} number${k > 1 ? 's' : ''} — the stack is bare.`; return false; }
+    return true;
+  };
+  const push = (v) => {
+    if (s.length >= 10) { FORTH.note = 'the demo stack is full — real Forth never checks, and that is a story for another day.'; return false; }
+    s.push(v); return true;
+  };
+  if (op === '+' || op === '-' || op === '*') {
+    if (!need(2)) return;
+    const b = s.pop(), a = s.pop();
+    const r = op === '+' ? a + b : op === '*' ? a * b : a - b;
+    if (push(r)) FORTH.note = `${a} ${b} ${op} \u2192 ${r}`;
+  } else if (op === 'DUP') {
+    if (!need(1)) return;
+    const a = s.pop();
+    if (push(a) && push(a)) FORTH.note = `${a} DUP \u2192 ${a} ${a}`;
+  } else if (op === 'DROP') {
+    if (!need(1)) return;
+    const a = s.pop();
+    FORTH.note = `${a} DROP \u2192 gone.`;
+  } else if (op === 'DOT') {
+    if (!need(1)) return;
+    const a = s.pop();
+    FORTH.out.push(a);
+    FORTH.note = `${a} . \u2192 printed.`;
+  } else if (op === 'SQUARE') {
+    if (!need(1)) return;
+    const a = s.pop();
+    if (push(a * a)) FORTH.note = `${a} SQUARE \u2192 ${a * a} — by its definition: DUP *`;
+  } else {
+    // a number: words of this kind simply push themselves
+    if (push(+op)) FORTH.note = `${op} pushed.`;
+  }
+}
+document.querySelectorAll('#forth-controls button').forEach(b => {
+  b.addEventListener('click', () => { forthOp(b.dataset.op); forthRender(); });
+});
+forthRender();
+
+/* ================================================================
+   11 · CHAPTER 8 — LISP: a language that is a list           */
+/* ================================================================*/
+const LISP = { list: ['mars', 'venus', 'mercury'], next: 0, note: 'Three entries; nil at the end.' };
+const DISCOVERIES = ['jupiter', 'saturn', 'a comet', 'a nova', 'a galaxy'];
+const lispQuote = () => "'(" + LISP.list.join(' ') + ")";
+function lispRender() {
+  const items = LISP.list;
+  const cells = items.map((it, i) => {
+    const last = i === items.length - 1;
+    return `<div class="ccell"><div class="car">${it}</div><div class="cdr">${last ? '\u2205' : '\u2022'}</div></div>` +
+      (last ? '' : '<span class="carrow">\u2192</span>');
+  }).join('');
+  $('#lisp-cells').innerHTML = cells || '<span class="cnil">() — nil, the empty catalogue</span>';
+  $('#lisp-note').textContent = LISP.note;
+}
+function lispOp(op) {
+  const before = lispQuote();
+  if (op === 'RESET') {
+    LISP.list = ['mars', 'venus', 'mercury'];
+    LISP.note = 'the catalogue, restored.';
+  } else if (op === 'car') {
+    if (!LISP.list.length) { LISP.note = "(car '()) \u21D2 nil — the empty catalogue has no first star."; }
+    else LISP.note = `(car ${before}) \u21D2 ${LISP.list[0]}`;
+  } else if (op === 'cdr') {
+    if (!LISP.list.length) { LISP.note = "(cdr '()) \u21D2 () — nothing remains of nothing."; }
+    else {
+      LISP.list = LISP.list.slice(1);
+      LISP.note = `(cdr ${before}) \u21D2 (${LISP.list.join(' ')})`;
+    }
+  } else if (op === 'cons') {
+    if (LISP.list.length >= 8) { LISP.note = 'the catalogue is full — astronomy, too, has budgets.'; }
+    else {
+      const d = DISCOVERIES[LISP.next % DISCOVERIES.length];
+      LISP.next++;
+      LISP.list = [d].concat(LISP.list);
+      LISP.note = `(cons '${d} ${before}) \u21D2 (${LISP.list.join(' ')})`;
+    }
+  }
+}
+document.querySelectorAll('#lisp-controls button').forEach(b => {
+  b.addEventListener('click', () => { lispOp(b.dataset.op); lispRender(); });
+});
+lispRender();
 </script>
 </body>
 </html>
