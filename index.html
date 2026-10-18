@@ -205,6 +205,14 @@ table.listing td.data, table.listing span.data{color:#1c6e3c}
 @keyframes pop{from{transform:translateY(-8px);opacity:0}to{transform:none;opacity:1}}
 .ribbon{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;min-height:34px;align-items:center}
 .valchip{border:1px solid #1c6e3c;color:#1c6e3c;border-radius:6px;font:700 15px var(--mono);padding:2px 10px}
+/* ---------- parts & contents ---------- */
+.part{display:flex;align-items:center;gap:18px;margin:4.4em 0 -1.4em}
+.part::before,.part::after{content:"";flex:1;border-top:1px solid var(--hair)}
+.part span{font:700 11px var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.toc{margin:1.4em 0 0;font-size:16px;color:#4c473c}
+.toc .tp{font:700 11px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:.9em 0 .15em}
+.toc a{color:inherit;text-decoration:none;border-bottom:1px solid var(--hair)}
+.toc a:hover{color:var(--accent);border-bottom-color:var(--accent)}
 /* ---------- two rivers ---------- */
 blockquote.koan{
   margin:1.6em 0;padding:.4em 0 .4em 1.2em;border-left:3px solid var(--accent);
@@ -248,10 +256,23 @@ footer{padding-bottom:80px}
   <p style="font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:3.2em 0 0">A primer for the curious</p>
   <h1>From Sand to Symbols</h1>
   <p class="subtitle">How a machine that only knows <em>on</em> and <em>off</em> comes, step by careful step, to understand <code>(fact 4)</code>.</p>
-  <p>Mathematics is not a spectator sport — and neither is the computer. This page builds the whole tower from the ground: a wire that is hot or cold, a gate, a bit of arithmetic, a loop of wire that <em>remembers</em>, a Turing machine, a small honest processor, and finally recursion in Scheme — which by then will feel like meeting an old friend in a foreign country. And because the majority view is not the only view, the climb ends by honouring a minority tradition — LISP and FORTH, the sky and the earth — and the ten-thousand-year debt that computing owes to the first astronomers and the first scribes. Every figure is live. Nothing is hidden: <strong>view source</strong>, and the page explains its own making.</p>
+  <p>Mathematics is not a spectator sport — and neither is the computer. This primer builds the whole tower from the ground: a wire that is hot or cold, a gate, a bit of arithmetic, a loop of wire that <em>remembers</em>, a Turing machine, a small honest processor, and finally recursion — a way of thinking that seems to float free of any machine, until you see the cells underneath it. The lens then widens twice: once to a minority tradition in the design of languages — LISP and FORTH, the sky and the earth — and once more, to the ten-thousand-year debt that computing owes to the first astronomers and the first scribes. Every figure is live and expects your hands. Nothing is hidden: <strong>view source</strong>, and the page explains its own making.</p>
   <p class="epigraph">“What I cannot create, I do not understand.”<br>
   <span class="who">— Richard Feynman, quoted on his blackboard</span></p>
+
+  <h3>How to read this primer</h3>
+  <p>The chapters build strictly on one another: each adds a single ability — to name, to relate, to compute, to remember, to follow a plan, to be programmed, to speak — and quietly reuses the abilities gained before it. Read in order, and let the figures have your hands. Notes in the margin carry history, definitions, and the occasional confession of a simplification; on a narrow screen they fold into the text. The primer is also built to grow: each of the three parts below can take further chapters without disturbing the others.</p>
+  <div class="toc">
+    <div class="tp">Part I · The Machine</div>
+    <div><a href="#bits">1 · The Bit</a> — <a href="#gates">2 · Gates</a> — <a href="#adders">3 · Arithmetic</a> — <a href="#memory">4 · Memory</a> — <a href="#turing">5 · Turing</a> — <a href="#cpu">6 · A real machine</a> — <a href="#recursion">7 · Recursion</a></div>
+    <div class="tp">Part II · Two Ways of Speaking</div>
+    <div><a href="#rivers">8 · Two rivers, one sky</a></div>
+    <div class="tp">Part III · The Long View</div>
+    <div><a href="#tower">9 · The tower</a></div>
+  </div>
 </header>
+
+<div class="part"><span>Part I · The Machine</span></div>
 
 <!-- ================================================================ 1 -->
 <h2 id="bits"><span class="chnum">1</span>The Bit</h2>
@@ -298,14 +319,14 @@ footer{padding-bottom:80px}
 <!-- ================================================================ 3 -->
 <h2 id="adders"><span class="chnum">3</span>One gate to rule them all — and then, arithmetic</h2>
 
-<p>First, the small miracle: NAND alone is enough. Tie its two inputs together and it becomes NOT. NAND the two outputs of a NAND and you get AND. And by De Morgan, three NANDs make an OR. Watch the recipes — the tables below are computed live by the very same gate definitions that draw Fig.&nbsp;2:</p>
+<p>Chapter 2 handed you a toolbox of six gates. It turns out the toolbox is overstocked: one gate is enough. This is the small miracle — NAND alone can impersonate all the others. Tie its two inputs together and it becomes NOT. NAND the two outputs of a NAND and you get AND. And by De Morgan’s rules, three NANDs make an OR. Watch the recipes — the tables below are computed live by the very same gate definitions that draw Fig.&nbsp;2:</p>
 
 <figure class="demo">
   <div class="mini-tbls" id="nand-tbls"></div>
   <figcaption>Fig. 3 — Three impostures. Each table on the right is produced by the recipe above it, using nothing but NAND. In real chips NAND is also the cheapest gate to etch — four transistors — which is why it became the brick of the digital world.</figcaption>
 </figure>
 
-<p>Now arithmetic. Add two bits <code>a</code> and <code>b</code>: the answer’s ones-column is <code>XOR(a,b)</code>, and the carry is <code>AND(a,b)</code>. That is the whole of the half adder — a sum gate and a carry gate, two lines of sand. To add columns that <em>receive</em> a carry, we add three bits at a time (<code>a</code>, <code>b</code>, and the carry-in), which takes two half adders glued by an OR: the <em>full adder</em>.</p>
+<p>Now arithmetic. Add two bits <code>a</code> and <code>b</code>: the answer’s ones-column is <code>XOR(a,b)</code>, and the carry is <code>AND(a,b)</code>. That two-gate gadget is called a <em>half adder</em> — half, because it can only add two bits; it has no place to receive a carry arriving from the column to its right. The <em>full adder</em> repairs the omission: it adds three one-bit numbers at a time (<code>a</code>, <code>b</code>, and the incoming carry), which takes two half adders glued together by an OR gate.</p>
 
 <p>Chain four full adders, feeding each carry into the next, and you can add any two numbers from 0 to 15. The carry <em>ripples</em> from right to left, exactly like the little 1s you carry when adding by hand:</p>
 
@@ -334,7 +355,7 @@ footer{padding-bottom:80px}
   <figcaption>Fig. 5 — The SR latch, the atom of memory. <strong>S</strong>et the latch: pulse S to 1 and Q lights up. <strong>R</strong>eset: pulse R. Now do <em>nothing</em>: with S = R = 0 the gates endlessly re-confirm each other’s story, and Q holds its value forever — a single bit of memory made of six hunks of sand, arguing in a closed loop. (Pushing both at once drives both outputs to 0, the forbidden state; release order decides who wins.)</figcaption>
 </figure>
 
-<p>While S and R are both 0, ask the latch “why is Q 1?” and it answers: “because Q̄ is 0. Why is Q̄ 0? Because Q is 1.” The state is a loop of mutual justification — a tiny strange loop.<sup class="snref">3</sup> Add a gate in front to decide <em>when</em> the latch may listen (a <em>clock</em> ticking a few billion times a second, <em>edge-triggered</em>) and you have a flip-flop; put 64 of them side by side and you have a register. This is all “memory” ever was: loops with a doorman.</p>
+<p>While S and R are both 0, ask the latch “why is Q 1?” and it answers: “because Q̄ is 0. Why is Q̄ 0? Because Q is 1.” The state is a loop of mutual justification — a tiny strange loop.<sup class="snref">3</sup> Add a gate in front to decide <em>when</em> the latch may listen, and a <em>clock</em> — a steady pulse, billions of beats per second — to do the deciding, and you have a flip-flop: memory that changes only on the beat. Put 64 of them side by side and you have a register. This is all “memory” ever was: loops with a doorman.</p>
 <span class="sidenote"><span class="sn">3</span>Douglas Hofstadter would want the phrase back: <em>Strange Loops</em> is his, and the latch is the smallest hardware instance of the phenomenon — a system whose output, chased far enough, circles back to become its own premise.</span>
 
 <p>So: we can compute (gates) and we can remember (latches). What is still missing is <em>purpose</em> — a machine that carries out a plan. For that we first need the plan’s purest form.</p>
@@ -372,7 +393,7 @@ footer{padding-bottom:80px}
 <!-- ================================================================ 6 -->
 <h2 id="cpu"><span class="chnum">6</span>A real machine: the von Neumann computer</h2>
 
-<p>Turing gave us the concept; the 1945 architecture of von Neumann gives us the shape every processor still wears. The idea is almost cheeky: take the Turing machine and <em>fix the tape in place</em> — call it <strong>memory</strong>, a row of numbered cells holding numbers — and hard-wire the rule-following into a circuit called the <strong>processor</strong>. Two registers are exposed to the programmer: a <strong>program counter</strong> (PC) holding the address of the next cell to obey, and an <strong>accumulator</strong> (ACC) to compute in.</p>
+<p>Turing gave us the concept; the 1945 architecture of von Neumann gives us the shape every processor still wears. The idea is almost cheeky: take the Turing machine and <em>fix the tape in place</em> — call it <strong>memory</strong>, a row of numbered cells holding numbers — and hard-wire the rule-following into a circuit called the <strong>processor</strong>. Two registers are exposed to the programmer: a <strong>program counter</strong> (PC) holding the address of the next cell to obey, and an <strong>accumulator</strong> (ACC) to compute in. A third, the <strong>instruction register</strong> (IR), is the machine’s hand: it holds the number most recently fetched while the decoding gates stare at it.</p>
 
 <p>The processor knows only this dance, the <em>fetch–decode–execute cycle</em>:</p>
 
@@ -412,7 +433,7 @@ footer{padding-bottom:80px}
 <!-- ================================================================ 7 -->
 <h2 id="recursion"><span class="chnum">7</span>Recursion, at ground level</h2>
 
-<p>Now we can keep the promise this primer was written for. In Scheme, recursion looks perfectly abstract — a function defined in terms of itself, floating free of any machine:</p>
+<p>Everything so far — wires, gates, loops of memory, cells of storage — has been preparation for one meeting: a piece of mathematics that seems to float free of the world, and the machine of sand that must somehow run it. The classic place to hold that meeting is recursion, because in a high-level language it looks perfectly abstract — a function defined in terms of itself, as if the machine did not exist:</p>
 
 <pre id="rec-code"><code>(define (fact n)
   (if <span id="hl-cond">(= n 0)</span>
@@ -445,6 +466,8 @@ footer{padding-bottom:80px}
 
 <p>So the magic dissolves in a specific, satisfying way. “The call remembers its context” — some cells do. “The base case stops it” — the depth of the stack is finite. “Infinite recursion crashes” — the finite cells run out; there is nothing mystical under <code>stack overflow</code>.<sup class="snref">6</sup> Scheme itself, the language this is written in, is at bottom the same <em>fetch–decode–execute</em> loop of Fig.&nbsp;7, extended with one more elegant instruction: <em>call — push a frame, jump; return — pop it, jump back.</em></p>
 <span class="sidenote"><span class="sn">6</span>Lisp (1958, John McCarthy) is the second-oldest language still in use, after Fortran. Its genius was to notice that programs are lists — data — and so programs could build programs. Turing’s blurring of code and data, you will notice, keeps reappearing at every level of the tower.</span>
+
+<div class="part"><span>Part II · Two Ways of Speaking</span></div>
 
 <!-- ================================================================ 8 -->
 <h2 id="rivers"><span class="chnum">8</span>Two rivers, one sky: the minority view</h2>
@@ -483,15 +506,15 @@ footer{padding-bottom:80px}
       <div class="decodeline" id="forth-note"></div>
     </div>
   </div>
-  <figcaption>Fig. 9 — The entire language, on one desk. FORTH has no operator precedence and no parentheses because it needs neither: a word simply takes what is on top of the stack — push 3, push 5, press +, press <code>.</code>, and you have printed 8. <code>: SQUARE DUP * ;</code> is DRY at machine level: you have taught the machine a word, and its vocabulary grew. The word <code>.</code> is the same print you watched as <code>OUT</code> in the countdown program; the dictionary is kept exactly like the memory of Chapter 6 — one definition standing on another. Moore’s systems steered telescopes with fewer words than this caption has clauses.</figcaption>
+  <figcaption>Fig. 9 — The entire language, on one desk. FORTH has no operator precedence and no parentheses because it needs neither: a word simply takes what is on top of the stack — push 3, push 5, press +, press <code>.</code>, and you have printed 8. <code>: SQUARE DUP * ;</code> teaches rather than repeats — one new word, usable forever, the way a scribe’s sign condenses a long tally into one mark. The word <code>.</code> is the same print you watched as <code>OUT</code> in the countdown program; the dictionary is kept exactly like the memory of Chapter 6 — one definition standing on another. Moore’s systems steered telescopes with fewer words than this caption has clauses.</figcaption>
 </figure>
 
 <p>Notice what is absent: variables, syntax trees, precedence rules, a border between “the language” and “your program.” The program is the dictionary, and the dictionary is the machine growing a vocabulary. Postfix order — the numbers first, the word last — is how the machine itself lives: <em>fetch, fetch, act</em>. FORTH is what Chapter 6 looks like when you stop apologising for it.</p>
 
 <h3>LISP — the meaning that recurs</h3>
 
-<p>Five years earlier, and pointed the opposite way, John McCarthy wanted a language in which a machine could reason about its own thoughts — and found, to his own surprise, that almost nothing is needed. LISP is lambda calculus wearing parentheses:<sup class="snref">9</sup> one data structure (the list), one way to build it (the pair, or <em>cons cell</em>), a few primitives to take it apart, and the rule that a program is itself a list. Not “like” a list — <em>is</em> one: the catalogue and the catalogue’s reading instructions have the same shape.</p>
-<span class="sidenote"><span class="sn">9</span>Lambda calculus — Alonzo Church, 1930s — is the mathematics of substitution: functions made only of functions. McCarthy’s 1960 paper needs barely a page to define Lisp in terms of Lisp; the famous metacircular evaluator of the textbooks is Lisp defined in Lisp — a language watching itself, the way the latch of Chapter 4 is a circuit watching itself.</span>
+<p>Five years earlier, and pointed the opposite way, John McCarthy wanted a language in which a machine could reason about its own thoughts — and found, to his own surprise, that almost nothing is needed. The core he reached for was a piece of pure mathematics: Church’s lambda calculus, in which computation is nothing but functions calling functions — no machine, no storage, only substitution.<sup class="snref">9</sup> From it, LISP takes one data structure (the list), one way to build it (the pair, or <em>cons cell</em>), a few primitives to take it apart, and the rule that a program is itself a list. Not “like” a list — <em>is</em> one: the catalogue and the catalogue’s reading instructions have the same shape.</p>
+<span class="sidenote"><span class="sn">9</span>Lambda calculus — Alonzo Church, 1930s — was invented as pure mathematics, decades before anyone had built a machine to run it on. McCarthy’s 1960 paper needs barely a page to define Lisp in terms of Lisp; an interpreter for Lisp, written in Lisp, famously fits on a single page of the textbooks — a language watching itself, the way the latch of Chapter 4 is a circuit watching itself.</span>
 
 <p>A list is a chain of pairs: each cell holds one thing and a pointer to the rest; the last pointer points at nothing — <em>nil</em>. Three words are the hands for this material: <code>(cons x …)</code> attaches a new first thing; <code>(car …)</code> takes the first thing; <code>(cdr …)</code> takes the rest. Handle the sky’s catalogue yourself:</p>
 
@@ -542,6 +565,8 @@ The student was enlightened, and returned to his work.
 
 <p>Between the Tigris and the Euphrates, civilisation formed on silt carried from two directions. The minority view suspects that between LISP and FORTH, silt of a similar kind is being carried — and that when the historical relationship between society and software matures, it will build its cities there.</p>
 
+<div class="part"><span>Part III · The Long View</span></div>
+
 <!-- ================================================================ 9 -->
 <h2 id="tower"><span class="chnum">9</span>The tower, and how to build well inside it</h2>
 
@@ -574,19 +599,19 @@ The student was enlightened, and returned to his work.
 <p>Each layer makes a promise — <em>“you don’t need to know how I do it”</em> — and that promise is what lets a single mind build at the top.<sup class="snref">13</sup> But every abstraction leaks a little: latency leaks, overflow leaks, the forbidden state of the latch leaks. That is why ground-up understanding matters — not to hold the whole tower in your head at once, but to be unafraid when a leak forces you to look down a floor.</p>
 <span class="sidenote"><span class="sn">13</span>“All non-trivial abstractions leak.” — Joel Spolsky, stating the occupational hazard of the tower. Feynman stated the repair procedure: <em>create</em> the layer once, and you own it forever.</span>
 
-<p>And the engineering virtues this primer honours? Tey were reflect the machinery itself:</p>
+<p>Between the machine and the sky, one more thing deserves plain words: the habits of good building. They are not modern management lore — the machine itself discovered them, before any engineer wrote them down:</p>
 
 <ul>
-  <li><strong>DRY</strong> — Don’t Repeat Yourself — is the subroutine: the discovery, made at machine-code level, that a numbered cell can be <em>called</em>. The whole history of software is the war against saying the same thing twice.</li>
-  <li><strong>KISS</strong> — Keep It Simple — is Turing’s tape: the smallest machine that can possibly work. Simplicity is not less care; it is care aimed at one target.</li>
-  <li><strong>YAGNI</strong> — You Aren’t Gonna Need It — is the von Neumann architecture refusing features until the program demands them. The machine that reached the Moon had 4&nbsp;KB of memory, and none of it was speculative.</li>
+  <li><strong>Name a thing once, then use the name forever.</strong> The subroutine is the discovery, made at machine-code level, that a numbered cell can be <em>called</em> by name instead of copied. The scribes of Sumer were doing the same when they pressed one sign for “forty sheep” where forty tokens had been; the whole history of software is the long war against saying the same thing twice.</li>
+  <li><strong>Build the smallest thing that can possibly work.</strong> Turing’s tape is the pattern: the minimal machine, stated honestly, turns out to be enough for everything. Simplicity is not less care; it is care aimed at one target.</li>
+  <li><strong>Add nothing until something asks for it.</strong> The von Neumann architecture refuses features until the program demands them; the machine that reached the Moon had 4&nbsp;KB of memory, and none of it was speculative.</li>
 </ul>
 
-<p>Forth and Lisp, you now know, are not merely chapter topics; they are the two long-running experiments in taking these three virtues as an entire worldview — languages built the way Moore built his telescope controller and McCarthy built his evaluator, from the smallest core that could possibly suffice, extended only when the sky demanded it.</p>
+<p>Forth and Lisp, you now know, are not merely chapter topics; they are the two long-running experiments in taking those habits as an entire worldview — languages built the way Moore built his telescope controller and McCarthy built his evaluator, from the smallest core that could possibly suffice, extended only when the sky demanded it.</p>
 
 <hr>
 
-<p>Which leaves the last rung to climb: <em>view source</em>. This page practises the sermon. It is one file, no framework, no build step, no network (KISS). One small table of gate functions drives every truth table in Chapters 2 and 3, one shared little engine drives the three Step/Run/Reset machines in Chapters 5, 6 and 7, and the two instruments of Chapter 8 — a stack calculator and a cons-cell sketchpad — reuse the same handful of DOM helpers (DRY, thrice). It contains nothing intended for a hypothetical future feature (YAGNI). The code is meant to be read by the same person who read the prose.</p>
+<p>Which leaves the last invitation: <em>view source</em>. This page practises what it preaches. It is a single self-contained file — no framework, no build step, no network. One small table of gate definitions computes every truth table in Chapters 2 and 3; one shared engine runs the three Step/Run/Reset machines of Chapters 5, 6 and 7; the calculator and the cons-cell sketchpad of Chapter 8 reuse the same handful of helpers; and nothing in it is a scaffold for a hypothetical future feature. The code is meant to be read by the same person who read the prose.</p>
 
 <p class="colophon">Colophon — set in Georgia for the text and your system’s own sans and monospace for the machinery; margin notes in the manner of Edward Tufte; demonstrations in the manner of Richard Feynman: no miracle left unexplained at the level below. Built from sand, meaning from symbols.</p>
 
@@ -596,7 +621,7 @@ The student was enlightened, and returned to his work.
 <script>
 'use strict';
 /* ================================================================
-   0 · TINY HELPERS (KISS)                                   */
+   0 · TINY HELPERS — deliberately small                    */
 /* ================================================================*/
 const $ = (sel) => document.querySelector(sel);
 const el = (tag, cls, html) => {
@@ -608,7 +633,8 @@ const el = (tag, cls, html) => {
 
 /* ================================================================
    1 · ONE TABLE OF GATES — the single source of truth for
-       every truth table and every wire colour on this page (DRY) */
+       every truth table and every wire colour on this page —
+       one definition per gate, used everywhere             */
 /* ================================================================*/
 const GATES = {
   NOT:  (ins) => ins[0] ? 0 : 1,
@@ -634,7 +660,8 @@ function truthRows(fn, arity) {
 
 /* ================================================================
    2 · ONE SHARED PLAYER — Step / Run / Reset for the Turing
-       machine, the CPU and the recursion demo (DRY again)     */
+       machine, the CPU and the recursion demo — one engine,
+       wired three times                                   */
 /* ================================================================*/
 function makePlayer(prefix, opts) {
   let state = opts.initial();
