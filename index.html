@@ -228,6 +228,14 @@ table.mirror td.s{font-style:italic;color:#4c473c}
 @media (min-width:760px){.forth-grid{grid-template-columns:180px 1fr}}
 .forth-stack{display:flex;flex-direction:column;gap:4px;min-height:150px;border:1px dashed #b9b2a0;border-radius:8px;padding:8px;align-items:center}
 .fchip{border:1px solid var(--ink);border-radius:6px;font:700 15px var(--mono);padding:2px 14px;background:#fff}
+/* the FORTH keypad: calculator-shaped, dictionary on top */
+.fwords{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0}
+.fwords .btn{margin:0}
+.fkeys{display:grid;grid-template-columns:repeat(4,minmax(58px,68px));gap:6px;margin-top:10px}
+.fkeys .btn{margin:0;padding:6px 4px;height:46px;font-size:15px}
+.fkeys .btn.op{color:var(--accent);border-color:#c98b97}
+.fkeys .btn.eq{background:var(--accent);border-color:var(--accent);color:#fffdf6}
+.fkeys .btn.zero{grid-column:span 2}
 .dict-line{font:13px var(--mono);background:var(--code-bg);padding:6px 10px;border-radius:6px;margin-top:10px}
 .cons{display:flex;flex-wrap:wrap;gap:0;align-items:center;margin-top:10px;min-height:56px}
 .ccell{display:flex;border:1px solid var(--ink);border-radius:6px;overflow:hidden;background:#fff}
@@ -483,17 +491,28 @@ footer{padding-bottom:80px}
 
 <figure class="demo">
   <div class="controls" id="forth-controls">
-    <button class="btn" data-op="3">3</button>
-    <button class="btn" data-op="5">5</button>
-    <button class="btn" data-op="8">8</button>
-    <button class="btn" data-op="+">+</button>
-    <button class="btn" data-op="*">*</button>
-    <button class="btn" data-op="-">−</button>
-    <button class="btn" data-op="DUP">DUP</button>
-    <button class="btn" data-op="DROP">DROP</button>
-    <button class="btn" data-op="SQUARE">SQUARE</button>
-    <button class="btn" data-op="DOT">.</button>
-    <button class="btn" data-op="RESET">clear</button>
+    <div class="fwords">
+      <button class="btn" data-op="SQUARE">SQUARE</button>
+      <button class="btn" data-op="DUP">DUP</button>
+      <button class="btn" data-op="DROP">DROP</button>
+    </div>
+    <div class="fkeys">
+      <button class="btn" data-op="7">7</button>
+      <button class="btn" data-op="8">8</button>
+      <button class="btn" data-op="9">9</button>
+      <button class="btn op" data-op="+">+</button>
+      <button class="btn" data-op="4">4</button>
+      <button class="btn" data-op="5">5</button>
+      <button class="btn" data-op="6">6</button>
+      <button class="btn op" data-op="-">−</button>
+      <button class="btn" data-op="1">1</button>
+      <button class="btn" data-op="2">2</button>
+      <button class="btn" data-op="3">3</button>
+      <button class="btn op" data-op="*">*</button>
+      <button class="btn zero" data-op="0">0</button>
+      <button class="btn" data-op="RESET">clear</button>
+      <button class="btn eq" data-op="DOT">.</button>
+    </div>
   </div>
   <div class="forth-grid">
     <div>
