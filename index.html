@@ -1236,7 +1236,7 @@ forthRender();
    11 · CHAPTER 8 — LISP: a language that is a list           */
 /* ================================================================*/
 const LISP = { list: ['mars', 'venus', 'mercury'], next: 0, note: 'Three entries; nil at the end.' };
-const DISCOVERIES = ['jupiter', 'saturn', 'a comet', 'a nova', 'a galaxy'];
+const DISCOVERIES = ['jupiter', 'saturn', 'a-comet', 'a-nova', 'a-galaxy'];
 const lispQuote = () => "'(" + LISP.list.join(' ') + ")";
 function lispRender() {
   const items = LISP.list;
