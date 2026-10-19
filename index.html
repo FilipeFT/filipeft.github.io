@@ -277,7 +277,7 @@ footer{padding-bottom:80px}
 <!-- ================================================================ 1 -->
 <h2 id="bits"><span class="chnum">1</span>The Bit</h2>
 
-<p>A computer is a machine of two states. A voltage is high or it is low. A switch is closed or it is open. A magnet points north or it points south. The two states are written <strong>0</strong> and <strong>1</strong>, and one of them is called a <em>bit</em>. That is the entire alphabet. Everything else, numbers, music, this sentence, is arrangement.</p>
+<p>A computer is a machine of two states. A voltage is high or it is low. A switch is closed or it is open. A magnet points north or it points south. The two states are written <strong>0</strong> and <strong>1</strong>, and each such digit is called a <em>bit</em>. That is the entire alphabet. Everything else, numbers, music, this sentence, is arrangement.</p>
 
 <p>Below, five switches. Click them and count.</p>
 
@@ -294,14 +294,14 @@ footer{padding-bottom:80px}
 </figure>
 
 <p>The places are worth 1, 2, 4, 8, 16, each twice the one to its right. The numeral <code>10101</code> is not a mystical string; it is 16&nbsp;+&nbsp;4&nbsp;+&nbsp;1&nbsp;=&nbsp;21 written in the only alphabet the machine has.<sup class="snref">1</sup></p>
-<span class="sidenote"><span class="sn">1</span>Binary numerals are older than computers by a comfortable margin: Leibniz worked the arithmetic out in 1679 and admired how neatly it expressed creation — “from nothing, everything.”</span>
+<span class="sidenote"><span class="sn">1</span>Binary numerals are older than computers by a comfortable margin: Leibniz worked the arithmetic out in 1679 and admired how neatly it expressed creation — everything out of nothing, one sufficing.</span>
 
 <p>One bit says little. Two bits can be related: both are 1, at least one is 1, they disagree. A device that answers such questions about its inputs is a <em>logic gate</em>, and it is the next rung.</p>
 
 <!-- ================================================================ 2 -->
 <h2 id="gates"><span class="chnum">2</span>Gates: the whole vocabulary</h2>
 
-<p>A gate is a few pieces of carefully poisoned sand, a transistor or three, that answers one question about its input bits. Six kinds are worth knowing. The wire below turns red when it carries a 1; the pads take clicks, and so do the buttons.</p>
+<p>A gate is a few pieces of carefully poisoned sand, a transistor or four, that answers one question about its input bits. Six kinds are worth knowing. The wire below turns red when it carries a 1; the pads take clicks, and so do the buttons.</p>
 
 <figure class="demo">
   <div class="controls" id="gate-chips"></div>
@@ -319,21 +319,21 @@ footer{padding-bottom:80px}
 <!-- ================================================================ 3 -->
 <h2 id="adders"><span class="chnum">3</span>One gate to rule them all — and then, arithmetic</h2>
 
-<p>The toolbox of Chapter 2 is overstocked: one gate is enough. NAND alone can impersonate all the others. Tie its two inputs together and it becomes NOT. NAND the two outputs of a NAND and you get AND. By De Morgan’s rules, three NANDs make an OR. The tables below are computed live by the same gate definitions that draw Fig.&nbsp;2:</p>
+<p>The toolbox of Chapter 2 is overstocked: one gate is enough. NAND alone can impersonate all the others. Tie its two inputs together and it becomes NOT. Feed a NAND’s output to both inputs of a second NAND and you get AND. By De Morgan’s rules, three NANDs make an OR. The tables below are computed live by the same gate definitions that draw Fig.&nbsp;2:</p>
 
 <figure class="demo">
   <div class="mini-tbls" id="nand-tbls"></div>
   <figcaption>Fig. 3 — Three impostures. Each table on the right is produced by the recipe above it, using nothing but NAND. In real chips NAND is also the cheapest gate to etch — four transistors — which is why it became the brick of the digital world.</figcaption>
 </figure>
 
-<p>Now arithmetic. Add two bits <code>a</code> and <code>b</code>: the answer’s ones-column is <code>XOR(a,b)</code>, and the carry is <code>AND(a,b)</code>. That two-gate gadget is called a <em>half adder</em> — half, because it can only add two bits; it has no place to receive a carry arriving from the column to its right. The <em>full adder</em> repairs the omission: it adds three one-bit numbers at a time (<code>a</code>, <code>b</code>, and the incoming carry), which takes two half adders glued together by an OR gate.</p>
+<p>Now arithmetic. Add two bits <code>a</code> and <code>b</code>: the answer’s ones-column is <code>XOR(a,b)</code>, and the carry is <code>AND(a,b)</code>. That two-gate gadget is called a <em>half adder</em> — half, because it can only add two bits; it has no place to receive the carry arriving from the next-lower column. The <em>full adder</em> repairs the omission: it adds three one-bit numbers at a time (<code>a</code>, <code>b</code>, and the incoming carry), which takes two half adders glued together by an OR gate.</p>
 
-<p>Chain four full adders, feeding each carry into the next, and you can add any two numbers from 0 to 15. The carry <em>ripples</em> from right to left, exactly like the little 1s you carry when adding by hand:</p>
+<p>Chain four full adders, feeding each carry into the next, and you can add any two numbers from 0 to 15. The carry <em>ripples</em> from the 1s column to the 8s, exactly like the little 1s you carry when adding by hand:</p>
 
 <figure class="demo">
   <div class="adder" id="adder"></div>
   <div id="adder-eq"></div>
-  <figcaption>Fig. 4 — A 4-bit ripple-carry adder. Click the A and B bits. Each box adds three one-bit numbers (a, b, and the carry arriving from the right) and produces a sum bit plus a carry. The round chips between boxes are the carries, flowing toward the more significant side. The exit chip on the far right is the fifth bit of the answer; it lights up when 15 + 15 = 30 outgrows four bits.</figcaption>
+  <figcaption>Fig. 4 — A 4-bit ripple-carry adder. Click the A and B bits. Each box adds three one-bit numbers (a, b, and the carry arriving from the left) and produces a sum bit plus a carry. The round chips between boxes are the carries, flowing toward the more significant side. The exit chip on the far right is the fifth bit of the answer; it lights up when 15 + 15 = 30 outgrows four bits.</figcaption>
 </figure>
 
 <p>Somewhere inside the processor in front of you, a wider and faster cousin of this pattern is adding numbers billions of times a second. Arithmetic did not grow more mysterious as it grew real; it grew more <em>parallel</em>.</p>
@@ -352,7 +352,7 @@ footer{padding-bottom:80px}
     <button class="btn" id="latch-r"></button>
   </div>
   <div id="latch-note"></div>
-  <figcaption>Fig. 5 — The SR latch, the atom of memory. <strong>S</strong>et the latch: pulse S to 1 and Q lights up. <strong>R</strong>eset: pulse R. Now do <em>nothing</em>: with S = R = 0 the gates endlessly re-confirm each other’s story, and Q holds its value forever — a single bit of memory made of six hunks of sand, arguing in a closed loop. (Pushing both at once drives both outputs to 0, the forbidden state; release order decides who wins.)</figcaption>
+  <figcaption>Fig. 5 — The SR latch, the atom of memory. <strong>S</strong>et the latch: pulse S to 1 and Q lights up. <strong>R</strong>eset: pulse R. Now do <em>nothing</em>: with S = R = 0 the gates endlessly re-confirm each other’s story, and Q holds its value forever — a single bit of memory made of eight hunks of sand, arguing in a closed loop. (Pushing both at once drives both outputs to 0, the forbidden state; release order decides who wins.)</figcaption>
 </figure>
 
 <p>While S and R are both 0, ask the latch “why is Q 1?” and it answers: “because Q̄ is 0. Why is Q̄ 0? Because Q is 1.” The state is a loop of mutual justification — a tiny strange loop.<sup class="snref">3</sup> Add a gate in front to decide <em>when</em> the latch may listen, and a <em>clock</em> — a steady pulse, billions of beats per second — to do the deciding, and you have a flip-flop: memory that changes only on the beat. Put 64 of them side by side and you have a register. This is all “memory” ever was: loops with a doorman.</p>
@@ -363,8 +363,8 @@ footer{padding-bottom:80px}
 <!-- ================================================================ 5 -->
 <h2 id="turing"><span class="chnum">5</span>The Turing machine: purpose, distilled</h2>
 
-<p>In 1936 — a decade before any such machine was built — Alan Turing asked what “mechanical procedure” could possibly mean, and distilled it to almost nothing:<sup class="snref">4</sup></p>
-<span class="sidenote"><span class="sn">4</span>The same paper introduces the halting problem: some programs run forever, and <em>no algorithm at all</em> can examine a program and reliably tell you which kind it is. Every impossibility proof in computing descends from this one.</span>
+<p>In 1936, before any electronic computer existed, Alan Turing asked what “mechanical procedure” could possibly mean, and distilled it to almost nothing:<sup class="snref">4</sup></p>
+<span class="sidenote"><span class="sn">4</span>The same paper introduces the halting problem: some programs run forever, and <em>no algorithm at all</em> can examine a program and reliably tell you which kind it is. The impossibility proofs of computing descend from this one.</span>
 
 <ul>
   <li>an endless <strong>tape</strong> of cells, each holding one symbol;</li>
@@ -477,7 +477,7 @@ footer{padding-bottom:80px}
 <h3>FORTH — the word that acts</h3>
 
 <p>In the 1960s, Charles H. Moore programmed computers for astronomy, and the trade became, in his hands, a decade-long act of subtraction. Every tool struck him as heavier than the work; every language, as a bureaucratic tax on thought. His answer was to make the language disappear almost entirely. By the time he was steering radio telescopes for the National Radio Astronomy Observatory, his system — he called it FORTH — was little more than the stack you met in Chapter 7, a dictionary of <em>words</em>, and a colon for teaching the machine new words from old ones.<sup class="snref">7</sup></p>
-<span class="sidenote"><span class="sn">7</span>The name was a pun: Moore meant “FOURTH,” as in fourth-generation language; the IBM 1130 he used permitted five-character names. The system had been distilling privately since the mid-1960s and reached its essential form pointing at the radio sky — the 36-foot telescope at Kitt Peak among its first chores.</span>
+<span class="sidenote"><span class="sn">7</span>The name was a pun: Moore meant “FOURTH,” as in fourth-generation language; the IBM 1130 he used permitted five-character names. The system had been distilling privately since the late 1950s and reached its essential form pointing at the radio sky — the 36-foot telescope at Kitt Peak among its first chores.</span>
 
 <p>Numbers go onto the stack; words consume what they need and leave what they made; <code>: SQUARE DUP * ;</code> teaches a new word, indistinguishable thereafter from a built-in. That is most of the specification. The whole language, on one desk:</p>
 
@@ -506,7 +506,7 @@ footer{padding-bottom:80px}
       <div class="decodeline" id="forth-note"></div>
     </div>
   </div>
-  <figcaption>Fig. 9 — The entire language, on one desk. FORTH has no operator precedence and no parentheses because it needs neither: a word simply takes what is on top of the stack — push 3, push 5, press +, press <code>.</code>, and you have printed 8. <code>: SQUARE DUP * ;</code> teaches rather than repeats — one new word, usable forever, the way a scribe’s sign condenses a long tally into one mark. The word <code>.</code> is the same print you watched as <code>OUT</code> in the countdown program; the dictionary is kept exactly like the memory of Chapter 6 — one definition standing on another. Moore’s systems steered telescopes with fewer words than this caption has clauses.</figcaption>
+  <figcaption>Fig. 9 — The entire language, on one desk. FORTH has no operator precedence and no parentheses because it needs neither: a word simply takes what is on top of the stack — push 3, push 5, press +, press <code>.</code>, and you have printed 8. <code>: SQUARE DUP * ;</code> teaches rather than repeats — one new word, usable forever, the way a scribe’s numeral condenses a long tally into a few marks. The word <code>.</code> is the same print you watched as <code>OUT</code> in the countdown program; the dictionary is kept exactly like the memory of Chapter 6 — one definition standing on another. Moore steered telescopes with a dictionary of a few dozen words — fewer than this caption has.</figcaption>
 </figure>
 
 <p>Absent are variables, syntax trees, precedence rules, any border between the language and your program. The program is the dictionary, and the dictionary is the machine growing a vocabulary. Postfix order — the numbers first, the word last — is how the machine itself lives: <em>fetch, fetch, act</em>. FORTH is Chapter 6 without the apology.</p>
@@ -514,7 +514,7 @@ footer{padding-bottom:80px}
 <h3>LISP — the meaning that recurs</h3>
 
 <p>Five years earlier, pointed the opposite way, John McCarthy wanted a language in which a machine could reason about its own thoughts, and found that almost nothing is needed. The core he reached for was pure mathematics, Church’s lambda calculus, in which computation is nothing but functions calling functions — no machine, no storage, only substitution.<sup class="snref">8</sup> From it LISP takes one data structure, the list; one way to build it, the pair or <em>cons cell</em>; a few primitives to take it apart; and the rule that a program is itself a list. Not like a list — <em>is</em> one: the catalogue and the catalogue’s reading instructions have the same shape.</p>
-<span class="sidenote"><span class="sn">8</span>Lambda calculus — Alonzo Church, 1930s — was invented as pure mathematics, decades before anyone had built a machine to run it on. McCarthy’s 1960 paper needs barely a page to define Lisp in terms of Lisp; an interpreter for Lisp, written in Lisp, famously fits on a single page of the textbooks — a language watching itself, the way the latch of Chapter 4 is a circuit watching itself.</span>
+<span class="sidenote"><span class="sn">8</span>Lambda calculus — Alonzo Church, 1930s — was invented as pure mathematics, decades before anyone had built a machine to run it on. McCarthy’s 1960 paper already defines Lisp in terms of Lisp; an interpreter for Lisp, written in Lisp, famously fits on a single page — a language watching itself, the way the latch of Chapter 4 is a circuit watching itself.</span>
 
 <p>A list is a chain of pairs: each cell holds one thing and a pointer to the rest; the last pointer points at nothing — <em>nil</em>. Three words are the hands for this material: <code>(cons x …)</code> attaches a new first thing; <code>(car …)</code> takes the first thing; <code>(cdr …)</code> takes the rest. The sky’s catalogue, for your hands:</p>
 
@@ -556,7 +556,7 @@ The student was enlightened, and returned to his work.
 <h3>The oldest computation</h3>
 
 <p>A telescope controller is the right place to meet all this, because the loop it closes is ten thousand years old. Astronomy was humanity’s first science, mathematics, and computation in one: people looked up, saw that the sky is the one place where the changing masks the unchanging, and discerned cycles — of days, of seasons, of years, of the slow recurrence of planets and the shock of a predicted eclipse.<sup class="snref">10</sup> Recording the cycles forced the invention of number and of notation; predicting them was the first program execution.</p>
-<span class="sidenote"><span class="sn">10</span>Babylonian base-60, chosen for the sky, outlived the civilisation that chose it: it survives in the degrees on a telescope mount and the minutes on your clock — the sky’s units, thirty centuries old and still in daily use.</span>
+<span class="sidenote"><span class="sn">10</span>Babylonian base-60, a counting system inherited from Sumer and made immortal by the sky, outlived both: it survives in the degrees on a telescope mount and the minutes on your clock — thirty centuries old and still in daily use.</span>
 
 <p>The second act of the same play: the earliest writing of Sumer and Egypt is not poetry or prayer — it is accounting. Tallies of sheep and grain pressed into clay; the token, the envelope, the tablet.<sup class="snref">11</sup> The state was born as a ledger. Scribes were trained by copying the record and adding to it, generation onto generation — and the archive outlives the scribe exactly as the latch of Chapter 4 outlives the signal that set it, scaled up to a civilisation. Writing, teaching, remembering: culture itself as external memory. Civilisation formed as a form of abstract computation — the slowest and most successful information technology ever deployed.</p>
 <span class="sidenote"><span class="sn">11</span>On Denise Schmandt-Besserat’s account, writing began as bookkeeping: small clay counting tokens (as early as 8000 BCE) became impressions on envelopes, impressions became marks on flat clay, and marks became script. Literature arrived later, and inherited the clerk’s tools.</span>
@@ -597,14 +597,14 @@ The student was enlightened, and returned to his work.
 </svg>
 
 <p>Each layer makes a promise — <em>“you don’t need to know how I do it”</em> — and that promise is what lets a single mind build at the top.<sup class="snref">12</sup> But every abstraction leaks: latency leaks, overflow leaks, the forbidden state of the latch leaks. Ground-up understanding matters not because you will hold the whole tower in your head, but because a leak is less frightening when you can look down a floor.</p>
-<span class="sidenote"><span class="sn">12</span>“All non-trivial abstractions leak.” — Joel Spolsky, stating the occupational hazard of the tower. Feynman stated the repair procedure: <em>create</em> the layer once, and you own it forever.</span>
+<span class="sidenote"><span class="sn">12</span>“All non-trivial abstractions, to some degree, are leaky.” — Joel Spolsky, stating the occupational hazard of the tower. Feynman stated the repair procedure: <em>create</em> the layer once, and you own it forever.</span>
 
 <p>Between the machine and the sky, the habits of good building. The machine discovered them before any engineer wrote them down:</p>
 
 <ul>
-  <li><strong>Name a thing once, then use the name forever.</strong> The subroutine is the discovery, made at machine-code level, that a numbered cell can be <em>called</em> by name instead of copied. The scribes of Sumer were doing the same when they pressed one sign for “forty sheep” where forty tokens had been; the whole history of software is the long war against saying the same thing twice.</li>
+  <li><strong>Name a thing once, then use the name forever.</strong> The subroutine is the discovery, made at machine-code level, that a numbered cell can be <em>called</em> by name instead of copied. The scribes of Sumer were doing the same when forty sheep, once forty tokens, one per animal, became a numeral and a sheep sign — the number named once and reused for everything counted after; the whole history of software is the long war against saying the same thing twice.</li>
   <li><strong>Build the smallest thing that can possibly work.</strong> Turing’s tape is the pattern: the minimal machine, stated honestly, turns out to be enough for everything. Simplicity is not less care; it is care aimed at one target.</li>
-  <li><strong>Add nothing until something asks for it.</strong> The von Neumann architecture refuses features until the program demands them; the machine that reached the Moon carried 4&nbsp;KB of erasable memory and 72 of hand-woven rope, and the erasable words were so few that one address did seven jobs in a single flight.</li>
+  <li><strong>Add nothing until something asks for it.</strong> The von Neumann architecture refuses features until the program demands them; the machine that reached the Moon kept its programs in core rope — copper wire threaded by hand through magnetic cores, through for 1, around for 0 — and its 4&nbsp;KB of working memory was so tight that one address did seven jobs in a single flight.</li>
 </ul>
 
 <p>Forth and Lisp are the two long-running experiments in taking those habits as an entire worldview: languages built the way Moore built his telescope controller and McCarthy his evaluator, from the smallest core that could suffice, extended only when the sky demanded it.</p>
