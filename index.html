@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>From Sand to Symbols — a ground-up primer on computing</title>
-<meta name="description" content="An illustrated, interactive primer: from logic gates and Turing machines to computer architecture and recursion.">
+<title>From Sand to Symbols — a deck of doors into the machine</title>
+<meta name="description" content="Pick a card — playing games, delivering food, watching movies — and tap the parts down to bits, gates, memory, programs, and the machine itself.">
 <style>
 :root{
   --ink:#111111;
@@ -17,32 +17,15 @@
   --sans:system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
 body{
   margin:0;color:var(--ink);background:var(--paper);
   font:400 20px/1.6 Georgia,"Iowan Old Style","Times New Roman",serif;
   -webkit-font-smoothing:antialiased;
 }
-/* ---------- top navigation ---------- */
-nav#topnav{
-  position:sticky;top:0;z-index:20;background:rgba(255,253,246,.94);
-  border-bottom:1px solid var(--hair);backdrop-filter:blur(4px);
-}
-nav#topnav .inner{
-  max-width:1120px;margin:0 auto;padding:9px 5vw;display:flex;gap:14px;flex-wrap:wrap;
-  font:600 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
-}
-nav#topnav a{color:var(--faint);text-decoration:none}
-nav#topnav a:hover{color:var(--accent)}
 /* ---------- layout ---------- */
 .wrap{max-width:1120px;margin:0 auto;padding:0 5vw}
-.prose{max-width:680px}
 h1{font-size:52px;line-height:1.08;font-weight:400;margin:0 0 .2em}
-.subtitle{font-size:22px;font-style:italic;color:var(--faint);margin:0 0 1.6em}
-.epigraph{margin:2.2em 0 0;font-style:italic}
-.epigraph .who{font-style:normal;font-size:15px;color:var(--faint)}
-h2{font-size:33px;font-weight:400;line-height:1.15;margin:2.8em 0 .4em}
-h2 .chnum{color:var(--accent);font-style:italic;margin-right:.35em}
+.subtitle{font-size:22px;font-style:italic;color:var(--faint);margin:0 0 1.6em}h2{font-size:33px;font-weight:400;line-height:1.15;margin:2.8em 0 .4em}
 p{margin:0 0 1.2em}
 ul{padding-left:1.35em}
 li{margin:.35em 0}
@@ -92,10 +75,21 @@ figure.demo figcaption{
 }
 .btn:hover{border-color:var(--ink)}
 .btn:active{transform:translateY(1px)}
-.btn.running{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .chip{border-radius:999px}
 .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .controls{margin:14px 0 2px}
+/* ---------- the transport: play / step / stop ---------- */
+.transport{display:inline-flex;margin:14px 0 2px}
+#race-controls .transport{margin:0 0 6px 8px}
+.tbtn{display:inline-flex;align-items:center;gap:7px;font:600 13px var(--sans);letter-spacing:.02em;color:var(--ink);background:#fff;border:1px solid #9a927e;padding:6px 16px;cursor:pointer;margin:0;transition:all .12s}
+.transport .tbtn+.tbtn{margin-left:-1px}
+.transport .tbtn:first-child{border-radius:999px 0 0 999px}
+.transport .tbtn:last-child{border-radius:0 999px 999px 0}
+.tbtn:hover{border-color:var(--ink)}
+.tbtn:active{transform:translateY(1px)}
+.tbtn.running{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tbtn .ti{display:inline-flex}
+.tbtn svg{display:block;fill:currentColor}
 .decodeline{
   font:13.5px/1.5 var(--mono);color:#4c473c;background:var(--code-bg);
   border-radius:6px;padding:9px 13px;margin-top:12px;min-height:2.4em;
@@ -205,14 +199,72 @@ table.listing td.data, table.listing span.data{color:#1c6e3c}
 @keyframes pop{from{transform:translateY(-8px);opacity:0}to{transform:none;opacity:1}}
 .ribbon{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;min-height:34px;align-items:center}
 .valchip{border:1px solid #1c6e3c;color:#1c6e3c;border-radius:6px;font:700 15px var(--mono);padding:2px 10px}
-/* ---------- parts & contents ---------- */
-.part{display:flex;align-items:center;gap:18px;margin:4.4em 0 -1.4em}
-.part::before,.part::after{content:"";flex:1;border-top:1px solid var(--hair)}
-.part span{font:700 11px var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
-.toc{margin:1.4em 0 0;font-size:16px;color:#4c473c}
-.toc .tp{font:700 11px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:.9em 0 .15em}
-.toc a{color:inherit;text-decoration:none;border-bottom:1px solid var(--hair)}
-.toc a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+/* ---------- views: deck, systems, primers ---------- */
+.hidden{display:none}
+.view.primer,.view.system{max-width:680px;margin:0 auto}
+#topbar{
+  position:sticky;top:0;z-index:40;background:rgba(255,253,246,.94);
+  border-bottom:1px solid var(--hair);backdrop-filter:blur(4px);
+}
+#topbar .inner{
+  max-width:1120px;margin:0 auto;padding:9px 5vw;display:flex;align-items:center;gap:16px;
+  font:600 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
+}
+#back-btn{font:600 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:#fff;border:1px solid #9a927e;border-radius:999px;padding:7px 14px;cursor:pointer}
+#back-btn:hover{border-color:var(--ink)}
+#crumb{flex:1;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#home-link{color:var(--accent);text-decoration:none;cursor:pointer}
+#home-link:hover{color:var(--ink)}
+/* ---------- the deck ---------- */
+header .overline{font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:3.2em 0 0}
+.deck{display:grid;grid-template-columns:1fr;gap:16px;margin:2em 0 0}
+@media (min-width:760px){.deck{grid-template-columns:repeat(3,1fr)}}
+.card{
+  display:block;text-align:left;border:1px solid #9a927e;border-radius:12px;background:#fff;
+  padding:24px 22px 20px;cursor:pointer;font:inherit;color:inherit;transition:border-color .12s, box-shadow .12s;
+}
+.card:hover{border-color:var(--ink);box-shadow:0 3px 14px rgba(60,50,20,.12)}
+.card:active{transform:translateY(1px)}
+.card .c-ic{display:block;color:var(--accent);margin-bottom:14px}
+.card .c-name{font:700 13px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.card .c-q{display:block;font:400 20px/1.35 Georgia,serif;margin-top:8px}
+.card .c-hint{display:block;font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:16px}
+/* ---------- the fundamentals ---------- */
+.fund{margin-top:3.2em;border-top:1px solid var(--hair);padding-top:1.6em}
+.fund h3{font-size:24px;font-weight:400;margin:0 0 .2em}
+.fgrid{display:grid;grid-template-columns:1fr;gap:0 44px}
+@media (min-width:900px){.fgrid{grid-template-columns:1fr 1fr}}
+.fgroup h4{font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:1.3em 0 .4em}
+a.fq{display:block;font:15px/1.45 var(--sans);color:var(--ink);text-decoration:none;padding:7px 0;border-bottom:1px dashed var(--hair);cursor:pointer}
+a.fq:hover{color:var(--accent)}
+a.fq::after{content:" →";color:var(--faint)}
+/* ---------- the systems: a spine of parts ---------- */
+.system h2{margin-top:1.4em}
+.sys-how{font:15px/1.5 var(--sans);color:var(--faint)}
+.spine{position:relative;margin:1.8em 0;max-width:600px}
+.spine::before{content:"";position:absolute;left:27px;top:16px;bottom:16px;border-left:2px solid var(--hair)}
+.spart{position:relative;margin:0 0 8px}
+.sp-head{display:flex;align-items:center;gap:15px;width:100%;text-align:left;background:none;border:0;padding:4px 0;cursor:pointer;font:inherit;color:inherit}
+.sp-ic{flex:0 0 54px;height:54px;border-radius:50%;background:#fff;border:1px solid #9a927e;display:flex;align-items:center;justify-content:center;color:var(--ink);position:relative;z-index:1;transition:border-color .12s}
+.sp-head:hover .sp-ic{border-color:var(--ink)}
+.sp-txt{min-width:0}
+.sp-name{display:block;font:700 14px var(--sans);letter-spacing:.03em;color:var(--ink)}
+.sp-line{display:block;font:400 13.5px/1.4 var(--sans);color:var(--faint);margin-top:2px}
+.sp-tw{margin-left:auto;color:var(--faint);font:13px var(--sans);transition:transform .15s}
+.spart.open .sp-tw{transform:rotate(180deg)}
+.sp-body{display:none;margin:2px 0 8px 69px;padding-bottom:6px}
+.spart.open .sp-body{display:block}
+.sp-body p{font-size:16px;line-height:1.55;margin:0 0 .8em}
+a.sp-deep{display:inline-block;font:600 13px var(--sans);color:var(--accent);text-decoration:none;border-bottom:1px dashed var(--accent);cursor:pointer;margin:0 18px 8px 0}
+a.sp-deep:hover{border-bottom-style:solid}
+.sys-bottom{margin:1.8em 0 0;padding:16px 20px;border:1px dashed #b9b2a0;border-radius:10px}
+.sys-bottom p{font-size:16px;line-height:1.55;margin:0 0 .9em}
+.sys-bottom a{display:inline-block;font:600 13px var(--sans);color:var(--accent);text-decoration:none;border-bottom:1px dashed var(--accent);cursor:pointer;margin:0 22px 6px 0}
+.sys-bottom a:hover{border-bottom-style:solid}
+@media(max-width:600px){
+  h1{font-size:38px}h2{font-size:27px}.subtitle{font-size:19px}
+  .card .c-q{font-size:18px}
+}
 /* ---------- two rivers ---------- */
 blockquote.koan{
   margin:1.6em 0;padding:.4em 0 .4em 1.2em;border-left:3px solid var(--accent);
@@ -244,13 +296,17 @@ table.mirror td.s{font-style:italic;color:#4c473c}
 .carrow{font:17px var(--mono);color:var(--faint);padding:0 7px}
 .cnil{font:15px var(--mono);color:var(--faint);padding:7px 2px}
 /* ---------- relations (the third way) ---------- */
-.pl-grid{display:grid;grid-template-columns:1fr;gap:16px}
-@media (min-width:820px){.pl-grid{grid-template-columns:0.9fr 1.1fr}}
-.pl-kb{border:1px solid var(--hair);border-radius:8px;padding:10px 12px;background:#fff;font:13px/1.8 var(--mono);color:#4c473c;overflow-x:auto}
+.qlabel{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-right:10px}
+.pl-board{border:1px solid var(--hair);border-radius:10px;background:#fff;overflow:hidden;margin:14px 0 0}
+.pl-zone{padding:13px 18px 11px}
+.pl-zone+.pl-zone{border-top:1px solid var(--hair)}
+.pl-zlabel{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+.pl-kb{font:13px/1.9 var(--mono);color:#4c473c;overflow-x:auto}
+.pl-kb .kb-cols{columns:2 170px}
 .pl-kb div{padding:0 8px;border-radius:5px;white-space:nowrap}
 .pl-kb div.cur{background:#f3d9dc}
 .pl-kb .kbhead{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:5px 0 2px;padding-left:0}
-.pl-trail{border:1px dashed #b9b2a0;border-radius:8px;padding:10px 12px;min-height:300px;max-height:360px;overflow-y:auto;font:12.5px/1.8 var(--mono);color:#4c473c}
+.pl-trail{background:var(--code-bg);border-radius:8px;padding:10px 12px;min-height:170px;max-height:250px;overflow-y:auto;font:12.5px/1.8 var(--mono);color:#4c473c}
 .pl-trail .ln{white-space:normal;overflow-wrap:break-word}
 .pl-trail .ln.ok{color:#1c6e3c}
 .pl-trail .ln.ok .as{color:var(--faint)}
@@ -259,7 +315,32 @@ table.mirror td.s{font-style:italic;color:#4c473c}
 .pl-trail .ln.sol{color:var(--accent);font-weight:700}
 .pl-trail .ln.end{color:#4c473c;font-weight:600}
 .pl-trail .hint{font-style:italic;color:var(--faint)}
+.pl-answers{display:flex;gap:8px;flex-wrap:wrap;align-items:center;min-height:46px}
+.pl-answers .ans{border:1px solid var(--accent);color:var(--accent);border-radius:6px;font:700 15px var(--mono);padding:3px 12px}
+.pl-answers .pl-none{font:12.5px var(--mono);color:var(--faint);font-style:italic}
+.pl-answers .pl-count{font:600 12px var(--sans);color:var(--faint);margin-left:auto}
+.pl-runbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:12px 0 2px}
+.pl-runbar .transport{margin:0}
+.pl-status{flex:1 1 240px;font:13px/1.5 var(--mono);color:#4c473c;min-height:1.4em}
 #pl-queries .btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+/* ---------- time (concurrency) ---------- */
+.race-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:760px){.race-grid{grid-template-columns:1fr 1.15fr 1fr}}
+.race-col,.race-mid{border:1px solid var(--hair);border-radius:8px;padding:10px 14px;background:#fff;min-height:150px}
+.rc-label{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.race-prog{font:13px/1.9 var(--mono);color:#4c473c}
+.race-prog div{padding:0 8px;border-radius:5px;white-space:nowrap}
+.race-prog div.cur{background:#f3d9dc}
+.race-prog div.did{color:#1c6e3c}
+.regrow{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.regrow .rl{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.race-cell{font:700 46px/1.1 var(--mono);color:#4c473c;text-align:center;margin-top:18px}
+.pipe{display:flex;gap:6px;min-height:44px;align-items:center;justify-content:center;flex-wrap:wrap;border:1px dashed #b9b2a0;border-radius:8px;padding:6px}
+.pipe .msg{border:1px solid var(--accent);color:var(--accent);border-radius:6px;font:700 14px var(--mono);padding:2px 10px}
+.pipe .pipe-empty{font:12.5px var(--mono);color:var(--faint);font-style:italic}
+.ownerbox{border:1px solid var(--ink);border-radius:8px;padding:10px 14px;margin-top:12px}
+.ownerbox .race-cell{margin-top:10px}
+#race-controls .btn[disabled]{opacity:.4;cursor:default}
 /* ---------- tower ---------- */
 .tower-svg{width:100%;height:auto;max-width:680px;display:block;margin:1.5em auto}
 /* ---------- colophon ---------- */
@@ -268,41 +349,81 @@ footer{padding-bottom:80px}
 </style>
 </head>
 <body>
-
-<nav id="topnav"><div class="inner">
-  <a href="#bits">Bits</a><a href="#gates">Gates</a><a href="#adders">Arithmetic</a>
-  <a href="#memory">Memory</a><a href="#turing">Turing</a><a href="#cpu">A real machine</a>
-  <a href="#recursion">Recursion</a><a href="#rivers">Two rivers</a><a href="#tower">The tower</a>
+<nav id="topbar"><div class="inner">
+  <button id="back-btn" class="hidden">← back</button>
+  <span id="crumb">the deck</span>
+  <a id="home-link" role="button" tabindex="0">⌂ deck</a>
 </div></nav>
 
-<div class="wrap"><div class="prose">
+<div class="wrap">
 
+<section class="view" id="deck" data-title="the deck">
 <header>
-  <p style="font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:3.2em 0 0">A primer for the curious</p>
+  <p class="overline">A deck of doors into the machine</p>
   <h1>From Sand to Symbols</h1>
-  <p class="subtitle">How a machine that only knows <em>on</em> and <em>off</em> comes to understand <code>(fact 4)</code>.</p>
-  <p>This primer builds the machine from the ground, one ability at a time: a wire that is hot or cold, a gate, a bit of arithmetic, a loop of wire that <em>remembers</em>, a Turing machine, a small honest processor, and finally recursion, which seems to float free of any machine until you see the cells underneath it. The lens then widens twice: once to a minority tradition in the design of languages — FORTH, LISP and Prolog, the earth, the sky, and the relation between them; once more to the ten-thousand-year debt that computing owes to the first astronomers and the first scribes. Every figure is live and expects your hands. Nothing is hidden: <strong>view source</strong>, and the page explains its own making.</p>
-  <p class="epigraph">“What I cannot create, I do not understand.”<br>
-  <span class="who">— Richard Feynman, quoted on his blackboard</span></p>
-
-  <h3>How to read this primer</h3>
-  <p>The chapters build on one another: each adds a single ability, to name, to relate, to compute, to remember, to follow a plan, to be programmed, to speak, to ask, and quietly reuses the abilities gained before it. Read in order; the figures are there to be handled. Margin notes carry history, definitions and the occasional confession of a simplification, and fold into the text on a narrow screen. The primer is built to grow: each of the three parts below can take further chapters without disturbing the others.</p>
-  <div class="toc">
-    <div class="tp">Part I · The Machine</div>
-    <div><a href="#bits">1 · The Bit</a> — <a href="#gates">2 · Gates</a> — <a href="#adders">3 · Arithmetic</a> — <a href="#memory">4 · Memory</a> — <a href="#turing">5 · Turing</a> — <a href="#cpu">6 · A real machine</a> — <a href="#recursion">7 · Recursion</a></div>
-    <div class="tp">Part II · Ways of Speaking</div>
-    <div><a href="#rivers">8 · Two rivers, one sky</a> — <a href="#relations">9 · The third way</a></div>
-    <div class="tp">Part III · The Long View</div>
-    <div><a href="#tower">10 · The tower</a></div>
-  </div>
+  <p class="subtitle">Something your computers already do, walked all the way down to the sand.</p>
+  <p>A computer is a machine that follows instructions — exactly, and at absurd speed. Each card opens on a thing one of your computers already does for you; every part you tap explains itself, in its own words, in its own context. Follow the questions as far as curiosity carries you, and step back to the deck whenever you like. There is no order here, and no course.</p>
 </header>
 
-<div class="part"><span>Part I · The Machine</span></div>
+<div class="deck" id="deck-cards"></div>
 
-<!-- ================================================================ 1 -->
-<h2 id="bits"><span class="chnum">1</span>The Bit</h2>
+<section class="fund">
+  <h3>Underneath it all</h3>
+  <p>Every trail above, followed far enough down, lands on one of these. Each is a self-contained primer; they are not waiting to be read in order, they are waiting to be needed.</p>
+  <div class="fgrid">
+    <div class="fgroup">
+      <h4>the machine, from sand up</h4>
+      <a class="fq dgo" data-go="bits">How can a machine that knows only two words do anything?</a>
+      <a class="fq dgo" data-go="gates">How does it decide anything?</a>
+      <a class="fq dgo" data-go="adders">How does it add?</a>
+      <a class="fq dgo" data-go="memory">How does it remember?</a>
+      <a class="fq dgo" data-go="turing">Is there anything it cannot do?</a>
+      <a class="fq dgo" data-go="cpu">What is inside a real one?</a>
+      <a class="fq dgo" data-go="recursion">What happens when a task contains a copy of itself?</a>
+    </div>
+    <div class="fgroup">
+      <h4>ways of speaking to it</h4>
+      <a class="fq dgo" data-go="rivers">Why are there so many programming languages?</a>
+      <a class="fq dgo" data-go="relations">Can you tell it only facts, and still get answers?</a>
+    </div>
+    <div class="fgroup">
+      <h4>when machines meet the world</h4>
+      <a class="fq dgo" data-go="time">What happens when two act on the same thing at once?</a>
+    </div>
+    <div class="fgroup">
+      <h4>the long view</h4>
+      <a class="fq dgo" data-go="tower">How does it all stack up?</a>
+    </div>
+  </div>
+</section>
+</section>
 
-<p>A computer is a machine of two states. A voltage is high or it is low. A switch is closed or it is open. A magnet points north or it points south. The two states are written <strong>0</strong> and <strong>1</strong>, and each such digit is called a <em>bit</em>. That is the entire alphabet. Everything else, numbers, music, this sentence, is arrangement.</p>
+<section class="view hidden system" id="games" data-title="playing games">
+  <h2>Playing games</h2>
+  <p>You press a button, and the world on the screen answers — sixty times a second, wherever you steer it. Nothing about that is magic, and every part of the trail has a name. This is the walk, from your thumb to the screen.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the red lines at the end of an open part are doors into the fundamentals.</p>
+  <div class="spine" id="games-parts"></div>
+</section>
+
+<section class="view hidden system" id="food" data-title="delivering food">
+  <h2>Delivering food</h2>
+  <p>A few taps on a phone, and half an hour later a meal arrives at the door. A surprising amount of computing lives in between those two moments. This is the trail, from your finger to the doorbell.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the red lines at the end of an open part are doors into the fundamentals.</p>
+  <div class="spine" id="food-parts"></div>
+</section>
+
+<section class="view hidden system" id="movies" data-title="watching movies">
+  <h2>Watching movies</h2>
+  <p>The film is not inside your television. It arrives continuously, as numbers, and the television paints it — sixty times a second, wherever you sit. This is the trail, from the studio to your living room.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the red lines at the end of an open part are doors into the fundamentals.</p>
+  <div class="spine" id="movies-parts"></div>
+</section>
+
+<!-- ================================================================ bits -->
+<section class="view hidden primer" id="bits" data-title="the bit">
+<h2>The Bit</h2>
+
+<p>A computer is a machine of two states. A voltage is high or it is low. A switch is closed or it is open. A magnet points north or it points south. The two states are written <strong>0</strong> and <strong>1</strong>, and each such digit is called a <em>bit</em>. That is the entire alphabet. Everything else, numbers, music, this sentence, is arrangement. The machines you own — the phone, the console, the television — are built of nothing else.</p>
 
 <p>Below, five switches. Click them and count.</p>
 
@@ -321,10 +442,13 @@ footer{padding-bottom:80px}
 <p>The places are worth 1, 2, 4, 8, 16, each twice the one to its right. The numeral <code>10101</code> is not a mystical string; it is 16&nbsp;+&nbsp;4&nbsp;+&nbsp;1&nbsp;=&nbsp;21 written in the only alphabet the machine has.<sup class="snref">1</sup></p>
 <span class="sidenote"><span class="sn">1</span>Binary numerals are older than computers by a comfortable margin: Leibniz worked the arithmetic out in 1679 and admired how neatly it expressed creation — everything out of nothing, one sufficing.</span>
 
-<p>One bit says little. Two bits can be related: both are 1, at least one is 1, they disagree. A device that answers such questions about its inputs is a <em>logic gate</em>, and it is the next rung.</p>
+<p>One bit says little. Two bits can be related: both are 1, at least one is 1, they disagree. A device that answers such questions about its inputs is a <em>logic gate</em>, and it has a primer of its own.</p>
 
-<!-- ================================================================ 2 -->
-<h2 id="gates"><span class="chnum">2</span>Gates: the whole vocabulary</h2>
+</section>
+
+<!-- ================================================================ gates -->
+<section class="view hidden primer" id="gates" data-title="gates">
+<h2>Gates: the whole vocabulary</h2>
 
 <p>A gate is a few pieces of carefully poisoned sand, a transistor or four, that answers one question about its input bits. Six kinds are worth knowing. The wire below turns red when it carries a 1; the pads take clicks, and so do the buttons.</p>
 
@@ -336,15 +460,18 @@ footer{padding-bottom:80px}
   <figcaption>Fig. 2 — The gate playground. Six gates, one picture, one truth table: the complete behavioural vocabulary of Boolean logic. Everything else in this page is made of these.</figcaption>
 </figure>
 
-<p><strong>XOR</strong> answers <em>exactly one of you?</em> — addition with the carrying withheld, 1&nbsp;+&nbsp;1 leaves 0 and a debt. <strong>NAND</strong>, <em>not both</em>, is the gate physics likes best; it goes to work in the next chapter.<sup class="snref">2</sup></p>
+<p><strong>XOR</strong> answers <em>exactly one of you?</em> — addition with the carrying withheld, 1&nbsp;+&nbsp;1 leaves 0 and a debt. <strong>NAND</strong>, <em>not both</em>, is the gate physics likes best; it goes to work in the adder primer.<sup class="snref">2</sup></p>
 <span class="sidenote"><span class="sn">2</span>De Morgan’s laws are the working hand’s pocket knife: invert and swap AND↔OR — <code>not (a and b)</code> is <code>(not a) or (not b)</code>. This is why one gate can impersonate all the others, and why you only ever need to stock one part in the parts bin.</span>
 
 <p>Real gates are not instant. Signals take picoseconds to cross, and the sand runs warm. The latch, the clock, the ripple of the adder further on: all of it engineering <em>with</em> that sloppiness rather than against it. From here on, though, ideal gates — honest, immediate, tireless.</p>
 
-<!-- ================================================================ 3 -->
-<h2 id="adders"><span class="chnum">3</span>One gate to rule them all — and then, arithmetic</h2>
+</section>
 
-<p>The toolbox of Chapter 2 is overstocked: one gate is enough. NAND alone can impersonate all the others. Tie its two inputs together and it becomes NOT. Feed a NAND’s output to both inputs of a second NAND and you get AND. By De Morgan’s rules, three NANDs make an OR. The tables below are computed live by the same gate definitions that draw Fig.&nbsp;2:</p>
+<!-- ================================================================ adders -->
+<section class="view hidden primer" id="adders" data-title="arithmetic">
+<h2>One gate to rule them all — and then, arithmetic</h2>
+
+<p>The gate primer’s toolbox is overstocked: one gate is enough. NAND alone can impersonate all the others. Tie its two inputs together and it becomes NOT. Feed a NAND’s output to both inputs of a second NAND and you get AND. By De Morgan’s rules, three NANDs make an OR. The tables below are computed live by the same gate definitions that draw Fig.&nbsp;2:</p>
 
 <figure class="demo">
   <div class="mini-tbls" id="nand-tbls"></div>
@@ -363,8 +490,11 @@ footer{padding-bottom:80px}
 
 <p>Somewhere inside the processor in front of you, a wider and faster cousin of this pattern is adding numbers billions of times a second. Arithmetic did not grow more mysterious as it grew real; it grew more <em>parallel</em>.</p>
 
-<!-- ================================================================ 4 -->
-<h2 id="memory"><span class="chnum">4</span>A loop of wire that remembers</h2>
+</section>
+
+<!-- ================================================================ memory -->
+<section class="view hidden primer" id="memory" data-title="memory">
+<h2>A loop of wire that remembers</h2>
 
 <p>Everything so far has a flaw: it is <em>stateless</em>. Change the inputs and the output follows; nothing persists. A machine that holds no state cannot count, cannot iterate, has no before and no after. The remedy is a loop: <strong>feed a gate’s output back into its own input</strong>, and time enters the circuit.</p>
 
@@ -383,10 +513,13 @@ footer{padding-bottom:80px}
 <p>While S and R are both 0, ask the latch “why is Q 1?” and it answers: “because Q̄ is 0. Why is Q̄ 0? Because Q is 1.” The state is a loop of mutual justification — a tiny strange loop.<sup class="snref">3</sup> Add a gate in front to decide <em>when</em> the latch may listen, and a <em>clock</em> — a steady pulse, billions of beats per second — to do the deciding, and you have a flip-flop: memory that changes only on the beat. Put 64 of them side by side and you have a register. This is all “memory” ever was: loops with a doorman.</p>
 <span class="sidenote"><span class="sn">3</span>Douglas Hofstadter would want the phrase back: <em>Strange Loops</em> is his, and the latch is the smallest hardware instance of the phenomenon — a system whose output, chased far enough, circles back to become its own premise.</span>
 
-<p>Gates compute and latches remember. What is missing is <em>purpose</em>, a machine that carries out a plan, and for that the plan’s purest form first.</p>
+<p>Gates compute and latches remember. What is missing is <em>purpose</em> — a machine that carries out a plan — and the Turing primer holds the plan in its purest form.</p>
 
-<!-- ================================================================ 5 -->
-<h2 id="turing"><span class="chnum">5</span>The Turing machine: purpose, distilled</h2>
+</section>
+
+<!-- ================================================================ turing -->
+<section class="view hidden primer" id="turing" data-title="the Turing machine">
+<h2>The Turing machine: purpose, distilled</h2>
 
 <p>In 1936, before any electronic computer existed, Alan Turing asked what “mechanical procedure” could possibly mean, and distilled it to almost nothing:<sup class="snref">4</sup></p>
 <span class="sidenote"><span class="sn">4</span>The same paper introduces the halting problem: some programs run forever, and <em>no algorithm at all</em> can examine a program and reliably tell you which kind it is. The impossibility proofs of computing descend from this one.</span>
@@ -399,24 +532,23 @@ footer{padding-bottom:80px}
 
 <p>That is the entire machine. No numbers, no arithmetic, no addresses. Given tape and time it computes anything any computer can compute — <em>anything at all</em>: a phone and a supercomputer are, in Turing’s sense, the same object.</p>
 
-<p>Here is a Turing machine that adds one to a binary number. Its plan: sweep right to the end of the digits, then walk back flipping trailing 1s to 0s until the first 0, which becomes 1. The rule table lights up as it works:</p>
+<p>Here is a Turing machine that adds one to a binary number. Its plan: sweep right to the end of the digits, then walk back flipping trailing 1s to 0s until the first 0, which becomes 1. Say the answer aloud before running it — <code>1011</code> becomes what? — then press play, or step slowly and read one lit rule at a time:</p>
 
 <figure class="demo">
-  <div class="controls">
-    <button class="btn" id="tm-step">Step</button>
-    <button class="btn" id="tm-run">Run</button>
-    <button class="btn" id="tm-reset">Reset</button>
-  </div>
+  <div class="transport" id="tm-transport"></div>
   <div style="margin-top:12px"><span class="tm-state" id="tm-state">scan</span><span style="font:14px var(--mono);color:var(--faint)" id="tm-note"></span></div>
   <div class="tape" id="tm-tape"></div>
   <table class="rules" id="tm-rules"></table>
-  <figcaption>Fig. 6 — Binary increment: <code>1011</code> (eleven) becomes <code>1100</code> (twelve). The highlighted row of the rule table is the machine’s current thought; the ▼ marks the head. State <code>scan</code> runs right until the first blank (<code>_</code>), then state <code>carry</code> does the binary carrying you did by hand in Chapter 1 — flip 1s until you meet a 0. Six rules, and it will add one to a number a million digits long.</figcaption>
+  <figcaption>Fig. 6 — Binary increment: <code>1011</code> (eleven) becomes <code>1100</code> (twelve). The highlighted row of the rule table is the machine’s current thought; the ▼ marks the head. State <code>scan</code> runs right until the first blank (<code>_</code>), then state <code>carry</code> does the binary carrying you did by hand in the bit primer — flip 1s until you meet a 0. Six rules, and it will add one to a number a million digits long.</figcaption>
 </figure>
 
-<p>The program is that table, six lines. And the table is <em>data</em>: a rule and a number on the tape are the same kind of thing, and one machine can read a table and obey it. That observation, in the next chapter, is the computer.</p>
+<p>The program is that table, six lines. And the table is <em>data</em>: a rule and a number on the tape are the same kind of thing, and one machine can read a table and obey it. That observation, in the machine primer, is the computer.</p>
 
-<!-- ================================================================ 6 -->
-<h2 id="cpu"><span class="chnum">6</span>A real machine: the von Neumann computer</h2>
+</section>
+
+<!-- ================================================================ cpu -->
+<section class="view hidden primer" id="cpu" data-title="a real machine">
+<h2>A real machine: the von Neumann computer</h2>
 
 <p>Turing gave the concept; von Neumann’s 1945 architecture gives the shape every processor still wears. The idea is nearly a joke: take the Turing machine and <em>fix the tape in place</em> — call it <strong>memory</strong>, a row of numbered cells holding numbers — and hard-wire the rule-following into a circuit called the <strong>processor</strong>. Two registers are exposed to the programmer: a <strong>program counter</strong> (PC) holding the address of the next cell to obey, and an <strong>accumulator</strong> (ACC) to compute in. A third, the <strong>instruction register</strong> (IR), is the machine’s hand: it holds the number most recently fetched while the decoding gates stare at it.</p>
 
@@ -430,11 +562,7 @@ footer{padding-bottom:80px}
 <p>The radical part: the cell holding <code>108</code> is an instruction <em>only because PC pointed at it</em>. The very same memory holds the data. Code is numbers. Below, a complete little computer with ten cells of memory and eight instructions; it counts down from five, printing each value. Step it slowly:</p>
 
 <figure class="demo">
-  <div class="controls">
-    <button class="btn" id="cpu-step">Step</button>
-    <button class="btn" id="cpu-run">Run</button>
-    <button class="btn" id="cpu-reset">Reset</button>
-  </div>
+  <div class="transport" id="cpu-transport"></div>
   <div class="cpu-grid">
     <div><table class="listing" id="cpu-table"></table></div>
     <div>
@@ -444,7 +572,7 @@ footer{padding-bottom:80px}
         <div class="reg"><div class="rn">ACC</div><div class="rv" id="cpu-acc">0</div></div>
       </div>
       <div class="outbox"><span class="outlabel">Output</span><span id="cpu-out"></span></div>
-      <div class="decodeline" id="cpu-decode">Press Step to begin the cycle.</div>
+      <div class="decodeline" id="cpu-decode">Press step to begin the cycle.</div>
     </div>
   </div>
   <figcaption>Fig. 7 — Ten numbers that mean two things. The left table is the same memory shown twice: as the programmer wrote it (mnemonics and comments) and as the machine holds it (right column, three-digit numbers). <code>JZ</code> (jump if the accumulator is zero) at address 4 waits for the countdown to reach zero before letting the machine fall through to <code>HLT</code>; that one instruction is all the “if” a language compiles down to. Cells holding data are green, and the count at address 8 shrinks as the program rewrites it. The machine halts with output 5, 4, 3, 2, 1.</figcaption>
@@ -453,12 +581,15 @@ footer{padding-bottom:80px}
 <p>Everything here descends from earlier figures: the ACC is Fig.&nbsp;4’s adder with a latch on its output; the PC a row of Fig.&nbsp;5’s loops; the decoding circuit Fig.&nbsp;2’s gates staring at <code>IR</code>’s digits.<sup class="snref">5</sup> Scaled up, pipelined, predicted, it is the machine on which you are reading this page.</p>
 <span class="sidenote"><span class="sn">5</span>This teaching computer is the “Little Man Computer” of Stuart Madnick (1965), slightly dialectal. Real instruction sets number in the hundreds, but every one of them is this table with more clothes on; real machines also cheat the cycle, fetching instruction n+1 while n executes, but the dance remains the score.</span>
 
-<p>Where did the program keep the countdown? In a <em>memory cell</em>. Where did <code>STA 8</code> put the new value? In a <em>memory cell</em>. The machine state — the “where was I” of any running program — is always, at bottom, cells. The chapters ahead stand on this.</p>
+<p>Where did the program keep the countdown? In a <em>memory cell</em>. Where did <code>STA 8</code> put the new value? In a <em>memory cell</em>. The machine state — the “where was I” of any running program — is always, at bottom, cells. Every primer that follows stands on this.</p>
 
-<!-- ================================================================ 7 -->
-<h2 id="recursion"><span class="chnum">7</span>Recursion, at ground level</h2>
+</section>
 
-<p>The chapters behind were preparation for one meeting: mathematics that seems to float free of the world, and the machine of sand that must run it. Recursion is where they recognise each other, because in a high-level language it looks perfectly abstract — a function defined in terms of itself, as if the machine did not exist:</p>
+<!-- ================================================================ recursion -->
+<section class="view hidden primer" id="recursion" data-title="recursion">
+<h2>Recursion, at ground level</h2>
+
+<p>The primers behind were preparation for one meeting: mathematics that seems to float free of the world, and the machine of sand that must run it. Recursion is where they recognise each other, because in a high-level language it looks perfectly abstract — a function defined in terms of itself, as if the machine did not exist:</p>
 
 <pre id="rec-code"><code>(define (fact n)
   (if <span id="hl-cond">(= n 0)</span>
@@ -470,11 +601,7 @@ footer{padding-bottom:80px}
 <p>But you have met a processor, and know the answer: <strong>frames on a stack</strong>. Each call gets a few memory cells — the frame — holding its own <code>n</code> and its place in the multiplication. A register, sibling of the PC, points to the top frame; calls push, returns pop. Below, <code>(fact 4)</code> becomes 24, the highlighted expression moving as it does:</p>
 
 <figure class="demo">
-  <div class="controls">
-    <button class="btn" id="rec-step">Step</button>
-    <button class="btn" id="rec-run">Run</button>
-    <button class="btn" id="rec-reset">Reset</button>
-  </div>
+  <div class="transport" id="rec-transport"></div>
   <div class="rec-grid">
     <div>
       <div class="rec-stack-label">The stack — newest frame on top</div>
@@ -483,25 +610,26 @@ footer{padding-bottom:80px}
     <div>
       <div class="rec-stack-label">Values returned so far</div>
       <div class="ribbon" id="rec-ribbon"></div>
-      <div class="decodeline" id="rec-note">Press Step.</div>
+      <div class="decodeline" id="rec-note">Press step.</div>
     </div>
   </div>
-  <figcaption>Fig. 8 — <code>(fact 4)</code>, stepped. Each dashed bedrock frame is the base case, which returns 1 without asking anyone further. Then the multiplications that were “owed” — the <code>(* n …)</code> half-finished in each waiting frame — get paid, one per pop. Recursion is not a metaphor: it is a stack pointer walking through ordinary memory, the very memory of Chapter 6.</figcaption>
+  <figcaption>Fig. 8 — <code>(fact 4)</code>, stepped. Each dashed bedrock frame is the base case, which returns 1 without asking anyone further. Then the multiplications that were “owed” — the <code>(* n …)</code> half-finished in each waiting frame — get paid, one per pop. Recursion is not a metaphor: it is a stack pointer walking through ordinary memory, the very memory of the machine primer.</figcaption>
 </figure>
 
 <p>The magic dissolves into particulars. “The call remembers its context” — some cells do. “The base case stops it” — the stack has a bottom. “Infinite recursion crashes” — the cells run out, and there is nothing mystical under <code>stack overflow</code>.<sup class="snref">6</sup> Scheme itself is the <em>fetch–decode–execute</em> loop of Fig.&nbsp;7 with two more instructions: <em>call</em>, push a frame and jump; <em>return</em>, pop it and jump back.</p>
 <span class="sidenote"><span class="sn">6</span>Lisp (1958, John McCarthy) is the second-oldest language still in use, after Fortran. Its genius was to notice that programs are lists — data — and so programs could build programs. Turing’s blurring of code and data keeps reappearing at every level of the tower.</span>
 
-<div class="part"><span>Part II · Ways of Speaking</span></div>
+</section>
 
-<!-- ================================================================ 8 -->
-<h2 id="rivers"><span class="chnum">8</span>Two rivers, one sky: the minority view</h2>
+<!-- ================================================================ rivers -->
+<section class="view hidden primer" id="rivers" data-title="two rivers">
+<h2>Two rivers, one sky: the minority view</h2>
 
 <p>The road most travelled runs through one machine, many layers, a tower of abstraction with a program at the top. It is the majority view, and it built the industry. A minority tradition, patient and mostly ignored, holds that a language need not be an empire, and that the two most honest languages ever designed are also the two smallest, mirroring one another as the sky mirrors the earth. They appeared a decade apart and face in opposite directions. LISP (1958) turned toward mathematics, meaning, the pattern behind things. FORTH (1968) turned toward the machine, the act, the cost of the act.</p>
 
 <h3>FORTH — the word that acts</h3>
 
-<p>In the 1960s, Charles H. Moore programmed computers for astronomy, and the trade became, in his hands, a decade-long act of subtraction. Every tool struck him as heavier than the work; every language, as a bureaucratic tax on thought. His answer was to make the language disappear almost entirely. By the time he was steering radio telescopes for the National Radio Astronomy Observatory, his system — he called it FORTH — was little more than the stack you met in Chapter 7, a dictionary of <em>words</em>, and a colon for teaching the machine new words from old ones.<sup class="snref">7</sup></p>
+<p>In the 1960s, Charles H. Moore programmed computers for astronomy, and the trade became, in his hands, a decade-long act of subtraction. Every tool struck him as heavier than the work; every language, as a bureaucratic tax on thought. His answer was to make the language disappear almost entirely. By the time he was steering radio telescopes for the National Radio Astronomy Observatory, his system — he called it FORTH — was little more than the stack you met in the recursion primer, a dictionary of <em>words</em>, and a colon for teaching the machine new words from old ones.<sup class="snref">7</sup></p>
 <span class="sidenote"><span class="sn">7</span>The name was a pun: Moore meant “FOURTH,” as in fourth-generation language; the IBM 1130 he used permitted five-character names. The system had been distilling privately since the late 1950s and reached its essential form pointing at the radio sky — the 36-foot telescope at Kitt Peak among its first chores.</span>
 
 <p>Numbers go onto the stack; words consume what they need and leave what they made; <code>: SQUARE DUP * ;</code> teaches a new word, indistinguishable thereafter from a built-in. That is most of the specification. The whole language, on one desk:</p>
@@ -542,15 +670,15 @@ footer{padding-bottom:80px}
       <div class="decodeline" id="forth-note"></div>
     </div>
   </div>
-  <figcaption>Fig. 9 — The entire language, on one desk. FORTH has no operator precedence and no parentheses because it needs neither: a word simply takes what is on top of the stack — push 3, push 5, press +, press <code>.</code>, and you have printed 8. <code>: SQUARE DUP * ;</code> teaches rather than repeats — one new word, usable forever, the way a scribe’s numeral condenses a long tally into a few marks. The word <code>.</code> is the same print you watched as <code>OUT</code> in the countdown program; the dictionary is kept exactly like the memory of Chapter 6 — one definition standing on another. Moore steered telescopes with a dictionary of a few dozen words — fewer than this caption has.</figcaption>
+  <figcaption>Fig. 9 — The entire language, on one desk. FORTH has no operator precedence and no parentheses because it needs neither: a word simply takes what is on top of the stack — push 3, push 5, press +, press <code>.</code>, and you have printed 8. <code>: SQUARE DUP * ;</code> teaches rather than repeats — one new word, usable forever, the way a scribe’s numeral condenses a long tally into a few marks. The word <code>.</code> is the same print you watched as <code>OUT</code> in the countdown program; the dictionary is kept exactly like the memory of the machine primer — one definition standing on another. Moore steered telescopes with a dictionary of a few dozen words — fewer than this caption has.</figcaption>
 </figure>
 
-<p>Absent are variables, syntax trees, precedence rules, any border between the language and your program. The program is the dictionary, and the dictionary is the machine growing a vocabulary. Postfix order — the numbers first, the word last — is how the machine itself lives: <em>fetch, fetch, act</em>. FORTH is Chapter 6 without the apology.</p>
+<p>Absent are variables, syntax trees, precedence rules, any border between the language and your program. The program is the dictionary, and the dictionary is the machine growing a vocabulary. Postfix order — the numbers first, the word last — is how the machine itself lives: <em>fetch, fetch, act</em>. FORTH is the machine primer without the apology.</p>
 
 <h3>LISP — the meaning that recurs</h3>
 
 <p>Five years earlier, pointed the opposite way, John McCarthy wanted a language in which a machine could reason about its own thoughts, and found that almost nothing is needed. The core he reached for was pure mathematics, Church’s lambda calculus, in which computation is nothing but functions calling functions — no machine, no storage, only substitution.<sup class="snref">8</sup> From it LISP takes one data structure, the list; one way to build it, the pair or <em>cons cell</em>; a few primitives to take it apart; and the rule that a program is itself a list. Not like a list — <em>is</em> one: the catalogue and the catalogue’s reading instructions have the same shape.</p>
-<span class="sidenote"><span class="sn">8</span>Lambda calculus — Alonzo Church, 1930s — was invented as pure mathematics, decades before anyone had built a machine to run it on. McCarthy’s 1960 paper already defines Lisp in terms of Lisp; an interpreter for Lisp, written in Lisp, famously fits on a single page — a language watching itself, the way the latch of Chapter 4 is a circuit watching itself.</span>
+<span class="sidenote"><span class="sn">8</span>Lambda calculus — Alonzo Church, 1930s — was invented as pure mathematics, decades before anyone had built a machine to run it on. McCarthy’s 1960 paper already defines Lisp in terms of Lisp; an interpreter for Lisp, written in Lisp, famously fits on a single page — a language watching itself, the way the latch of the memory primer is a circuit watching itself.</span>
 
 <p>A list is a chain of pairs: each cell holds one thing and a pointer to the rest; the last pointer points at nothing — <em>nil</em>. Three words are the hands for this material: <code>(cons x …)</code> attaches a new first thing; <code>(car …)</code> takes the first thing; <code>(cdr …)</code> takes the rest. The sky’s catalogue, for your hands:</p>
 
@@ -563,10 +691,10 @@ footer{padding-bottom:80px}
   </div>
   <div class="cons" id="lisp-cells"></div>
   <div class="decodeline" id="lisp-note"></div>
-  <figcaption>Fig. 10 — A catalogue of the sky, the way LISP sees everything: pairs pointing forward, ending in nil (the ∅). <code>car</code> takes the first entry; <code>cdr</code> keeps the rest; <code>cons</code> attaches a new discovery at the front — a list growing one cell at a time. Code has exactly this shape too, which is why Lisp programs can read, write, and be written by other Lisp programs — the recursion of Chapter 7, turned sideways.</figcaption>
+  <figcaption>Fig. 10 — A catalogue of the sky, the way LISP sees everything: pairs pointing forward, ending in nil (the ∅). <code>car</code> takes the first entry; <code>cdr</code> keeps the rest; <code>cons</code> attaches a new discovery at the front — a list growing one cell at a time. Code has exactly this shape too, which is why Lisp programs can read, write, and be written by other Lisp programs — the recursion primer, turned sideways.</figcaption>
 </figure>
 
-<p>Seen from both ends, the factorial of Chapter 7 reads two ways: FORTH makes the stack speak, LISP makes the sentence compute. The stack machine and the lambda calculus are the two minimal answers to Turing’s question, <em>what is computation</em>, and history has mostly chosen to build very large things atop each while visiting neither.</p>
+<p>Seen from both ends, the factorial of the recursion primer reads two ways: FORTH makes the stack speak, LISP makes the sentence compute. The stack machine and the lambda calculus are the two minimal answers to Turing’s question, <em>what is computation</em>, and history has mostly chosen to build very large things atop each while visiting neither.</p>
 
 <h3>The mirror</h3>
 
@@ -592,7 +720,7 @@ The student was enlightened, and returned to his work.
 
 <h3>The secret identity</h3>
 
-<p>Chapter 7 kept the proof in its pocket. To run recursion, the machine grew a stack of frames, each frame a note of what the suspended call still owed. FORTH is that stack promoted to an entire language; LISP is that recursion promoted to an entire language. Strip the notation and they are one machine: any program written in one can be rewritten, mechanically, as a program in the other — the sentence flattens into pushes and acts, and the pushes and acts, read again, curl back into a sentence. The middle of that translation has a name, the <em>continuation</em> — the meaning of “what to do next” made into a thing a program can hold — and Chapter 7 was building continuations all along. The sky and the earth differ in posture, not in substance.<sup class="snref">10</sup></p>
+<p>The recursion primer kept the proof in its pocket. To run recursion, the machine grew a stack of frames, each frame a note of what the suspended call still owed. FORTH is that stack promoted to an entire language; LISP is that recursion promoted to an entire language. Strip the notation and they are one machine: any program written in one can be rewritten, mechanically, as a program in the other — the sentence flattens into pushes and acts, and the pushes and acts, read again, curl back into a sentence. The middle of that translation has a name, the <em>continuation</em> — the meaning of “what to do next” made into a thing a program can hold — and the recursion primer was building continuations all along. The sky and the earth differ in posture, not in substance.<sup class="snref">10</sup></p>
 <span class="sidenote"><span class="sn">10</span>The rewriting is no parable; it is the first road of compiler construction. Plotkin (1975) gave continuations their calculus; Danvy (2003) showed the classic SECD machine of 1964 to be a continuation interpreter in disguise; Ghuloum (2006) showed how to grow such a compiler in small verified steps, each kept honest by tests. A reader who wants to watch the two rivers meet can follow that trail downhill, from sentence to stack.</span>
 
 <h3>The oldest computation</h3>
@@ -600,58 +728,112 @@ The student was enlightened, and returned to his work.
 <p>A telescope controller is the right place to meet all this, because the loop it closes is ten thousand years old. Astronomy was humanity’s first science, mathematics, and computation in one: people looked up, saw that the sky is the one place where the changing masks the unchanging, and discerned cycles — of days, of seasons, of years, of the slow recurrence of planets and the shock of a predicted eclipse.<sup class="snref">11</sup> Recording the cycles forced the invention of number and of notation; predicting them was the first program execution.</p>
 <span class="sidenote"><span class="sn">11</span>Babylonian base-60, a counting system inherited from Sumer and made immortal by the sky, outlived both: it survives in the degrees on a telescope mount and the minutes on your clock — thirty centuries old and still in daily use.</span>
 
-<p>The second act of the same play: the earliest writing of Sumer and Egypt is not poetry or prayer — it is accounting. Tallies of sheep and grain pressed into clay; the token, the envelope, the tablet.<sup class="snref">12</sup> The state was born as a ledger. Scribes were trained by copying the record and adding to it, generation onto generation — and the archive outlives the scribe exactly as the latch of Chapter 4 outlives the signal that set it, scaled up to a civilisation. Writing, teaching, remembering: culture itself as external memory. Civilisation formed as a form of abstract computation — the slowest and most successful information technology ever deployed.</p>
+<p>The second act of the same play: the earliest writing of Sumer and Egypt is not poetry or prayer — it is accounting. Tallies of sheep and grain pressed into clay; the token, the envelope, the tablet.<sup class="snref">12</sup> The state was born as a ledger. Scribes were trained by copying the record and adding to it, generation onto generation — and the archive outlives the scribe exactly as the latch of the memory primer outlives the signal that set it, scaled up to a civilisation. Writing, teaching, remembering: culture itself as external memory. Civilisation formed as a form of abstract computation — the slowest and most successful information technology ever deployed.</p>
 <span class="sidenote"><span class="sn">12</span>On Denise Schmandt-Besserat’s account, writing began as bookkeeping: small clay counting tokens (as early as 8000 BCE) became impressions on envelopes, impressions became marks on flat clay, and marks became script. Literature arrived later, and inherited the clerk’s tools.</span>
 
 <p>The connections, stated plainly: the sky taught counting, the clay remembering, the scribal schools teaching. Computing is not a novelty of the last century; it is the oldest continuous human craft, order abstracted from recurrence, written down, passed forward, and the transistor only let the craft run at the speed of light. When Charles Moore pointed his five-character language at the radio sky, the loop quietly closed: the heavens that taught humanity to count were at last counted back through an instrument steered by a dictionary of a few dozen words.</p>
 
 <p>Between the Tigris and the Euphrates, civilisation formed on silt carried from two directions. The minority view suspects that between LISP and FORTH, silt of a similar kind is being carried — and that when the historical relationship between society and software matures, it will build its cities there.</p>
 
-<!-- ================================================================ 9 -->
-<h2 id="relations"><span class="chnum">9</span>The third way: relations</h2>
+</section>
 
-<p>LISP speaks in sentences, FORTH in single words. A third way of speaking appeared in Marseille, in 1972, and it speaks in facts. A Prolog program is a list of what is true — <code>parent(gaia, cronus).</code> — together with a few rules about what follows from what. No instruction appears in it anywhere, no order of doing, nothing that says <em>how</em>: the programmer states the truths, asks a question, and the machine goes looking for the answer itself. FORTH asks what things cost, LISP asks what things mean; Prolog asks what things imply.</p>
+<!-- ================================================================ relations -->
+<section class="view hidden primer" id="relations" data-title="relations">
+<h2>The third way: relations</h2>
 
-<p>The finding is ordinary machine work, and the machine of Part I does it. Take the goals one at a time; try each matching fact in order; bind a variable where it fits; when a road dead-ends, back up to the last choice and take the next. Unification and backtracking are the words; nested loops are the act. Every language before made the programmer write the loops; Prolog keeps the loops in the machine, and the program holds only the truths. An algorithm is logic plus control — Kowalski’s equation — and this is the language that takes the split seriously.<sup class="snref">13</sup></p>
+<p>LISP speaks in sentences, FORTH in single words. A third way of speaking appeared in Marseille, in 1972, and it speaks in facts. A Prolog program is a list of what is true — <code>parent(gaia, cronus).</code>, which reads aloud as <em>gaia is a parent of cronus</em> — together with a few rules about what follows from what. No instruction appears in it anywhere, no order of doing, nothing that says <em>how</em>: the programmer states the truths, asks a question, and the machine goes looking for the answer itself. FORTH asks what things cost, LISP asks what things mean; Prolog asks what things imply.</p>
+
+<p>The notation is small enough to learn in a minute, and every mark in it earns its keep. A fact is a relation’s name, its subjects in parentheses, and a full stop to say <em>this stands</em>. A name that begins with a capital letter is not a name at all but a blank waiting to be filled: <code>parent(gaia, X)</code> says <em>gaia is a parent of somebody</em>, and the machine’s task is to find out who. A rule is a head and a body joined by <code>:-</code>, which reads as <em>if</em>; <code>grandparent(A, C) :- parent(A, B), parent(B, C).</code> says that A is a grandparent of C if A is a parent of B <em>and</em> B is a parent of C — the comma reads as <em>and</em>. And a question is any such sentence with <code>?-</code> written in front of it: <code>?- grandparent(G, zeus).</code> asks <em>who is a grandparent of Zeus?</em>, and the machine answers by filling in every G that the facts and the rules make true.</p>
+
+<p>The finding is ordinary machine work, and the machine of the sand-up primers does it. Take the goals one at a time; try each matching fact in order; bind a variable where it fits; when a road dead-ends, back up to the last choice and take the next. Unification and backtracking are the words; nested loops are the act. Every language before made the programmer write the loops; Prolog keeps the loops in the machine, and the program holds only the truths. An algorithm is logic plus control — Kowalski’s equation — and this is the language that takes the split seriously.<sup class="snref">13</sup></p>
 <span class="sidenote"><span class="sn">13</span>Prolog was born of a project to make a computer reason in French: Alain Colmerauer and Philippe Roussel had a preliminary version running in Marseille at the end of 1971 and a definitive one at the end of 1972; the name, short for <em>programmation en logique</em>, was suggested by Roussel’s wife. Robert Kowalski of Edinburgh supplied the theory; J. Alan Robinson’s resolution principle (1965) supplied the engine — if a machine can search for proofs, then a list of facts is a program.</span>
 
-<p>The subject matter is chosen on purpose. Hesiod’s <em>Theogony</em>, the first Greek cosmogony, is a genealogy of the sky: Uranus the sky and Gaia the earth beget Cronus and Rhea, and Cronus and Rhea beget Zeus. It is half myth and half table of facts, the exact shape Prolog wants. Nine facts and three rules hold all of it — a small pond of truths, and the machine that swims in it:</p>
+<p>The subject matter is chosen on purpose. Hesiod’s <em>Theogony</em>, the first Greek cosmogony, is a genealogy of the sky: Uranus the sky and Gaia the earth beget Cronus and Rhea, and Cronus and Rhea beget Zeus. It is half myth and half table of facts, the exact shape Prolog wants. Nine facts and three rules hold all of it, a small pond of truths, and the figure below puts you beside the machine that swims in it. The chips at the top are questions; pick one, and begin with <code>?- grandparent(G, zeus).</code> — answer it yourself before running it, for the myth already told you who the grandparents are. Then press play, or step slowly and read the search one line at a time: the pond lights the fact being tried, the search is the machine’s thoughts, and the answers gather at the bottom as they are found. When a road dead-ends the machine backs up and takes the next; the ↩ lines are not mistakes but the search itself.</p>
 
 <figure class="demo">
   <div class="controls" id="pl-queries">
+    <span class="qlabel">pick a question:</span>
     <button class="btn" data-q="parent(rhea, X)">?- parent(rhea, X).</button>
     <button class="btn active" data-q="grandparent(G, zeus)">?- grandparent(G, zeus).</button>
     <button class="btn" data-q="ancestor(chaos, X)">?- ancestor(chaos, X).</button>
     <button class="btn" data-q="grandparent(chaos, zeus)">?- grandparent(chaos, zeus).</button>
   </div>
-  <div class="controls">
-    <button class="btn" id="pl-step">Step</button>
-    <button class="btn" id="pl-run">Run</button>
-    <button class="btn" id="pl-reset">Reset</button>
-  </div>
-  <div class="pl-grid">
-    <div>
-      <div class="rec-stack-label">The pond — everything the machine knows</div>
+  <div class="pl-board">
+    <div class="pl-zone">
+      <div class="pl-zlabel">the pond · everything the machine knows</div>
       <div class="pl-kb" id="pl-kb"></div>
     </div>
-    <div>
-      <div class="rec-stack-label">The search — one thought per line</div>
+    <div class="pl-zone">
+      <div class="pl-zlabel">the search · the machine’s thoughts, one per line</div>
       <div class="pl-trail" id="pl-trail"></div>
-      <div class="decodeline" id="pl-note"></div>
+    </div>
+    <div class="pl-zone">
+      <div class="pl-zlabel">the answers · what it has found so far</div>
+      <div class="pl-answers" id="pl-answers"></div>
     </div>
   </div>
-  <figcaption>Fig. 11 — The third way, for your hands. The left panel is everything the machine knows; the right panel is its mind while it works. A fact that fits is bound, a fact that does not is rejected, and after every answer the machine backs up and goes hunting the next road, which is all backtracking is. Long runs of rejections fold into one line, and the highlight on the left walks the facts as they are tried. The second question returns the earth and the sky as Zeus’s grandparents; the fourth returns <code>false</code> — a failed search is an answer, not an error. The ancestor rule is the recursion of Chapter 7, with the search growing the frames. A few liberties with Hesiod keep the pond small.</figcaption>
+  <div class="pl-runbar">
+    <div class="transport" id="pl-transport"></div>
+    <div class="pl-status" id="pl-note"></div>
+  </div>
+  <figcaption>Fig. 11 — The third way, for your hands. One machine, three labelled parts. The pond is everything it knows — nine facts in two columns, three rules beneath. The search is its mind, one thought per line: a fact that fits is bound, a fact that does not is rejected, and after every answer the machine backs up and hunts the next road, which is all backtracking is. The answers strip fills as findings arrive, each answer once, proofs and answers counted apart; the play, step and stop controls beneath drive the whole thing. Long runs of rejections fold into one line, and the highlight walks the pond’s facts as they are tried. The ↩ lines are the machine backing up to the last choice — not mistakes, the search itself. A few liberties with Hesiod keep the pond small.</figcaption>
 </figure>
 
-<p>Read the second question closely. The machine walks every road that ends at Zeus, and the answer comes back twice over: Gaia and Uranus, the earth and the sky, each found once through Cronus and once through Rhea — four proofs of two answers, roads counted rather than destinations. The fourth question fails, and the failure is no malfunction: Chaos is Zeus’s ancestor but not his grandparent, and in Prolog a statement is true exactly when the machine can find a proof of it. And the ancestor rule is the recursion of Chapter 7, a relation defined in terms of itself, with the frames grown by the search, out of sight — the way LISP grows them, where FORTH would have made you push them by hand.<sup class="snref">14</sup></p>
+<p>Read the grandparent question closely. The machine walks every road that ends at Zeus, and the answer comes back twice over: Gaia and Uranus, the earth and the sky, each found once through Cronus and once through Rhea — four proofs of two answers, roads counted rather than destinations. The last question fails, and the failure is no malfunction: Chaos is Zeus’s ancestor but not his grandparent, and in Prolog a statement is true exactly when the machine can find a proof of it — a failed search is an answer, not an error. And the ancestor rule is the recursion primer’s subject: a relation defined in terms of itself, with the frames grown by the search, out of sight — the way LISP grows them, where FORTH would have made you push them by hand.<sup class="snref">14</sup></p>
 <span class="sidenote"><span class="sn">14</span>The third way stayed a minority taste, but it was bet on. Japan’s Fifth Generation project (1982–1992) wagered a decade of national research on logic programming as computing’s future, provoked answering programmes in America and Europe, and ended in quiet disappointment; Prolog survived it. David Warren’s 1983 compiler made the language fast — his abstract machine is still what every serious implementation compiles to — and it earns its keep wherever a problem is better described as facts than as steps: constraint solving, parsing, expert systems. IBM’s Watson parsed the questions it was asked in Prolog. Minority is not marginal.</span>
 
-<p>A pond like this holds no time. The facts are timeless, the search is timeless, one question at a time; nothing in the language says <em>now</em>, or <em>while</em>, or <em>first this, then that</em>. What happens when two acts must share one world — the question the pond cannot even ask — is left for the primer’s next growth. The long view follows:</p>
+<p>A pond like this holds no time. The facts are timeless, the search is timeless, one question at a time; nothing in the language says <em>now</em>, or <em>while</em>, or <em>first this, then that</em>. What happens when two acts must share one world — the question the pond cannot even ask — is the time primer’s business.</p>
 
-<div class="part"><span>Part III · The Long View</span></div>
+</section>
 
-<!-- ================================================================ 10 -->
-<h2 id="tower"><span class="chnum">10</span>The tower, and how to build well inside it</h2>
+<!-- ================================================================ time -->
+<section class="view hidden primer" id="time" data-title="time">
+<h2>Time enters</h2>
+
+<p>The sand-up machine was alone with its memory, and the loneliness was a kind of safety: one instruction at a time, one hand on the cell, order guaranteed by the clock. Most software lives in no such world. A server answers ten thousand strangers at once; a car runs a hundred little machines in parallel on one planet of wires; a phone keeps the network, the screen and the ear all in the air together. Time enters, and with it the oldest patient bug in computing: two acts, one memory, no agreed order. The memory primer hid the warning in the latch — two signals arriving without a doorman, release order deciding who wins — and a data race is that lesson scaled up: the forbidden state as an everyday occurrence.</p>
+
+<p>The mechanism is small enough to hold in one hand. Two workers, one cell holding 5, and each worker running the three-line program the machine primer taught: read the cell, add one, write it back. Each worker owns its register; the cell belongs to no one; and between any worker’s read and its write, the other is free to do exactly the same:</p>
+
+<figure class="demo">
+  <div class="controls" id="race-modes">
+    <button class="btn chip active" data-m="shared">a shared cell</button>
+    <button class="btn chip" data-m="pipe">a pipe and an owner</button>
+  </div>
+  <div class="controls" id="race-controls">
+    <button class="btn" id="race-w1">worker 1 acts</button>
+    <button class="btn" id="race-w2">worker 2 acts</button>
+    <button class="btn" id="race-own">the owner acts</button>
+    <span class="transport">
+      <button class="tbtn" id="race-play"></button>
+      <button class="tbtn" id="race-stop"></button>
+    </span>
+  </div>
+  <div class="race-grid">
+    <div class="race-col" id="race-c1"></div>
+    <div class="race-mid" id="race-mid"></div>
+    <div class="race-col" id="race-c2"></div>
+  </div>
+  <div class="decodeline" id="race-note"></div>
+  <figcaption>Fig. 12 — The lost update, and the cure, for your hands. In the first mode each worker reads the cell into its own register and writes its answer back; press the workers in any order, or press play — the classic unlucky interleaving. When both read before either writes, two increments become one; serialize the same steps by hand and the cell reaches 7, which is why races pass tests. The second mode takes away the sharing: the workers drop +1 into a pipe, and one owner takes the messages in order — any arrival order, no locks, nothing lost. Ownership is the whole of the doorman.</figcaption>
+</figure>
+
+<p>Read the race as it ran: both workers read 5, both added one, both wrote 6, and the cell ended at 6 when honest arithmetic says 7 — one increment vanished in the gap between a read and a write. Serialize the same steps by hand and the cell reaches 7, the bug disappears, and here is the cruellest property of a race: it passes tests. The unlucky order arrives only when no one is watching — under load, at scale, in the middle of the night — and the wrong answer is silent: a number slightly too small, a ticket sold twice, a balance that no longer balances.</p>
+
+<p>The classic cure is the doorman of the memory primer, promoted to software: a lock around the read–modify–write — Dijkstra’s semaphore, 1965 — so the second worker waits at the door until the first has left the room. It works, and it has carried fifty years of correct systems. But the doorman must be remembered on every path, requested in a consistent order, held briefly, released always; and one forgotten lock, one circular wait, one overlong hold is the forbidden state again, now in production.<sup class="snref">15</sup></p>
+<span class="sidenote"><span class="sn">15</span>Dijkstra introduced semaphores — the P and V operations, doormen in the strict sense — in “Cooperating Sequential Processes” (EWD-123, 1965), written while he built THE, an operating system presented together with a proof of its correctness: state the machine honestly, then show why it works.</span>
+
+<p>The figure’s second mode takes the other road, and it is worth walking slowly, because nothing about the work changes — two workers, two increments, the same cell — and the bug is simply gone. The sharing has been taken away. The workers no longer touch the cell at all, because the cell no longer belongs to everyone; it has an owner, and the workers’ whole job shrinks to dropping +1 into a pipe, while the owner’s whole job is taking the messages one at a time. Step through any interleaving the scheduler cares to produce and the cell reaches 7, and the reason is worth a second reading. The race existed because two hands each held a copy of the cell’s story, and the copies could disagree; here one hand holds the cell at every instant, and two stories cannot disagree where there is never a second story. The pipe is not a faster lock. It is the end of sharing.</p>
+
+<p>Hoare gave this arrangement its calculus in 1978 — <em>Communicating Sequential Processes</em>, where a program is processes that cannot touch each other’s memory and can only hand values through channels, the handoff a rendezvous: the sender waits, and the message never belongs to the wire. Go (2009) built its channels on CSP and made the doctrine a proverb: “don’t communicate by sharing memory, share memory by communicating.” But the pipe, like the lock, is still a discipline — a promise kept by hand, and nothing in either language stops a tired programmer from reaching around it. Rust closes the gap by moving the promise into the compiler: every value has exactly one owner, and a program in which two workers can reach the same cell is not an unlucky program but a refused one. The race of this figure, in Rust, is not a wrong answer in the middle of the night; it is a red line at build time — the forbidden state made unsayable, caught in the dark of the compiler, years before it could ever have been found in production.<sup class="snref">16</sup></p>
+<span class="sidenote"><span class="sn">16</span>Hoare’s “Communicating Sequential Processes” (<em>CACM</em> 21:8, August 1978) proposed that input and output are basic primitives of programming; it later grew into a full calculus. Go (2009) built its channels on CSP — Rob Pike’s proverb, “don’t communicate by sharing memory, share memory by communicating,” is the doctrine in one line. Rust began in 2006 as Graydon Hoare’s private project and reached 1.0 in 2015; its ownership system turns the race check into a type check, and the Rust book names the result <em>fearless concurrency</em>.</span>
+
+<p>Ownership, it turns out, is the whole of the cure; the doorman was only ever a stand-in for it. But a promise checked against memory needs a map of memory — which byte belongs to whom, where values live, when they die — and the sand-up machine kept memory a polite fiction: cells, numbered, nothing said about who owns them. The fiction has a famous repair — C, the heap, malloc and free, and the compiler that finally learned to read ownership — and it is a primer this deck has not yet built.</p>
+
+</section>
+
+<!-- ================================================================ tower -->
+<section class="view hidden primer" id="tower" data-title="the tower">
+<h2>The tower, and how to build well inside it</h2>
 
 <p>The climb, end to end:</p>
 
@@ -679,8 +861,8 @@ The student was enlightened, and returned to his work.
   </g>
 </svg>
 
-<p>Each layer makes a promise — <em>“you don’t need to know how I do it”</em> — and that promise is what lets a single mind build at the top.<sup class="snref">15</sup> But every abstraction leaks: latency leaks, overflow leaks, the forbidden state of the latch leaks. Ground-up understanding matters not because you will hold the whole tower in your head, but because a leak is less frightening when you can look down a floor.</p>
-<span class="sidenote"><span class="sn">15</span>“All non-trivial abstractions, to some degree, are leaky.” — Joel Spolsky, stating the occupational hazard of the tower. Feynman stated the repair procedure: <em>create</em> the layer once, and you own it forever.</span>
+<p>Each layer makes a promise — <em>“you don’t need to know how I do it”</em> — and that promise is what lets a single mind build at the top.<sup class="snref">17</sup> But every abstraction leaks: latency leaks, overflow leaks, the forbidden state of the latch leaks. Ground-up understanding matters not because you will hold the whole tower in your head, but because a leak is less frightening when you can look down a floor.</p>
+<span class="sidenote"><span class="sn">17</span>“All non-trivial abstractions, to some degree, are leaky.” — Joel Spolsky, stating the occupational hazard of the tower. Feynman stated the repair procedure: <em>create</em> the layer once, and you own it forever.</span>
 
 <p>Between the machine and the sky, the habits of good building. The machine discovered them before any engineer wrote them down:</p>
 
@@ -694,11 +876,13 @@ The student was enlightened, and returned to his work.
 
 <hr>
 
-<p>One invitation remains: <em>view source</em>. This page practises what it preaches. A single self-contained file, no framework, no build step, no network. One small table of gate definitions computes every truth table in Chapters 2 and 3; one engine runs the four Step/Run/Reset machines of Chapters 5, 6, 7 and 9; the calculator and the cons-cell sketchpad of Chapter 8 and the pond of Chapter 9 reuse the same handful of helpers; nothing in it is a scaffold for a hypothetical future feature. The code is meant to be read by the same person who read the prose.</p>
+<p>One invitation remains: <em>view source</em>. This page practises what it preaches. A single self-contained file, no framework, no build step, no network. One small table of gate definitions computes every truth table in the gate and adder primers; one engine runs the four play/step/stop machines — the Turing machine, the toy computer, the recursion stack, the pond; the calculator, the cons-cell sketchpad and the race track reuse the same handful of helpers; and the deck at the front door — cards, systems, parts — is data all the way down, walked by four small words. Nothing in it is a scaffold for a hypothetical future feature. The code is meant to be read by the same person who read the prose.</p>
 
 <p class="colophon">Colophon — set in Georgia for the text and your system’s own sans and monospace for the machinery; margin notes in the manner of Edward Tufte; demonstrations in the manner of Richard Feynman: no miracle left unexplained at the level below. Built from sand, meaning from symbols.</p>
 
-</div></div>
+</section>
+
+</div>
 <footer></footer>
 
 <script>
@@ -713,6 +897,226 @@ const el = (tag, cls, html) => {
   if (html != null) n.innerHTML = html;
   return n;
 };
+
+/* ================================================================
+   ⌂ · THE DECK — cards, systems, and the stack of views.
+       Everything navigable on this page is data; the structure
+       is one small structure, walked by four words:
+       render · go · back · home.                         */
+/* ================================================================*/
+const VIEW = { cur: 'deck', trail: [] };
+
+const ICONS = {
+  controller: '<rect x="2.5" y="7.5" width="19" height="9.5" rx="4.75"/><line x1="7.2" y1="10.6" x2="7.2" y2="13.8"/><line x1="5.6" y1="12.2" x2="8.8" y2="12.2"/><circle cx="16.2" cy="10.9" r="1.1" fill="currentColor" stroke="none"/><circle cx="18.7" cy="13.1" r="1.1" fill="currentColor" stroke="none"/>',
+  console: '<rect x="3.5" y="6.5" width="17" height="11" rx="2"/><line x1="6.5" y1="14.6" x2="11.5" y2="14.6"/><circle cx="16.8" cy="14.6" r="1.1" fill="currentColor" stroke="none"/><circle cx="16.8" cy="9.6" r="1.1" fill="currentColor" stroke="none"/>',
+  chip: '<rect x="7" y="7" width="10" height="10" rx="1.5"/><rect x="10.2" y="10.2" width="3.6" height="3.6"/><line x1="9.5" y1="7" x2="9.5" y2="4.5"/><line x1="14.5" y1="7" x2="14.5" y2="4.5"/><line x1="9.5" y1="17" x2="9.5" y2="19.5"/><line x1="14.5" y1="17" x2="14.5" y2="19.5"/><line x1="7" y1="9.5" x2="4.5" y2="9.5"/><line x1="7" y1="14.5" x2="4.5" y2="14.5"/><line x1="17" y1="9.5" x2="19.5" y2="9.5"/><line x1="17" y1="14.5" x2="19.5" y2="14.5"/>',
+  ram: '<rect x="3.5" y="8" width="17" height="8" rx="1.5"/><line x1="8" y1="10.8" x2="8" y2="13.2"/><line x1="11" y1="10.8" x2="11" y2="13.2"/><line x1="14" y1="10.8" x2="14" y2="13.2"/><line x1="17" y1="10.8" x2="17" y2="13.2"/>',
+  screen: '<rect x="3.5" y="4.5" width="17" height="12" rx="1.5"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="16.5" x2="12" y2="20"/>',
+  wifi: '<path d="M4 9.3c4.6-4.1 11.4-4.1 16 0"/><path d="M7 12.6c2.9-2.7 7.1-2.7 10 0"/><path d="M10 15.8c1.2-1.1 2.8-1.1 4 0"/><circle cx="12" cy="18.6" r="1.1" fill="currentColor" stroke="none"/>',
+  save: '<path d="M5 4h11l4 4v11a1.5 1.5 0 0 1-1.5 1.5h-13.5z"/><path d="M8 4v5h7V4"/><rect x="8" y="13" width="8" height="7.5"/>',
+  phone: '<rect x="7.5" y="3" width="9" height="18" rx="2"/><line x1="10.6" y1="18.4" x2="13.4" y2="18.4"/><line x1="9.5" y1="5.8" x2="14.5" y2="5.8"/>',
+  app: '<rect x="5" y="5" width="6" height="6" rx="1.2"/><rect x="13" y="5" width="6" height="6" rx="1.2"/><rect x="5" y="13" width="6" height="6" rx="1.2"/><rect x="13" y="13" width="6" height="6" rx="1.2"/>',
+  server: '<rect x="4" y="4.5" width="16" height="5.2" rx="1.4"/><rect x="4" y="14.3" width="16" height="5.2" rx="1.4"/><circle cx="7" cy="7.1" r=".9" fill="currentColor" stroke="none"/><circle cx="7" cy="16.9" r=".9" fill="currentColor" stroke="none"/><line x1="10.5" y1="7.1" x2="16" y2="7.1"/><line x1="10.5" y1="16.9" x2="16" y2="16.9"/>',
+  match: '<circle cx="6" cy="6.5" r="2.4"/><circle cx="18" cy="6.5" r="2.4"/><circle cx="12" cy="17.5" r="2.4"/><path d="M8.4 6.5h7.2M7 8.7l3.7 6.4M17 8.7l-3.7 6.4"/>',
+  map: '<path d="M12 21c-4.1-4.7-6.4-8-6.4-11a6.4 6.4 0 0 1 12.8 0c0 3-2.3 6.3-6.4 11z"/><circle cx="12" cy="10" r="2.3"/>',
+  turn: '<path d="M6 19.5c6.5 0 10-3.5 10-10.5V6.2"/><path d="M12.8 9l3.2-3.2L19.2 9"/>',
+  hands: '<rect x="9" y="13.5" width="6" height="5" rx="1"/><circle cx="6" cy="7.5" r="2.1"/><circle cx="18" cy="7.5" r="2.1"/><path d="M7.1 9.4l2.6 4.3M16.9 9.4l-2.6 4.3"/>',
+  wave: '<path d="M2.5 12c1.7-2.8 3.3-2.8 5 0s3.3 2.8 5 0 3.3-2.8 5 0 3.3 2.8 4 0"/>',
+  buffer: '<ellipse cx="12" cy="6.2" rx="7" ry="2.7"/><path d="M5 6.2v11.6c0 1.5 3.1 2.7 7 2.7s7-1.2 7-2.7V6.2"/>',
+  squeeze: '<path d="M4 5h16l-6.5 7v7.5L10.5 19v-7z"/>',
+  remote: '<rect x="9" y="3" width="6" height="18" rx="2.2"/><circle cx="12" cy="7.6" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="16.4" r="1.1" fill="currentColor" stroke="none"/>',
+  star: '<path d="M12 3.6l2.5 5.2 5.8.8-4.2 4.1 1 5.8-5.1-2.7-5.1 2.7 1-5.8-4.2-4.1 5.8-.8z"/>',
+  play: '<rect x="3.5" y="4.5" width="17" height="12.5" rx="1.5"/><path d="M10.4 8.3v5l4.6-2.5z"/><line x1="8.5" y1="20.5" x2="15.5" y2="20.5"/>',
+  box: '<path d="M6.5 8.5h11l-1.2 11.5h-8.6z"/><path d="M8 8.5 9.3 4h5.4l1.3 4.5"/><line x1="6.5" y1="12.5" x2="17.5" y2="12.5"/>',
+};
+const ic = (name, size) =>
+  '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + '</svg>';
+
+/* ---- the three systems, as data -------------------------------- */
+const SYSTEMS = {
+  games: {
+    title: 'Playing games', icon: 'controller',
+    q: 'How does a button under your thumb move a world?',
+    parts: [
+      { icon: 'controller', name: 'the controller',
+        line: 'two sticks and eight buttons — every one a switch',
+        blurb: 'Under every button is a switch, and a switch has two words: pressed and not pressed. The console never sees your thumbs; it reads a short row of ones and zeros, hundreds of times a second. Everything you ever do in the game arrives as that row, and as nothing else.',
+        deep: [{ to: 'bits', q: 'How far can a machine get on an alphabet of two symbols?' }] },
+      { icon: 'console', name: 'the box under the television',
+        line: 'a computer, wearing a costume',
+        blurb: 'Take the case off and the parts are the same as in the phone and the laptop: a processor to follow instructions, memory to hold the world, a program saying what to do. The makers do not hide this — the processor’s name is printed on the box. A console is a computer whose program tells it to behave like a toy.',
+        deep: [{ to: 'cpu', q: 'What exactly is inside, and how does it follow a program?' }] },
+      { icon: 'chip', name: 'the processor',
+        line: 'billions of instructions a second, none of them clever',
+        blurb: 'Sixty times every second the processor runs the same round: read the controller, move the world forward one step, work out what the world now looks like, hand the picture to the screen. Each of the billions of instructions is no cleverer than “add these two numbers”. The speed is astonishing; every single instruction is dumb.',
+        deep: [{ to: 'turing', q: 'What can such instructions achieve in principle — and what can they never?' }] },
+      { icon: 'ram', name: 'memory',
+        line: 'the world you move through, held in numbered cells',
+        blurb: 'The city, your position in it, the score: all of it lives in memory, which is an enormous row of numbered cells, each holding a number. Change a cell and the world changes; the machine has no other way to be different. Cut the power and every cell forgets — which is why there is a save file, further down this trail.',
+        deep: [{ to: 'memory', q: 'How can a circuit made of switches hold anything at all?' }] },
+      { icon: 'screen', name: 'the picture',
+        line: 'two million lamps, each told how bright to be',
+        blurb: 'The screen is a wall of tiny lamps, and each lamp is told, dozens of times a second, three numbers: how much red, how much green, how much blue. A frame of a game is about two million such trios, and the television is simply the machine obedient enough to display them. Nobody draws anything; numbers are obeyed.',
+        deep: [{ to: 'bits', q: 'How does a number become light?' }] },
+      { icon: 'wifi', name: 'the shared world',
+        line: 'two consoles, two copies, one truth to agree on',
+        blurb: 'Play with someone far away and there is no single machine holding the world: there are two, each with its own copy, trading messages as fast as the wires allow. When two players grab the same object in the same instant, the copies disagree — and every trick the game’s programmers use to settle it descends from one old, hard question.',
+        deep: [{ to: 'time', q: 'What happens when two hands act on one thing at once?' }] },
+      { icon: 'save', name: 'the save file',
+        line: 'memory that survives the off switch',
+        blurb: 'A save is a copy of the interesting cells, written onto a disk that does not forget when the power leaves. Switch on tomorrow and those numbers are read back into memory, and the world resumes exactly where it stopped. Nothing in the machine understands “saved game”; it is numbers copied faithfully from one kind of memory to another.',
+        deep: [] },
+    ],
+    bottom: 'Follow any part of this trail far enough down and it dissolves into switches: pressed and not pressed, high and low, 0 and 1. The bottom of everything is a primer, and it is waiting.',
+    deep: [{ to: 'bits', q: 'The Bit — the alphabet of two symbols' },
+           { to: 'gates', q: 'Gates — the switches that decide' }],
+  },
+  food: {
+    title: 'Delivering food', icon: 'box',
+    q: 'What happens between the tap and the doorbell?',
+    parts: [
+      { icon: 'phone', name: 'the phone',
+        line: 'a computer that happens to fit in a pocket',
+        blurb: 'The phone is the same machine as the console and the laptop: a processor, memory, and programs that give it its habits. The glass is a fine invisible grid of wires; where your finger lands, one row and one column cross, and the machine is told a coordinate — two numbers — and nothing more. It has never seen a finger in its life.',
+        deep: [{ to: 'bits', q: 'How much of the world fits into numbers?' }] },
+      { icon: 'app', name: 'the app',
+        line: 'a list of instructions, written down in advance',
+        blurb: 'The app is not a place and not a person: it is a long list of instructions, written in advance and followed without opinion. Each tap hands it one new fact, and it answers with the next instruction on the list. Doorbells, spaceships and food apps are all the same arrangement — instructions, obeyed exactly.',
+        deep: [{ to: 'cpu', q: 'What does “following an instruction” mean, exactly?' }] },
+      { icon: 'server', name: 'the restaurant’s side of the internet',
+        line: 'a warehouse computer answering ten thousand strangers',
+        blurb: 'Your tap becomes a small message, copied from your phone to a tower to a wire to a building full of computers — a server, which is a computer with no screen of its own, kept cool in a warehouse and answering ten thousand strangers at once. Your order lands in its memory like a note on a spike, and the reply — received — is copied back down the same road.',
+        deep: [{ to: 'time', q: 'Ten thousand strangers at once: how does anything stay in order?' }] },
+      { icon: 'match', name: 'the match',
+        line: 'facts and rules, searched for the answer',
+        blurb: 'Which restaurant, which rider: the assignment is made by a machine walking through facts — this rider is two kilometres away, that one is busy, this kitchen needs twenty minutes — hunting for the combination that satisfies all the rules at once. No person weighs the offers; the search does. Some of the most useful software ever written is exactly this, and it is a way of speaking to a machine, not a kind of hardware.',
+        deep: [{ to: 'relations', q: 'Can you tell a machine only facts, and still get answers?' }] },
+      { icon: 'map', name: 'the route',
+        line: 'a city as a picture the machine can walk',
+        blurb: 'To the machine the city is not streets and houses but corners joined by edges, each edge with a length. The best route is found by a recipe that contains a copy of itself: the cheapest way to a far corner is built out of cheapest ways to nearer ones, the same step applied again and again until nothing remains. The machine has no idea what a street is. It never needs one.',
+        deep: [{ to: 'recursion', q: 'What happens when a task contains a copy of itself?' }] },
+      { icon: 'turn', name: 'the courier’s phone',
+        line: 'instructions, one word at a time',
+        blurb: 'The courier’s phone speaks the way machines speak: one instruction at a time — left in two hundred metres, then arrive. The rider never sees the whole plan; they see the next word, and the next word is always enough. There is a whole tradition of computing built on exactly that discipline: a vocabulary of small words, each obeyed exactly, out of which anything can be composed.',
+        deep: [{ to: 'rivers', q: 'The two smallest, most honest languages ever designed.' }] },
+      { icon: 'hands', name: 'one order, two riders',
+        line: 'the bug the whole system exists to prevent',
+        blurb: 'The dangerous moment is invisible: two couriers press accept on the same order in the same instant. Two hands, one memory cell, no agreed order — and a carelessly built system can hand one meal to two riders, or to none. Every ordering system on earth is, at bottom, a scheme for making that impossible.',
+        deep: [{ to: 'time', q: 'The lost update, and the cure.' }] },
+    ],
+    bottom: 'The phone, the app, the warehouse, the match: each is the same machine — switches, numbers, instructions — wearing different clothes. The primers below take those words slowly, and each one stands alone.',
+    deep: [{ to: 'bits', q: 'The Bit — the two-word alphabet' },
+           { to: 'cpu', q: 'A real machine — instructions, exactly' }],
+  },
+  movies: {
+    title: 'Watching movies', icon: 'play',
+    q: 'Where does a film live while you watch it?',
+    parts: [
+      { icon: 'screen', name: 'the screen',
+        line: 'two million lamps, each told what to be',
+        blurb: 'A television picture is about two million tiny lamps, each given, dozens of times a second, three numbers: how much red, how much green, how much blue. A film is therefore a river of numbers arriving just in time to be shown, and the screen is the machine obedient enough to turn them into light. The pause button does not stop the world; it stops the numbers.',
+        deep: [{ to: 'bits', q: 'How can a lamp be told with numbers alone?' }] },
+      { icon: 'wave', name: 'the sound',
+        line: 'your evening, measured 44,100 times a second',
+        blurb: 'Sound reaches the ear as pressure in the air. A microphone measures it 44,100 times a second and writes each measurement down as a number; a speaker reads the numbers back and recreates the pressure. Music on a computer is a long column of numbers and nothing else — the screen’s trick, one dimension over.',
+        deep: [{ to: 'bits', q: 'The alphabet the whole machine speaks.' }] },
+      { icon: 'wave', name: 'the stream',
+        line: 'a film poured through a wire, just in time',
+        blurb: 'The numbers cannot all be sent at once, so they are poured: a few million bits a second, arriving shortly before they are needed. When more arrives than the wire can carry, the picture thins — grey blocks, a stutter — and that is the wire telling the truth about itself.',
+        deep: [] },
+      { icon: 'buffer', name: 'the buffer',
+        line: 'the next minute of the film, parked in your living room',
+        blurb: 'Because wires stutter, the player keeps a cushion: half a minute or so of the future, already arrived and held in memory. When the wire coughs, the film keeps playing out of the cushion, and the race between arrival and playback starts again quietly. The buffer is memory doing what memory exists to do: holding a state against time.',
+        deep: [{ to: 'memory', q: 'How does a circuit hold anything against time?' }] },
+      { icon: 'squeeze', name: 'the squeeze',
+        line: 'a program that decides what your eye will not miss',
+        blurb: 'Two million lamps repainted dozens of times a second is far more than any household wire can carry, so a program — the codec — compresses the numbers: this frame is nearly the last frame; this block of sky barely changes; the eye forgives. The film you see is the codec’s opinion of the film, computed on the fly, and it is a program like any other: instructions, obeyed exactly.',
+        deep: [{ to: 'cpu', q: 'One program among all programs — what is the dance it dances?' }] },
+      { icon: 'remote', name: 'the buttons',
+        line: 'a language of a dozen words',
+        blurb: 'Play. Pause. Back ten seconds. The remote’s whole vocabulary is a dozen words, and the player obeys one at a time, in the order pressed, without ever guessing. It is the oldest arrangement in computing — a small vocabulary, exact obedience — and there are whole languages built on nothing but it.',
+        deep: [{ to: 'rivers', q: 'Two whole languages made of almost nothing.' }] },
+      { icon: 'star', name: 'the suggestions',
+        line: 'facts about millions of evenings, walked to a guess',
+        blurb: '“Because you watched” is a machine searching recorded facts — millions of evenings, what was finished, what was abandoned — for what fits yours. It is not a person and it is not magic; it is search through relations, the same craft that assigns a rider to an order, run at planetary scale.',
+        deep: [{ to: 'relations', q: 'Facts, rules, and the machine that finds what follows.' }] },
+    ],
+    bottom: 'Lamps, pressure, wires, cushions: numbers all the way down, and numbers the machine can only hold and obey. The bottom of the deck explains how anything this obedient can also be this capable.',
+    deep: [{ to: 'bits', q: 'The Bit — numbers out of two states' },
+           { to: 'memory', q: 'Memory — holding states against time' }],
+  },
+};
+
+/* ---- four words: render · go · back · home -------------------- */
+function renderDeck() {
+  const d = $('#deck-cards');
+  Object.keys(SYSTEMS).forEach((id) => {
+    const s = SYSTEMS[id];
+    const c = el('button', 'card dgo');
+    c.dataset.go = id;
+    c.innerHTML =
+      '<span class="c-ic">' + ic(s.icon, 40) + '</span>' +
+      '<span class="c-name">' + s.title + '</span>' +
+      '<span class="c-q">' + s.q + '</span>' +
+      '<span class="c-hint">tap to walk it down</span>';
+    d.appendChild(c);
+  });
+}
+function deepHTML(links) {
+  return (links || []).map((x) =>
+    '<a class="sp-deep dgo" data-go="' + x.to + '">' + x.q + '</a>').join('');
+}
+function renderSystems() {
+  Object.keys(SYSTEMS).forEach((id) => {
+    const s = SYSTEMS[id];
+    const holder = document.getElementById(id + '-parts');
+    s.parts.forEach((p) => {
+      const sp = el('div', 'spart');
+      sp.innerHTML =
+        '<button class="sp-head">' +
+          '<span class="sp-ic">' + ic(p.icon, 26) + '</span>' +
+          '<span class="sp-txt"><span class="sp-name">' + p.name + '</span>' +
+          '<span class="sp-line">' + p.line + '</span></span>' +
+          '<span class="sp-tw">\u25be</span>' +
+        '</button>' +
+        '<div class="sp-body"><p>' + p.blurb + '</p>' + deepHTML(p.deep) + '</div>';
+      sp.querySelector('.sp-head').addEventListener('click', () => sp.classList.toggle('open'));
+      holder.appendChild(sp);
+    });
+    const b = el('div', 'sys-bottom');
+    b.innerHTML = '<p>' + s.bottom + '</p>' + deepHTML(s.deep);
+    holder.appendChild(b);
+  });
+}
+function viewTitle(id) {
+  const s = document.getElementById(id);
+  return (s && s.dataset && s.dataset.title) || id;
+}
+function go(id, push) {
+  const target = document.getElementById(id);
+  if (!target || !target.classList.contains('view')) return;
+  document.querySelectorAll('.view').forEach((v) => v.classList.toggle('hidden', v.id !== id));
+  if (push !== false && VIEW.cur !== id) VIEW.trail.push(VIEW.cur);
+  VIEW.cur = id;
+  if (window.scrollTo) window.scrollTo(0, 0);
+  $('#crumb').textContent = viewTitle(id);
+  $('#back-btn').classList.toggle('hidden', VIEW.trail.length === 0);
+}
+function goBack() {
+  const prev = VIEW.trail.pop();
+  if (prev) go(prev, false);
+}
+function homeDeck() {
+  VIEW.trail.length = 0;
+  go('deck', false);
+}
+$('#back-btn').addEventListener('click', goBack);
+$('#home-link').addEventListener('click', homeDeck);
+renderDeck();
+renderSystems();
+document.querySelectorAll('a.dgo, button.dgo').forEach((a) =>
+  a.addEventListener('click', () => go(a.dataset.go)));
+go('deck', false);
 
 /* ================================================================
    1 · ONE TABLE OF GATES — the single source of truth for
@@ -742,33 +1146,46 @@ function truthRows(fn, arity) {
 }
 
 /* ================================================================
-   2 · ONE SHARED PLAYER — Step / Run / Reset for the Turing
-       machine, the CPU and the recursion demo — one engine,
-       wired three times                                   */
+   2 · ONE SHARED PLAYER — the video transport: play, step,
+       stop. Built once, wired four times: the Turing machine,
+       the CPU, the recursion demo, the Prolog search       */
 /* ================================================================*/
+const TICONS = {
+  play:  '<svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.6 1.4l7.6 4.6-7.6 4.6z"/></svg>',
+  pause: '<svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.2 1.6h2.8v8.8H2.2zM7 1.6h2.8v8.8H7z"/></svg>',
+  step:  '<svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M1.6 1.4l6.8 4.6-6.8 4.6zM9.4 1.6h1.8v8.8H9.4z"/></svg>',
+  stop:  '<svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><rect x="2.1" y="2.1" width="7.8" height="7.8" rx="1"/></svg>',
+};
+function tbtn(icon, label) { return '<span class="ti">' + icon + '</span>' + label; }
 function makePlayer(prefix, opts) {
   let state = opts.initial();
   let timer = null;
+  const bar = $('#' + prefix + '-transport');
+  bar.innerHTML =
+    '<button class="tbtn" id="' + prefix + '-play">' + tbtn(TICONS.play, 'play') + '</button>' +
+    '<button class="tbtn" id="' + prefix + '-step">' + tbtn(TICONS.step, 'step') + '</button>' +
+    '<button class="tbtn" id="' + prefix + '-stop">' + tbtn(TICONS.stop, 'stop') + '</button>';
+  const bPlay = $('#' + prefix + '-play');
   const bStep = $('#' + prefix + '-step');
-  const bRun  = $('#' + prefix + '-run');
-  const bRst  = $('#' + prefix + '-reset');
   const render = () => opts.render(state);
-  const stop = () => {
+  const halt = () => {
     if (timer) { clearInterval(timer); timer = null; }
-    bRun.textContent = 'Run';
-    bRun.classList.remove('running');
+    bPlay.innerHTML = tbtn(TICONS.play, 'play');
+    bPlay.classList.remove('running');
   };
-  const doStep = () => { state = opts.step(state); render(); if (state.done) stop(); };
-  bStep.addEventListener('click', () => { stop(); doStep(); });
-  bRun.addEventListener('click', () => {
-    if (timer) { stop(); return; }
+  const doStep = () => { state = opts.step(state); render(); if (state.done) halt(); };
+  const rewind = () => { halt(); state = opts.initial(); render(); };
+  bPlay.addEventListener('click', () => {
+    if (timer) { halt(); return; }
     if (state.done) { state = opts.initial(); render(); }
-    bRun.textContent = 'Stop';
-    bRun.classList.add('running');
-    timer = setInterval(() => { doStep(); if (state.done) stop(); }, opts.speed || 500);
+    bPlay.innerHTML = tbtn(TICONS.pause, 'pause');
+    bPlay.classList.add('running');
+    timer = setInterval(() => { doStep(); if (state.done) halt(); }, opts.speed || 500);
   });
-  bRst.addEventListener('click', () => { stop(); state = opts.initial(); render(); });
+  bStep.addEventListener('click', () => { halt(); doStep(); });
+  $('#' + prefix + '-stop').addEventListener('click', rewind);
   render();
+  return { rewind };
 }
 
 /* ================================================================
@@ -1148,7 +1565,7 @@ function renderCPU(c) {
     ? c.out.map(v => `<span class="outchip">${v}</span>`).join(' ')
     : '<span style="font:13px var(--sans);color:var(--faint)">nothing yet</span>';
   $('#cpu-decode').innerHTML = c.ir == null
-    ? 'Press Step to begin the cycle.'
+    ? 'Press step to begin the cycle.'
     : `fetch: IR ← MEM[${c.fetchPc}] = ${String(c.ir).padStart(3, '0')} &nbsp;·&nbsp; decode: ${c.decode} &nbsp;·&nbsp; execute: ${c.text}` +
       (c.halted ? ' &nbsp;·&nbsp; <strong>machine halted</strong>' : '');
 }
@@ -1468,22 +1885,30 @@ function renderPL(st) {
     }
   }
   const sols = st.trace.slice(0, st.i).filter((e) => e.kind === 'sol');
+  const seen = new Set();
+  let ans = '';
+  sols.forEach((s) => { if (!seen.has(s.text)) { seen.add(s.text); ans += '<span class="ans">' + s.text + '</span>'; } });
+  if (st.done && !sols.length) ans = '<span class="ans">false</span>';
+  else if (!sols.length) ans = '<span class="pl-none">none yet — the machine is still walking the pond</span>';
+  if (st.done && sols.length) ans += '<span class="pl-count">' + st.trace[st.trace.length - 1].text + '</span>';
+  $('#pl-answers').innerHTML = ans;
   const note = $('#pl-note');
-  if (st.i === 0) note.textContent = 'A question is chosen above. Step once, or Run, and the machine starts looking.';
+  if (st.i === 0) note.textContent = 'Press play to watch the hunt, or step through it one thought at a time.';
   else if (st.done) note.textContent = 'Search over: ' + st.trace[st.trace.length - 1].text + '.';
-  else if (sols.length) note.textContent = sols.length + (sols.length === 1 ? ' answer so far — Step hunts for the next.' : ' answers so far — Step hunts for the next.');
+  else if (sols.length) note.textContent = sols.length + (sols.length === 1 ? ' answer so far — press step to hunt for the next.' : ' answers so far — press step to hunt for the next.');
   else note.textContent = 'No answer yet; the machine is still walking the pond.';
   trail.scrollTop = trail.scrollHeight;
 }
 (function () {
   const kb = $('#pl-kb');
-  let html = '<div class="kbhead">the facts</div>';
-  PL_FACTS.forEach((f, i) => { html += '<div id="pl-c-' + i + '">parent(' + f[0] + ', ' + f[1] + ').</div>'; });
-  html += '<div class="kbhead">the rules</div>';
-  PL_RULES.forEach((r) => { html += '<div id="pl-c-' + r.kb + '">' + r.text + '</div>'; });
-  kb.innerHTML = html;
+  let facts = '';
+  PL_FACTS.forEach((f, i) => { facts += '<div id="pl-c-' + i + '">parent(' + f[0] + ', ' + f[1] + ').</div>'; });
+  let rules = '';
+  PL_RULES.forEach((r) => { rules += '<div id="pl-c-' + r.kb + '">' + r.text + '</div>'; });
+  kb.innerHTML = '<div class="kbhead">the facts</div><div class="kb-cols">' + facts + '</div>' +
+    '<div class="kbhead">the rules</div>' + rules;
 })();
-makePlayer('pl', {
+const plPlayer = makePlayer('pl', {
   initial: () => ({ trace: plBuildTrace(PL.q), i: 0, done: false }),
   step: (st) => { const i = Math.min(st.i + 1, st.trace.length); return { trace: st.trace, i, done: i >= st.trace.length }; },
   render: renderPL,
@@ -1493,10 +1918,135 @@ document.querySelectorAll('#pl-queries .btn').forEach((b) => {
   b.addEventListener('click', () => {
     document.querySelectorAll('#pl-queries .btn').forEach((x) => x.classList.remove('active'));
     b.classList.add('active');
-    PL.q = b.dataset.q.replace(/[?.]/g, '').split(/[(,]/).map((t) => t.trim()).filter(Boolean);
-    $('#pl-reset').click();
+    PL.q = b.dataset.q.replace(/[?.(),]/g, ' ').split(/\s+/).filter(Boolean);
+    plPlayer.rewind();
   });
 });
+
+/* ================================================================
+   13 · CHAPTER 10 — TIME: two hands, one cell. The lost update
+       and the owner who prevents it; one state machine, two
+       postures, every act narrated.
+   ================================================================*/
+const RACE = { mode: 'shared', cell: 5, w: [{ pc: 0, reg: null }, { pc: 0, reg: null }], pipe: [], note: '', timer: null, script: [], si: 0 };
+const RACE_SHARED_PROG = ['load the cell', 'add 1', 'store to the cell'];
+const RACE_PIPE_PROG = ['send “+1” to the owner'];
+function raceSteps() { return RACE.mode === 'shared' ? 3 : 1; }
+function raceResetState() { RACE.cell = 5; RACE.w = [{ pc: 0, reg: null }, { pc: 0, reg: null }]; RACE.pipe = []; }
+function raceVerdict() {
+  const n = raceSteps();
+  if (RACE.mode === 'shared') {
+    if (RACE.w[0].pc >= n && RACE.w[1].pc >= n) {
+      const surv = RACE.cell - 5;
+      RACE.note += surv === 2
+        ? ' Both workers done: the cell reached 7 — the order happened to be safe. The same code under other skies loses one.'
+        : ' Both workers done: two increments went in, ' + surv + (surv === 1 ? ' survived.' : ' survived of two.');
+    }
+  } else if (RACE.w[0].pc >= n && RACE.w[1].pc >= n && RACE.pipe.length === 0) {
+    RACE.note += ' Everything is taken: the cell is ' + RACE.cell + '.';
+  }
+}
+function raceAct(who) {
+  if (who === 'own') {
+    if (RACE.pipe.length === 0) { RACE.note = 'The pipe is empty; the owner waits.'; return; }
+    RACE.pipe.shift(); RACE.cell += 1;
+    RACE.note = 'The owner takes a “+1”; the cell is now ' + RACE.cell + '.';
+  } else {
+    const w = RACE.w[who];
+    if (w.pc >= raceSteps()) { RACE.note = 'Worker ' + (who + 1) + ' is finished; press stop, then play, to run it again.'; return; }
+    if (RACE.mode === 'shared') {
+      if (w.pc === 0) { w.reg = RACE.cell; RACE.note = 'Worker ' + (who + 1) + ' reads ' + w.reg + ' into its own register — a private copy, already growing old.'; }
+      else if (w.pc === 1) { w.reg += 1; RACE.note = 'Worker ' + (who + 1) + ' adds one; its register says ' + w.reg + '.'; }
+      else {
+        const moved = RACE.cell !== w.reg - 1;
+        RACE.cell = w.reg;
+        RACE.note = moved
+          ? 'Worker ' + (who + 1) + ' stores ' + w.reg + ' over a cell that moved since its load — someone’s work is overwritten.'
+          : 'Worker ' + (who + 1) + ' stores ' + w.reg + ' into the cell.';
+      }
+    } else {
+      RACE.pipe.push('+1');
+      RACE.note = 'Worker ' + (who + 1) + ' drops “+1” into the pipe; the cell is not touched.';
+    }
+    w.pc += 1;
+  }
+  raceVerdict();
+}
+function raceStop() { if (RACE.timer) { clearInterval(RACE.timer); RACE.timer = null; } $('#race-play').innerHTML = tbtn(TICONS.play, 'play'); $('#race-play').classList.remove('running'); }
+function raceRun() {
+  if (RACE.timer) { raceStop(); return; }
+  raceResetState();
+  RACE.script = RACE.mode === 'shared' ? [0, 1, 0, 1, 0, 1] : [0, 1, 'own', 'own'];
+  RACE.si = 0;
+  $('#race-play').innerHTML = tbtn(TICONS.pause, 'pause');
+  $('#race-play').classList.add('running');
+  RACE.timer = setInterval(() => {
+    if (RACE.si >= RACE.script.length) {
+      raceStop();
+      RACE.note = RACE.mode === 'shared'
+        ? 'The race is over: the cell is ' + RACE.cell + ' — both workers read the same 5, and the second store wrote over the first. Two increments went in; one survived.'
+        : 'The messages are taken: the cell is ' + RACE.cell + '. The arrivals interleaved freely and nothing was lost — one owner was the whole of the doorman.';
+      raceRender();
+      return;
+    }
+    raceAct(RACE.script[RACE.si++]);
+    raceRender();
+  }, 550);
+}
+function raceWorkerHTML(i) {
+  const w = RACE.w[i], prog = RACE.mode === 'shared' ? RACE_SHARED_PROG : RACE_PIPE_PROG;
+  let lines = '';
+  prog.forEach((p, k) => {
+    lines += '<div class="' + (w.pc === k ? 'cur' : (w.pc > k ? 'did' : '')) + '">' + p + '</div>';
+  });
+  const reg = RACE.mode === 'shared'
+    ? '<div class="regrow"><span class="rl">its register</span> <span class="valchip">' + (w.reg == null ? '—' : w.reg) + '</span></div>'
+    : '';
+  return '<div class="rc-label">worker ' + (i + 1) + '</div><div class="race-prog">' + lines + '</div>' + reg;
+}
+function raceMidHTML() {
+  if (RACE.mode === 'shared') {
+    return '<div class="rc-label">the cell — owned by no one</div><div class="race-cell">' + RACE.cell + '</div>';
+  }
+  const msgs = RACE.pipe.length
+    ? RACE.pipe.map(() => '<span class="msg">+1</span>').join('')
+    : '<span class="pipe-empty">empty — the owner waits</span>';
+  return '<div class="rc-label">the pipe</div><div class="pipe">' + msgs + '</div>' +
+    '<div class="ownerbox"><div class="rc-label">the owner — the cell lives here now</div><div class="race-cell">' + RACE.cell + '</div></div>';
+}
+function raceRender() {
+  $('#race-c1').innerHTML = raceWorkerHTML(0);
+  $('#race-c2').innerHTML = raceWorkerHTML(1);
+  $('#race-mid').innerHTML = raceMidHTML();
+  const n = raceSteps();
+  $('#race-w1').disabled = RACE.w[0].pc >= n;
+  $('#race-w2').disabled = RACE.w[1].pc >= n;
+  $('#race-own').disabled = RACE.mode !== 'pipe';
+  $('#race-note').textContent = RACE.note;
+}
+function raceReset() {
+  raceStop();
+  raceResetState();
+  RACE.note = RACE.mode === 'shared'
+    ? 'Two workers, one cell holding 5. Press the workers in any order, or press play.'
+    : 'Two workers, a pipe, an owner. The workers no longer touch the cell at all.';
+  raceRender();
+}
+$('#race-w1').addEventListener('click', () => { raceStop(); raceAct(0); raceRender(); });
+$('#race-w2').addEventListener('click', () => { raceStop(); raceAct(1); raceRender(); });
+$('#race-own').addEventListener('click', () => { raceStop(); raceAct('own'); raceRender(); });
+$('#race-stop').innerHTML = tbtn(TICONS.stop, 'stop');
+$('#race-play').addEventListener('click', raceRun);
+$('#race-stop').addEventListener('click', raceReset);
+document.querySelectorAll('#race-modes .btn').forEach((b) => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('#race-modes .btn').forEach((x) => x.classList.remove('active'));
+    b.classList.add('active');
+    RACE.mode = b.dataset.m;
+    raceReset();
+  });
+});
+raceReset();
 </script>
 </body>
 </html>
