@@ -239,10 +239,10 @@ a.fq{display:block;font:15px/1.45 var(--sans);color:var(--ink);text-decoration:n
 a.fq:hover{color:var(--accent)}
 a.fq::after{content:" →";color:var(--faint)}
 /* ---------- the systems: a spine of parts ---------- */
-.system h2{margin-top:1.4em}
+.system h2,.explainer h2{margin-top:1.4em}
 .sys-how{font:15px/1.5 var(--sans);color:var(--faint)}
 .spine{position:relative;margin:1.8em 0;max-width:600px}
-.spine::before{content:"";position:absolute;left:27px;top:16px;bottom:16px;border-left:2px solid var(--hair)}
+.spine::before{content:"";position:absolute;left:27px;top:31px;bottom:31px;border-left:2px solid var(--hair)}
 .spart{position:relative;margin:0 0 8px}
 .sp-head{display:flex;align-items:center;gap:15px;width:100%;text-align:left;background:none;border:0;padding:4px 0;cursor:pointer;font:inherit;color:inherit}
 .sp-ic{flex:0 0 54px;height:54px;border-radius:50%;background:#fff;border:1px solid #9a927e;display:flex;align-items:center;justify-content:center;color:var(--ink);position:relative;z-index:1;transition:border-color .12s}
@@ -257,7 +257,7 @@ a.fq::after{content:" →";color:var(--faint)}
 .sp-body p{font-size:16px;line-height:1.55;margin:0 0 .8em}
 a.sp-deep{display:inline-block;font:600 13px var(--sans);color:var(--accent);text-decoration:none;border-bottom:1px dashed var(--accent);cursor:pointer;margin:0 18px 8px 0}
 a.sp-deep:hover{border-bottom-style:solid}
-.sys-bottom{margin:1.8em 0 0;padding:16px 20px;border:1px dashed #b9b2a0;border-radius:10px}
+.sys-bottom{margin:1.8em 0 0;padding:16px 20px;border:1px dashed #b9b2a0;border-radius:10px;max-width:600px}
 .sys-bottom p{font-size:16px;line-height:1.55;margin:0 0 .9em}
 .sys-bottom a{display:inline-block;font:600 13px var(--sans);color:var(--accent);text-decoration:none;border-bottom:1px dashed var(--accent);cursor:pointer;margin:0 22px 6px 0}
 .sys-bottom a:hover{border-bottom-style:solid}
@@ -362,7 +362,7 @@ footer{padding-bottom:80px}
   <p class="overline">A deck of doors into the machine</p>
   <h1>From Sand to Symbols</h1>
   <p class="subtitle">Something your computers already do, walked all the way down to the sand.</p>
-  <p>A computer is a machine that follows instructions — exactly, and at absurd speed. Each card opens on a thing one of your computers already does for you; every part you tap explains itself, in its own words, in its own context. Follow the questions as far as curiosity carries you, and step back to the deck whenever you like. There is no order here, and no course.</p>
+  <p>A computer is a machine that follows instructions — exactly, and at absurd speed. Each card opens on a thing one of your computers already does for you; every part opens a trail that shows, step by step, how the thing is done — and the trails branch, so one question leads to another at your own pace. Follow them as far as curiosity carries you, and step back to the deck whenever you like. There is no order here, and no course.</p>
 </header>
 
 <div class="deck" id="deck-cards"></div>
@@ -401,21 +401,21 @@ footer{padding-bottom:80px}
 <section class="view hidden system" id="games" data-title="playing games">
   <h2>Playing games</h2>
   <p>You press a button, and the world on the screen answers — sixty times a second, wherever you steer it. Nothing about that is magic, and every part of the trail has a name. This is the walk, from your thumb to the screen.</p>
-  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the red lines at the end of an open part are doors into the fundamentals.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the red lines at the end of an open part are doors into the next trail down.</p>
   <div class="spine" id="games-parts"></div>
 </section>
 
 <section class="view hidden system" id="food" data-title="delivering food">
   <h2>Delivering food</h2>
   <p>A few taps on a phone, and half an hour later a meal arrives at the door. A surprising amount of computing lives in between those two moments. This is the trail, from your finger to the doorbell.</p>
-  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the red lines at the end of an open part are doors into the fundamentals.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the red lines at the end of an open part are doors into the next trail down.</p>
   <div class="spine" id="food-parts"></div>
 </section>
 
 <section class="view hidden system" id="movies" data-title="watching movies">
   <h2>Watching movies</h2>
   <p>The film is not inside your television. It arrives continuously, as numbers, and the television paints it — sixty times a second, wherever you sit. This is the trail, from the studio to your living room.</p>
-  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the red lines at the end of an open part are doors into the fundamentals.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the red lines at the end of an open part are doors into the next trail down.</p>
   <div class="spine" id="movies-parts"></div>
 </section>
 
@@ -928,6 +928,13 @@ const ICONS = {
   star: '<path d="M12 3.6l2.5 5.2 5.8.8-4.2 4.1 1 5.8-5.1-2.7-5.1 2.7 1-5.8-4.2-4.1 5.8-.8z"/>',
   play: '<rect x="3.5" y="4.5" width="17" height="12.5" rx="1.5"/><path d="M10.4 8.3v5l4.6-2.5z"/><line x1="8.5" y1="20.5" x2="15.5" y2="20.5"/>',
   box: '<path d="M6.5 8.5h11l-1.2 11.5h-8.6z"/><path d="M8 8.5 9.3 4h5.4l1.3 4.5"/><line x1="6.5" y1="12.5" x2="17.5" y2="12.5"/>',
+  mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0"/><line x1="12" y1="18" x2="12" y2="21"/><line x1="8.5" y1="21" x2="15.5" y2="21"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5.3l3.4 2"/>',
+  stairs: '<path d="M3.5 20.5h4.2v-4.2h4.2v-4.2h4.2V8h4.3"/>',
+  scissors: '<circle cx="6.5" cy="6.5" r="2.3"/><circle cx="6.5" cy="17.5" r="2.3"/><path d="M8.3 8.2 20 18M8.3 15.8 20 6"/>',
+  envelope: '<rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M3.5 7.5l8.5 6 8.5-6"/>',
+  shield: '<path d="M12 3l7 2.8v5.4c0 4.3-3 7.3-7 8.8-4-1.5-7-4.5-7-8.8V5.8z"/>',
+  fork: '<path d="M12 20.5V12"/><path d="M12 12c0-3.4 5.5-3 5.5-6.8"/><path d="M12 12c0-3.4-5.5-3-5.5-6.8"/>',
 };
 const ic = (name, size) =>
   '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + '</svg>';
@@ -945,11 +952,11 @@ const SYSTEMS = {
       { icon: 'console', name: 'the box under the television',
         line: 'a computer, wearing a costume',
         blurb: 'Take the case off and the parts are the same as in the phone and the laptop: a processor to follow instructions, memory to hold the world, a program saying what to do. The makers do not hide this — the processor’s name is printed on the box. A console is a computer whose program tells it to behave like a toy.',
-        deep: [{ to: 'cpu', q: 'What exactly is inside, and how does it follow a program?' }] },
+        deep: [{ to: 'x-machine', q: 'What is inside, and how does it follow a program?' }] },
       { icon: 'chip', name: 'the processor',
         line: 'billions of instructions a second, none of them clever',
         blurb: 'Sixty times every second the processor runs the same round: read the controller, move the world forward one step, work out what the world now looks like, hand the picture to the screen. Each of the billions of instructions is no cleverer than “add these two numbers”. The speed is astonishing; every single instruction is dumb.',
-        deep: [{ to: 'turing', q: 'What can such instructions achieve in principle — and what can they never?' }] },
+        deep: [{ to: 'x-choices', q: 'How does it decide, sixty times a second, what happens next?' }] },
       { icon: 'ram', name: 'memory',
         line: 'the world you move through, held in numbered cells',
         blurb: 'The city, your position in it, the score: all of it lives in memory, which is an enormous row of numbered cells, each holding a number. Change a cell and the world changes; the machine has no other way to be different. Cut the power and every cell forgets — which is why there is a save file, further down this trail.',
@@ -957,15 +964,15 @@ const SYSTEMS = {
       { icon: 'screen', name: 'the picture',
         line: 'two million lamps, each told how bright to be',
         blurb: 'The screen is a wall of tiny lamps, and each lamp is told, dozens of times a second, three numbers: how much red, how much green, how much blue. A frame of a game is about two million such trios, and the television is simply the machine obedient enough to display them. Nobody draws anything; numbers are obeyed.',
-        deep: [{ to: 'bits', q: 'How does a number become light?' }] },
+        deep: [{ to: 'x-image', q: 'How is a picture made, from lamp to number?' }] },
       { icon: 'wifi', name: 'the shared world',
         line: 'two consoles, two copies, one truth to agree on',
         blurb: 'Play with someone far away and there is no single machine holding the world: there are two, each with its own copy, trading messages as fast as the wires allow. When two players grab the same object in the same instant, the copies disagree — and every trick the game’s programmers use to settle it descends from one old, hard question.',
-        deep: [{ to: 'time', q: 'What happens when two hands act on one thing at once?' }] },
+        deep: [{ to: 'x-network', q: 'How do two machines share one world?' }] },
       { icon: 'save', name: 'the save file',
         line: 'memory that survives the off switch',
         blurb: 'A save is a copy of the interesting cells, written onto a disk that does not forget when the power leaves. Switch on tomorrow and those numbers are read back into memory, and the world resumes exactly where it stopped. Nothing in the machine understands “saved game”; it is numbers copied faithfully from one kind of memory to another.',
-        deep: [] },
+        deep: [{ to: 'x-os', q: 'Who keeps the files, and who runs the machine?' }] },
     ],
     bottom: 'Follow any part of this trail far enough down and it dissolves into switches: pressed and not pressed, high and low, 0 and 1. The bottom of everything is a primer, and it is waiting.',
     deep: [{ to: 'bits', q: 'The Bit — the alphabet of two symbols' },
@@ -982,11 +989,11 @@ const SYSTEMS = {
       { icon: 'app', name: 'the app',
         line: 'a list of instructions, written down in advance',
         blurb: 'The app is not a place and not a person: it is a long list of instructions, written in advance and followed without opinion. Each tap hands it one new fact, and it answers with the next instruction on the list. Doorbells, spaceships and food apps are all the same arrangement — instructions, obeyed exactly.',
-        deep: [{ to: 'cpu', q: 'What does “following an instruction” mean, exactly?' }] },
+        deep: [{ to: 'x-machine', q: 'What does “following an instruction” mean, exactly?' }] },
       { icon: 'server', name: 'the restaurant’s side of the internet',
         line: 'a warehouse computer answering ten thousand strangers',
         blurb: 'Your tap becomes a small message, copied from your phone to a tower to a wire to a building full of computers — a server, which is a computer with no screen of its own, kept cool in a warehouse and answering ten thousand strangers at once. Your order lands in its memory like a note on a spike, and the reply — received — is copied back down the same road.',
-        deep: [{ to: 'time', q: 'Ten thousand strangers at once: how does anything stay in order?' }] },
+        deep: [{ to: 'x-network', q: 'How does an order cross the wire to the warehouse?' }] },
       { icon: 'match', name: 'the match',
         line: 'facts and rules, searched for the answer',
         blurb: 'Which restaurant, which rider: the assignment is made by a machine walking through facts — this rider is two kilometres away, that one is busy, this kitchen needs twenty minutes — hunting for the combination that satisfies all the rules at once. No person weighs the offers; the search does. Some of the most useful software ever written is exactly this, and it is a way of speaking to a machine, not a kind of hardware.',
@@ -1015,15 +1022,15 @@ const SYSTEMS = {
       { icon: 'screen', name: 'the screen',
         line: 'two million lamps, each told what to be',
         blurb: 'A television picture is about two million tiny lamps, each given, dozens of times a second, three numbers: how much red, how much green, how much blue. A film is therefore a river of numbers arriving just in time to be shown, and the screen is the machine obedient enough to turn them into light. The pause button does not stop the world; it stops the numbers.',
-        deep: [{ to: 'bits', q: 'How can a lamp be told with numbers alone?' }] },
+        deep: [{ to: 'x-image', q: 'How is a picture made, from lamp to number?' }] },
       { icon: 'wave', name: 'the sound',
         line: 'your evening, measured 44,100 times a second',
         blurb: 'Sound reaches the ear as pressure in the air. A microphone measures it 44,100 times a second and writes each measurement down as a number; a speaker reads the numbers back and recreates the pressure. Music on a computer is a long column of numbers and nothing else — the screen’s trick, one dimension over.',
-        deep: [{ to: 'bits', q: 'The alphabet the whole machine speaks.' }] },
+        deep: [{ to: 'x-audio', q: 'How does a song become numbers, and back again?' }] },
       { icon: 'wave', name: 'the stream',
         line: 'a film poured through a wire, just in time',
         blurb: 'The numbers cannot all be sent at once, so they are poured: a few million bits a second, arriving shortly before they are needed. When more arrives than the wire can carry, the picture thins — grey blocks, a stutter — and that is the wire telling the truth about itself.',
-        deep: [] },
+        deep: [{ to: 'x-network', q: 'How does a film cross the wire, just in time?' }] },
       { icon: 'buffer', name: 'the buffer',
         line: 'the next minute of the film, parked in your living room',
         blurb: 'Because wires stutter, the player keeps a cushion: half a minute or so of the future, already arrived and held in memory. When the wire coughs, the film keeps playing out of the cushion, and the race between arrival and playback starts again quietly. The buffer is memory doing what memory exists to do: holding a state against time.',
@@ -1031,7 +1038,7 @@ const SYSTEMS = {
       { icon: 'squeeze', name: 'the squeeze',
         line: 'a program that decides what your eye will not miss',
         blurb: 'Two million lamps repainted dozens of times a second is far more than any household wire can carry, so a program — the codec — compresses the numbers: this frame is nearly the last frame; this block of sky barely changes; the eye forgives. The film you see is the codec’s opinion of the film, computed on the fly, and it is a program like any other: instructions, obeyed exactly.',
-        deep: [{ to: 'cpu', q: 'One program among all programs — what is the dance it dances?' }] },
+        deep: [{ to: 'x-image', q: 'What exactly is being squeezed, and what is it made of?' }] },
       { icon: 'remote', name: 'the buttons',
         line: 'a language of a dozen words',
         blurb: 'Play. Pause. Back ten seconds. The remote’s whole vocabulary is a dozen words, and the player obeys one at a time, in the order pressed, without ever guessing. It is the oldest arrangement in computing — a small vocabulary, exact obedience — and there are whole languages built on nothing but it.',
@@ -1044,6 +1051,145 @@ const SYSTEMS = {
     bottom: 'Lamps, pressure, wires, cushions: numbers all the way down, and numbers the machine can only hold and obey. The bottom of the deck explains how anything this obedient can also be this capable.',
     deep: [{ to: 'bits', q: 'The Bit — numbers out of two states' },
            { to: 'memory', q: 'Memory — holding states against time' }],
+  },
+};
+
+/* ---- the trails: one entry per line of inquiry; steps carry the
+       chain, cross links branch it, deep lands on the fundamentals */
+const EXPLAINERS = {
+  'x-audio': {
+    title: 'How sound happens',
+    crumb: 'how sound happens',
+    icon: 'wave',
+    intro: 'Sound is pushes in the air. To keep a song, a machine must turn the pushes into numbers it can hold, and to play it, back again. This is the trail of that trick, from ear to number.',
+    steps: [
+      { icon: 'wave', name: 'pressure', line: 'a wave of pushes in the air',
+        blurb: 'Sound is pressure. A drum, a voice, a speaker cone pushes the air, the push travels as a wave, and your eardrum is shoved in time with it. A single note is the air swinging back and forth a few hundred times a second; nothing solid ever moves from the singer to you, only the push.' },
+      { icon: 'mic', name: 'the diaphragm', line: 'a little drum that turns push into voltage',
+        blurb: 'A microphone holds a tiny drum, thinner than a hair. Each arriving push bends it, the bending drags a magnet through a coil of wire, and the wire answers with a wobbling voltage: the push, copied as electricity. The wave is still continuous, still in time with the song.' },
+      { icon: 'clock', name: 'sampling', line: 'measured 44,100 times every second',
+        blurb: 'A machine cannot hold a continuous wobble, so it measures it: 44,100 quick snapshots every second, each one the voltage at that instant. The number is not arbitrary. The ear tops out near twenty thousand waves a second, and measuring at least twice per wave rebuilds every wave the ear can hear; the compact disc chose 44,100, and the number stayed.' },
+      { icon: 'stairs', name: 'rounding', line: 'each measurement, one of 65,536 steps',
+        blurb: 'Each snapshot is rounded to the nearest of 65,536 steps and written down as a number. The rounding is honest — the true voltage is almost never exactly on a step — but the steps are so fine that the rebuilt wave is indistinguishable, to an ear, from the original. One rounded number is called a sample.',
+        cross: [{ to: 'x-image', q: 'Pictures are caught the same way: measured, rounded, numbered.' }] },
+      { icon: 'save', name: 'the file', line: 'a small note, then millions of numbers',
+        blurb: 'A WAV file is a small header — 44,100 a second, 16 bits per sample, two ears — followed by millions of samples in order, one per ear per moment. The file is a long column of numbers and a note about how to read it, and nothing else.' },
+      { icon: 'app', name: 'the bytes', line: 'each number spelled in sixteen binary digits',
+        blurb: 'A sample can hold any of 65,536 values, and 65,536 is 2¹⁶, so each sample is spelled in sixteen binary digits, split into two bytes of eight. A three-minute song is some thirty million bytes: an entire performance pressed into a column of numbers, in the alphabet the whole machine speaks.' },
+    ],
+    bottom: 'Push to voltage, voltage to number, number to digits: this is how the machine keeps anything at all.',
+    deep: [{ to: 'bits', q: 'The Bit — the alphabet of two symbols' },
+           { to: 'memory', q: 'Memory — where a song waits while it plays' }],
+  },
+  'x-image': {
+    title: 'How an image happens',
+    crumb: 'how an image happens',
+    icon: 'screen',
+    intro: 'A picture is a wall of lamps obeying numbers. To draw, the machine must turn light into numbers, numbers into memory, and memory back into light, in time. This is the trail, from lamp to number and back.',
+    steps: [
+      { icon: 'screen', name: 'one lamp', line: 'told how much red, green and blue to be',
+        blurb: 'One pixel is three lamps pressed close together: red, green, blue. Each is told, by a number, how brightly to shine, and the three mix in the eye — full of all three is white, none of them is black. That is the whole of colour on every screen you own.' },
+      { icon: 'match', name: 'three numbers', line: 'a pixel is a trio, each 0 to 255',
+        blurb: 'Each lamp’s brightness is rounded to one of 256 steps, 0 to 255 — one byte each, the same rounding the ear forgave. A pixel is therefore three numbers, and numbers can be written down, copied and sent like any others. To the machine a photograph is not a picture; it is an enormous list.' },
+      { icon: 'app', name: 'the grid', line: 'two million trios, one picture',
+        blurb: 'A television frame is 1,920 columns by 1,080 rows of these trios — about two million pixels, six million numbers. There is no image in the machine anywhere, only the list; the screen is where the list is interpreted. Every photograph ever shown on a computer has been this.' },
+      { icon: 'ram', name: 'the frame in memory', line: 'the picture lives in a block of memory',
+        blurb: 'The six million numbers of one frame sit together in one region of memory, the frame buffer, and the screen rereads it wholesale, dozens of times a second. The picture is not in the screen; it is a block of ordinary memory, and the screen is its window.',
+        cross: [{ to: 'memory', q: 'How a circuit holds six million numbers against time.' }] },
+      { icon: 'chip', name: 'drawing is writing', line: 'to move something, change numbers',
+        blurb: 'Every stroke of every game and every film is arithmetic on the buffer: move a character ten pixels right and the machine adds ten across a few hundred thousand numbers, fills in behind, shades the edge. The programmers never touch a lamp. They arrange for numbers to change — and deciding which numbers change is a different, older question.',
+        cross: [{ to: 'x-choices', q: 'Who decides, and how? The trail of choices.' }] },
+      { icon: 'clock', name: 'the beat', line: 'whatever is in the buffer is what you see',
+        blurb: 'A clock beats, and on each beat the screen repaints from the buffer, top to bottom, while the machine races to finish its changes before the next one. A moving image is a list rewritten in time with a clock; miss the beat and the picture tears, win it and everything moves.' },
+    ],
+    bottom: 'Light rounded to numbers, numbers held in memory, memory repainted in time. At the bottom, each of these numbers is spelled in the machine’s alphabet.',
+    deep: [{ to: 'bits', q: 'The Bit — the spelling of every number' },
+           { to: 'x-machine', q: 'The trail of the machine — what does the painting' }],
+  },
+  'x-network': {
+    title: 'How a message travels',
+    crumb: 'how a message travels',
+    icon: 'envelope',
+    intro: 'No wire runs from your phone to the restaurant. Your order crosses in small numbered pieces, handed from machine to machine, and is rebuilt at the far end. This is the trail of a message.',
+    steps: [
+      { icon: 'scissors', name: 'chopping', line: 'a long message becomes small packets',
+        blurb: 'A wire can carry only so much at once, and a long message would jam every machine along its road. So the sender chops it: the order becomes a handful of small packets, a few hundred bytes each, sent separately. Nothing crosses whole; everything crosses in pieces.' },
+      { icon: 'envelope', name: 'the envelope', line: 'every packet labelled with numbers',
+        blurb: 'Each piece is wrapped in an envelope — where from, where to, which piece of the whole this is — and every machine on the network has a number of its own, four bytes such as 142.250.72.14. The envelope is written in the same numbers as the message. No router can read your order; every router can read the envelope.',
+        cross: [{ to: 'x-machine', q: 'What is inside the machines doing the handing?' }] },
+      { icon: 'wifi', name: 'hop to hop', line: 'no road goes all the way',
+        blurb: 'At each crossroads a router reads the address and hands the packet down the best next wire; the route can change mid-message, and the pieces of one order may travel different roads. The internet is not a web of wires to places. It is a crowd of small machines, each deciding the next hop.' },
+      { icon: 'hands', name: 'reassembly', line: 'the pieces arrive out of order and are rebuilt',
+        blurb: 'The pieces may arrive out of order, and each envelope says which piece it is, so the receiver rebuilds the whole before anyone reads it. The number on the envelope is what makes confetti a message. Lose the numbering and no wire, however fast, can deliver an order.' },
+      { icon: 'save', name: 'keep until received', line: 'a copy held until the far end answers',
+        blurb: 'A packet can vanish in a crowd, so the sender keeps a copy until the far end says received, and sends it again if the silence lasts. That one small rule lets ten thousand strangers share one planet of wires without losing their words — and it is the same rule that keeps two riders off one order.',
+        cross: [{ to: 'time', q: 'Two hands, one order book: the oldest bug, and the cure.' }] },
+    ],
+    bottom: 'Chopped, numbered, handed onward, rebuilt: everything you have ever sent travelled as numbers in envelopes.',
+    deep: [{ to: 'bits', q: 'The Bit — envelopes and addresses are numbers' },
+           { to: 'x-machine', q: 'The trail of the machine — what a router is' }],
+  },
+  'x-os': {
+    title: 'Who runs the machine',
+    crumb: 'who runs the machine',
+    icon: 'shield',
+    intro: 'Your phone seems to do twenty things at once. It does one at a time, very fast, with a manager. This is the trail of the manager.',
+    steps: [
+      { icon: 'chip', name: 'one at a time', line: 'the processor does one thing per instant',
+        blurb: 'However much seems to be happening, the processor executes one instruction at a time, one per beat. Two programs cannot share a moment. Every claim of simultaneity on your phone is an arrangement built on that single fact, and the arrangement has a name.' },
+      { icon: 'app', name: 'the illusion', line: 'switching so fast it looks like everything at once',
+        blurb: 'The trick is switching: a sliver of one program, then a sliver of the next, thousands of times a second, with each one’s whereabouts kept in memory between its turns. None of them notices the gaps. The twenty simultaneous programs are a stage illusion, run very well and very fast.' },
+      { icon: 'clock', name: 'the scheduler', line: 'a program that decides who goes next',
+        blurb: 'Who goes next is decided by a program, the scheduler — the one program allowed to stop the others and start them again, thousands of times a second. It is a program like any other, running on the same machine by the same rules: a shepherd that is also a sheep, merely trusted.',
+        cross: [{ to: 'x-choices', q: 'How does a machine decide anything at all?' }] },
+      { icon: 'save', name: 'files', line: 'named blocks of numbers on a disk',
+        blurb: 'A program not running is a file: a named block of bytes on a disk, beside your photographs and your orders. The file is not the program, only its frozen numbers, read back into memory and continued when called. A disk is memory that does not mind waiting.',
+        cross: [{ to: 'memory', q: 'How a circuit holds anything at all.' }] },
+      { icon: 'shield', name: 'the gatekeeper', line: 'one program allowed to touch everything',
+        blurb: 'Memory, disks, the wire, the screen: every program wants them, and only one program is allowed to hand them out — the operating system. Your apps never touch the hardware; they ask, and the manager grants or refuses. That is why one crashing app does not take the phone down with it: the failure stops at the door.' },
+    ],
+    bottom: 'The manager, the scheduler, the files: all of it is programs, and all programs are instructions stored and obeyed. Under the manager stands the machine itself.',
+    deep: [{ to: 'x-machine', q: 'The trail of the machine — what the manager runs' },
+           { to: 'time', q: 'Time — when two hands meet one cell' }],
+  },
+  'x-machine': {
+    title: 'The machine itself',
+    crumb: 'the machine itself',
+    icon: 'chip',
+    intro: 'Every trail on this deck ends in a program being obeyed. This is what obeying means: the stored program, from a 1945 sketch to the phone in your hand.',
+    steps: [
+      { icon: 'save', name: 'the radical idea', line: 'store the instructions with the data, in advance',
+        blurb: 'Before 1945 a machine was rewired for each new job; the program was the wiring. The idea that ended that: keep the instructions in the same memory as the data, written down in advance, and let one machine run any job by reading them. The machine no longer changes for the work. The work is a list, and the list is numbers.' },
+      { icon: 'ram', name: 'a number that means a command', line: 'the cell decides by position which it is',
+        blurb: 'In memory a program looks like nothing at all: numbers in cells, indistinguishable from data. The number 108 in one cell is an instruction — load — and the same 108 elsewhere is a piece of data. The difference is not in the cell; it is where the machine is looking. Code is data, and attention makes it code.' },
+      { icon: 'chip', name: 'the dance', line: 'fetch, decode, execute — billions of times a second',
+        blurb: 'The machine runs one round forever: fetch the next instruction, decode what its number means — add, load, jump — execute it, move on. Billions of rounds a second, on the beat of a clock. Nothing else is happening inside the phone, the console, the router or the television; every one of them runs this one dance.',
+        cross: [{ to: 'x-os', q: 'Who shares one machine among many programs?' }] },
+      { icon: 'console', name: 'the one design', line: 'in every box on every trail',
+        blurb: 'The console, the courier’s phone, the warehouse server, the router, the player in the television: one design, scaled and costumed, in every box this deck has walked. Von Neumann’s group sketched it in 1945; the world has built it in the billions since, and nothing has replaced it.' },
+    ],
+    bottom: 'One dance, in every machine you own. The whole machine, small enough to step through by hand, is a primer — and so is the question of what it can never do.',
+    deep: [{ to: 'cpu', q: 'A real machine — the dance, step by step, for your hands' },
+           { to: 'turing', q: 'The Turing machine — what such a machine can never do' }],
+  },
+  'x-choices': {
+    title: 'How a machine decides',
+    crumb: 'how a machine decides',
+    icon: 'fork',
+    intro: 'Jump if the button is pressed and the feet are on the ground. Send again if the answer never came. Grant the next slice to whoever has waited longest. Every decision a program makes is a fork, and the forks themselves are wired.',
+    steps: [
+      { icon: 'fork', name: 'one question', line: 'every decision is yes or no',
+        blurb: 'A program decides by asking: is the button pressed? is the count zero? is this address mine? Each question has two answers, and the program takes one road or the other. All the branching richness of software — menus, autopilots, this deck — is a braid of two-answer forks.' },
+      { icon: 'match', name: 'and, or, not', line: 'the everyday words are the wiring diagram',
+        blurb: 'Jump if pressed AND on the ground. Fire if either button is pressed: OR. Move unless paused: NOT. The words that combine questions in daily speech are the exact ones the machine needs, and each is a small circuit of switches that answers the combined question electrically, in an instant, with nobody home.' },
+      { icon: 'chip', name: 'the gate', line: 'a question etched in sand',
+        blurb: 'That circuit is called a logic gate: a few pieces of carefully poisoned sand that turn voltages into an answer. AND, OR, NOT, and three or four cousins are the complete vocabulary of decision — the smallest parts of the machine that can be said to know anything.' },
+      { icon: 'clock', name: 'billions of forks', line: 'the day’s work of a processor',
+        blurb: 'Sixty times a second the game asks a few million of these questions; the scheduler asks who has waited longest; the router asks which wire is best. Every if in every program, unwound far enough, lands on gates — questions etched in sand, answered billions of times a second, honestly, because honestly is all a gate can be.' },
+    ],
+    bottom: 'Decision, wired. The whole vocabulary — six gates, one picture, every truth table — is a primer, and it is the piece the rest of the machine is made from.',
+    deep: [{ to: 'gates', q: 'Gates — the whole vocabulary, for your hands' },
+           { to: 'bits', q: 'The Bit — what the gates are made of' }],
   },
 };
 
@@ -1066,26 +1212,48 @@ function deepHTML(links) {
   return (links || []).map((x) =>
     '<a class="sp-deep dgo" data-go="' + x.to + '">' + x.q + '</a>').join('');
 }
+function buildStrand(holder, steps) {
+  steps.forEach((p) => {
+    const sp = el('div', 'spart');
+    sp.innerHTML =
+      '<button class="sp-head">' +
+        '<span class="sp-ic">' + ic(p.icon, 26) + '</span>' +
+        '<span class="sp-txt"><span class="sp-name">' + p.name + '</span>' +
+        '<span class="sp-line">' + p.line + '</span></span>' +
+        '<span class="sp-tw">\u25be</span>' +
+      '</button>' +
+      '<div class="sp-body"><p>' + p.blurb + '</p>' + deepHTML(p.cross || p.deep) + '</div>';
+    sp.querySelector('.sp-head').addEventListener('click', () => sp.classList.toggle('open'));
+    holder.appendChild(sp);
+  });
+}
+function buildBottom(section, s) {
+  const b = el('div', 'sys-bottom');
+  b.innerHTML = '<p>' + s.bottom + '</p>' + deepHTML(s.deep);
+  section.appendChild(b);
+}
 function renderSystems() {
   Object.keys(SYSTEMS).forEach((id) => {
     const s = SYSTEMS[id];
-    const holder = document.getElementById(id + '-parts');
-    s.parts.forEach((p) => {
-      const sp = el('div', 'spart');
-      sp.innerHTML =
-        '<button class="sp-head">' +
-          '<span class="sp-ic">' + ic(p.icon, 26) + '</span>' +
-          '<span class="sp-txt"><span class="sp-name">' + p.name + '</span>' +
-          '<span class="sp-line">' + p.line + '</span></span>' +
-          '<span class="sp-tw">\u25be</span>' +
-        '</button>' +
-        '<div class="sp-body"><p>' + p.blurb + '</p>' + deepHTML(p.deep) + '</div>';
-      sp.querySelector('.sp-head').addEventListener('click', () => sp.classList.toggle('open'));
-      holder.appendChild(sp);
-    });
-    const b = el('div', 'sys-bottom');
-    b.innerHTML = '<p>' + s.bottom + '</p>' + deepHTML(s.deep);
-    holder.appendChild(b);
+    buildStrand(document.getElementById(id + '-parts'), s.parts);
+    buildBottom(document.getElementById(id), s);
+  });
+}
+function renderExplainers() {
+  const wrap = document.querySelector('.wrap');
+  Object.keys(EXPLAINERS).forEach((id) => {
+    const s = EXPLAINERS[id];
+    const sec = el('section', 'view hidden explainer');
+    sec.id = id;
+    sec.dataset.title = s.crumb;
+    sec.innerHTML =
+      '<h2>' + s.title + '</h2>' +
+      '<p>' + s.intro + '</p>' +
+      '<p class="sys-how">Tap a step to open it; tap it again to close. The red lines inside an open step are doors into other trails, and the note at the bottom lands on the fundamentals.</p>' +
+      '<div class="spine" id="' + id + '-parts"></div>';
+    buildStrand(sec.querySelector('.spine'), s.steps);
+    buildBottom(sec, s);
+    wrap.appendChild(sec);
   });
 }
 function viewTitle(id) {
@@ -1114,6 +1282,7 @@ $('#back-btn').addEventListener('click', goBack);
 $('#home-link').addEventListener('click', homeDeck);
 renderDeck();
 renderSystems();
+renderExplainers();
 document.querySelectorAll('a.dgo, button.dgo').forEach((a) =>
   a.addEventListener('click', () => go(a.dataset.go)));
 go('deck', false);
