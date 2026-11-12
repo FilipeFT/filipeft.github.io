@@ -326,11 +326,22 @@ def _where(parse_error):
 HINTS = [
     ('unexpected element <art>',
      'this deck carries no ASCII art — delete the <art> element; '
-     'a part, a step, a rung is prose and doors, nothing else'),
+     'a part and a step is prose and doors, nothing else'),
     ('unexpected element <ladder>',
-     'the ladder holds <rung> children (and rails holds <rail>)'),
+     'the ladder holds one ordered list of <rung> children'),
     ('expected at least 1 <rung>',
-     'the ladder holds <rung> children (and rails holds <rail>)'),
+     'the ladder holds one ordered list of <rung> children'),
+    ('unexpected element <pattern>',
+     'the pattern page is gone by design — the deck starts at the '
+     'cards and the reader drills down; delete the <pattern> element'),
+    ('unexpected element <rails>',
+     'the rails are merged into the ladder — give each rail a '
+     'place in <ladder> as a plain <rung id="…" chip="…"/>'),
+    ('unexpected element <rail>',
+     'rails are merged — write a plain <rung id="…" chip="…"/> '
+     'inside <ladder> instead'),
+    ('/rung[',
+     'a rung is an id and a chip, nothing else'),
     ('value \'2\' not in enumeration',
      'levels are pinned: cards 0, trails 1, placeholders 1 or 2, primers 2'),
     ('value \'0\' not in enumeration',
@@ -377,7 +388,7 @@ class Checks:
 # ---------------------------------------------------------------
 # deck.xml, already schema-validated, is lifted into one dict: the
 # exact JSON the template's shims (SYSTEMS, EXPLAINERS, LADDER,
-# RAILS, PATTERN, ICONS, PRIMER_META, PLACEHOLDERS) walk at runtime.
+# ICONS, PRIMER_META, PLACEHOLDERS) walk at runtime.
 # Key order is stable, so the injected payload is diff-friendly.
 
 
@@ -442,42 +453,19 @@ def build_data(root):
             'deep': _doors(t),
         }
     data['trails'] = trails
-    # the ladder and the rails: a rung may carry a second named door
-    def rungs(container):
-        out = []
-        for r in container:
-            ds = r.findall('door')
-            entry = {
-                'id': r.get('id'),
-                'icon': r.get('icon'),
-                'chip': r.get('chip'),
-                'name': r.get('name'),
-                'line': r.get('line'),
-                'blurb': _prose(r.find('blurb')),
-                'deep': {'to': ds[0].get('to'), 'q': ds[0].get('q')},
-            }
-            if len(ds) > 1:
-                entry['deep2'] = {'to': ds[1].get('to'), 'q': ds[1].get('q')}
-            out.append(entry)
-        return out
-    data['ladder'] = rungs(root.find('ladder'))
-    data['rails'] = rungs(root.find('rails'))
-    # the pattern: outside the ladder, free to door anywhere
-    P = root.find('pattern')
-    data['pattern'] = {
-        'intro': _prose(P.find('intro')),
-        'bottom': _prose(P.find('bottom')),
-        'deep': _doors(P),
-    }
+    # the ladder: data only. No page renders from it: the order of
+    # the rungs sorts the parts of every card, and the chips label
+    # them. The rails are gone as a container — what they named
+    # sits in the ladder as ordinary rungs
+    data['ladder'] = [{'id': r.get('id'), 'chip': r.get('chip')}
+                      for r in root.find('ladder')]
     # the icons: name -> SVG body
     data['icons'] = {i.get('name'): (i.text or '').strip()
                      for i in root.find('icons')}
-    # the primer index; the pattern's own entry is synthesized, not
-    # authored, so its orb knows its icon and label
+    # the primer index: each door button knows its icon and label
     primers = {}
     for p in root.find('primers'):
         primers[p.get('id')] = [p.get('icon'), p.get('label')]
-    primers['pattern'] = ['stairs', 'the pattern']
     data['primers'] = primers
     # the named placeholders: patches to be written later
     placeholders = {}
@@ -498,8 +486,7 @@ def build_data(root):
 # What the schema cannot express: references between elements, the
 # layered descent, and the door floors. Every check here encodes a
 # real past mistake (a door to nothing, an unknown icon, a card
-# jolting straight to a primer, a lone orb on a pattern row, a
-# placeholder nothing points at).
+# jolting straight to a primer, a placeholder nothing points at).
 
 
 def check_data(root, data, template):
@@ -509,16 +496,14 @@ def check_data(root, data, template):
     placeholders = data['placeholders']
     # the set of views a door may lead to
     views = (set(data['cards']) | set(data['trails']) |
-             set(data['primers']) | set(placeholders) | {'pattern'})
-    rung_ids = set(r['id'] for r in data['ladder']) | \
-               set(r['id'] for r in data['rails'])
+             set(data['primers']) | set(placeholders))
+    rung_ids = set(r['id'] for r in data['ladder'])
 
     def target_level(to):
-        """The layer a door leads to: 0 a card (or the pattern,
-        which stands outside the ladder), 1 a trail or a level-1
-        placeholder, 2 a primer or a level-2 placeholder, None
-        unknown."""
-        if to == 'pattern' or to in data['cards']:
+        """The layer a door leads to: 0 a card, 1 a trail or a
+        level-1 placeholder, 2 a primer or a level-2 placeholder,
+        None unknown."""
+        if to in data['cards']:
             return 0
         if to in data['trails']:
             return 1
@@ -546,7 +531,7 @@ def check_data(root, data, template):
     def floor(doors_list, where, n=2):
         """Every row offers at least n DISTINCT ways on. Counting
         distinct targets matters: a door and a lateral to the same
-        view render as one orb."""
+        view render as one button."""
         uniq = set(d['to'] for d in doors_list)
         k.that(len(uniq) >= n, '%s: only %d distinct door%s — every row '
                'offers at least %d named ways on'
@@ -591,34 +576,6 @@ def check_data(root, data, template):
             door_ok(d, where, False)
             all_targets.append(d['to'])
 
-    # rungs: every pattern row shows at least two distinct named
-    # orbs — its door(s) down plus the parts and trails at it
-    for r in data['ladder'] + data['rails']:
-        where = 'rung %s' % r['id']
-        k.that(r['icon'] in icons, '%s: unknown icon %r' % (where, r['icon']))
-        k.that(bool(r['blurb']), '%s: the blurb is empty' % where)
-        row = set([r['deep']['to']] +
-                  [cid for cid, c in data['cards'].items()
-                   for p in c['parts'] if p['rung'] == r['id']] +
-                  [tid for tid, t in data['trails'].items()
-                   if t['rung'] == r['id']])
-        if 'deep2' in r:
-            row.add(r['deep2']['to'])
-        k.that(len(row) >= 2, '%s: the pattern row would show a single '
-               'orb — give the rung a second door, a part, or a trail'
-               % where)
-        door_ok(r['deep'], where, False)
-        all_targets.append(r['deep']['to'])
-        if 'deep2' in r:
-            door_ok(r['deep2'], where, False)
-            all_targets.append(r['deep2']['to'])
-
-    # the pattern
-    floor(data['pattern']['deep'], 'the pattern', 1)
-    for d in data['pattern']['deep']:
-        door_ok(d, 'the pattern', False)
-        all_targets.append(d['to'])
-
     # the named placeholders: real icons, real ids, really used
     ph_root = root.find('placeholders')
     k.equals(len(ph_root), len(placeholders),
@@ -633,26 +590,29 @@ def check_data(root, data, template):
                'referenced — a promise nothing points at'
                % (pid, ph['title']))
 
-    # primers: the template must carry each one, and a door to it
+    # primers: the template must carry each one
     for pid, (icon, label) in data['primers'].items():
-        if pid == 'pattern':
-            continue
         k.that(icon in icons, 'primer %s: unknown icon %r' % (pid, icon))
 
     # the template must have a home and a spine for every view the
-    # data names, and the data slot to receive the payload
+    # data names, the map that draws the whole deck as one graph,
+    # and the data slot to receive the payload
     for cid in data['cards']:
         k.that('id="%s"' % cid in template,
                'template has no section for card %r' % cid)
         k.that('id="%s-parts"' % cid in template,
                'template has no spine for card %r' % cid)
     for pid in data['primers']:
-        if pid == 'pattern':
-            continue
         k.that('id="%s"' % pid in template,
                'template has no section for primer %r' % pid)
-        k.that('data-go="%s"' % pid in template,
-               'template has no door to primer %r' % pid)
+        k.that(('data-go="%s"' % pid) in template
+               or ('fund-dag' in template and 'renderFundDAG' in template),
+               'primer %r has no door: no static door, and no map '
+               '(fund-dag + renderFundDAG) to draw it from' % pid)
+    k.that('id="fund-dag"' in template,
+           'template has no map for the fundamentals (id="fund-dag")')
+    k.that('function renderFundDAG' in template,
+           'template has no map builder (renderFundDAG)')
     k.that(MARKER in template, 'template has no data slot (%s)' % MARKER)
     return k
 
@@ -684,8 +644,6 @@ def check_output(page, data, template):
     for cid in data['cards']:
         k.that('id="%s"' % cid in page, 'the built page lost card %r' % cid)
     for pid in data['primers']:
-        if pid == 'pattern':
-            continue  # synthesized at runtime, not in the template
         k.that('id="%s"' % pid in page, 'the built page lost primer %r' % pid)
     # the payload must survive a JSON round trip: what the template
     # will parse is exactly what was written
@@ -775,9 +733,9 @@ def main(argv):
     # ---- summary ----
     total = checks.count + out_checks.count + 1  # +1 for the schema pass
     print('built out/site.html — %d checks passed' % total)
-    print('  cards %d · trails %d · ladder %d · rails %d · icons %d · placeholders %d'
+    print('  cards %d · trails %d · ladder %d · icons %d · placeholders %d'
           % (len(data['cards']), len(data['trails']), len(data['ladder']),
-             len(data['rails']), len(data['icons']), len(data['placeholders'])))
+             len(data['icons']), len(data['placeholders'])))
     print('  %d KB' % (len(page) // 1024))
     return 0
 
