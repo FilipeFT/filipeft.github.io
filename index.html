@@ -266,15 +266,16 @@ header .overline{font:600 12px var(--sans);letter-spacing:.14em;text-transform:u
 #fund-dag.dag-focusing .dag-edge{opacity:.1}
 #fund-dag.dag-focusing .dag-edge.dag-hi{opacity:1;stroke:var(--ink);stroke-width:2}
 #fund-dag.dag-focusing .dag-edge.dag-build.dag-hi{stroke-width:2.5}
-.dag-row{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 28px;margin:0 0 56px;position:relative;z-index:1}
+.dag-row{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 28px;margin:0 0 56px;position:relative;z-index:1}
 .dag-row:last-child{margin-bottom:0}
 .dag-band{border:1px solid var(--hair);border-radius:999px;gap:6px 14px;margin:0 0 46px;padding:8px 16px 10px}
 .dag-band:last-child{margin-bottom:0}
-.dag-band-label{align-self:center;font-size:.72rem;letter-spacing:.06em;opacity:.6;margin-right:8px;white-space:nowrap}
+.dag-band-label{align-self:center;font-size:.72rem;letter-spacing:.06em;opacity:.6;margin-right:6px;white-space:nowrap}
 /* the fork: once the storeys split, the two sides draw side by
-   side — the abstract computers left, the machine as built
-   right — with a seam down the middle, and the left side ends
-   on its own floor: mathematics itself, nothing beneath */
+   side — the machine as thought on the left, the machine as
+   built on the right — with a seam down the middle, and each
+   side ends on its own floor: mathematics beneath the thought,
+   physics beneath the sand */
 .dag-fork{display:flex;gap:0;margin:0 0 46px;position:relative;z-index:1}
 .dag-fork::before{content:'';position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed var(--hair)}
 .dag-fork-col{flex:1;min-width:0;padding:0 24px}
@@ -424,7 +425,7 @@ footer{padding-bottom:80px}
 <section class="fund">
   <h3>Underneath it all</h3>
   <p>Every trail above, followed far enough down, lands on one of these. Each is a self-contained primer; they are not waiting to be read in order, they are waiting to be needed.</p>
-  <p class="sys-how">The territory beneath the stories, drawn from the model, the one structure the whole deck is checked against. The strata run top to bottom, one zoom deeper each storey: what a person sees; the boundary where the world crosses into data and data crosses back; machines together; one machine, at work; the words and numbers inside — then the fork: the abstract computers on the left, the machine as built on the right, opening into its components and ending in the bedrock, while the left side bottoms in mathematics itself, nothing drawn beneath it. One line per road that descends exactly one storey; a road that climbs, runs level, or skips a storey is walked in the views, never drawn here. The stories themselves are the cards above; the grey circles are paths still to come, and every full circle opens its view.</p>
+  <p class="sys-how">The territory beneath the stories, drawn from the model, the one structure the whole deck is checked against. The strata run top to bottom, one zoom deeper each storey: what a person sees; the boundary where the world crosses into data and data crosses back; machines together; one machine, at work; the words and numbers inside; the machinery of thought, where the founding argument of computing is walked — then the fork, the machine drawn two ways as two columns that step down together: on the left the tower of abstractions, above the ways of speaking, above the formal machines; on the right the machine as built, above its components, above the bedrock. The columns mirror one another, and each is a construction: hover the circle at the top of either and the whole chain beneath it lights — on the left the formal machines built up into the languages built up into the tower, on the right the gates built up into the parts built up into the processor. Each side ends in its own floor: the machine as thought bottoms in mathematics itself, the machine as built bottoms in physics — a voltage high or low — and nothing is drawn beneath either. One line per road that descends exactly one storey; a road that climbs, runs level, or skips a storey is walked in the views, never drawn here. The stories themselves are the cards above; the grey circles are paths still to come, and every full circle opens its view.</p>
   <div class="dag" id="fund-dag"></div>
 </section>
 </section>
@@ -1938,6 +1939,10 @@ const DATA = {
             {
               "to": "p-learning",
               "q": "Where the better guesses come from"
+            },
+            {
+              "to": "x-thought",
+              "q": "What is a thought, that a machine could have one?"
             }
           ]
         }
@@ -2640,6 +2645,10 @@ const DATA = {
             {
               "to": "p-universal",
               "q": "Instructions stored like data — how one machine can be any machine"
+            },
+            {
+              "to": "x-thought",
+              "q": "Where the radical idea was first thought — how a thought became a machine"
             }
           ]
         },
@@ -3104,6 +3113,10 @@ const DATA = {
             {
               "to": "rivers",
               "q": "Two whole languages built from words this small"
+            },
+            {
+              "to": "x-rivers",
+              "q": "How those two languages were found — the trail of the two rivers"
             }
           ]
         }
@@ -3172,6 +3185,10 @@ const DATA = {
             {
               "to": "p-routes",
               "q": "A recipe that contains itself — the walk, as steps of steps"
+            },
+            {
+              "to": "x-rules",
+              "q": "How the self-containing walk was made honest — the rule that names itself"
             }
           ]
         },
@@ -3540,6 +3557,10 @@ const DATA = {
             {
               "to": "x-clock",
               "q": "the drift that breaks a working system from the inside"
+            },
+            {
+              "to": "x-thought",
+              "q": "the first theorem of the new machines — no rule can say which programs finish"
             }
           ]
         },
@@ -4119,6 +4140,306 @@ const DATA = {
           "q": "the Bit — the spelling of every dial"
         }
       ]
+    },
+    "x-thought": {
+      "title": "How a thought becomes a machine",
+      "crumb": "how a thought becomes a machine",
+      "rung": "code",
+      "icon": "tower",
+      "intro": "Every machine on this page descends from an argument about the meaning of proof — fought on paper, a decade before anyone had built one. This is the trail of that argument: a dream of perfect certainty, a crack in it, and the two answers that found, inside the crack, the machine.",
+      "steps": [
+        {
+          "icon": "tower",
+          "name": "the dream",
+          "line": "all of mathematics, by rule alone",
+          "blurb": "In 1900, in Paris, David Hilbert wished mathematics into a finished building: every statement proved or disproved by following a rule — and, the deepest wish, a rule that decides, for any statement, which of the two it must be. It is called the decision problem, and it sounds innocent now that it has been answered. What could “following a rule” even mean, when nobody is following it? The question was not about machines. There were none.",
+          "cross": [
+            {
+              "to": "p-proof",
+              "q": "What is a proof, that a rule could check it?"
+            },
+            {
+              "to": "x-fail",
+              "q": "The dream hid a law of failure — the one thing no procedure can do"
+            }
+          ]
+        },
+        {
+          "icon": "bit",
+          "name": "the crack",
+          "line": "a sentence that says “I cannot be proved”",
+          "blurb": "In 1931 Kurt Gödel answered first, with a trick of pure numbering: statements about numbers were turned into numbers themselves, so that mathematics could speak about its own sentences. It then assembled the sentence this one is not provable — and any system rich enough to hold arithmetic, if consistent, must leave it true and unprovable, and cannot certify its own consistency from inside. The dream of perfect certainty cracked at exactly the point where mathematics looked at itself — and the crack was load-bearing.",
+          "cross": [
+            {
+              "to": "p-selfcopy",
+              "q": "A thing that describes itself: the seed of the machine that copies itself"
+            },
+            {
+              "to": "x-facts",
+              "q": "Keep the truths, let the machine do the proving — what follows?"
+            }
+          ]
+        },
+        {
+          "icon": "console",
+          "name": "the man at the desk",
+          "line": "thought reduced to steps a clerk could keep",
+          "blurb": "In 1936 Alan Turing took Hilbert’s question literally and asked what “mechanical” could possibly mean. His answer was the furthest thing from a creative leap: a clerk with a rulebook, a paper tape, and no insight whatsoever. The Turing machine is that clerk distilled, and it was enough — whatever any computer will ever compute, the clerk computes. One machine can even read a description of any other and act it out: the universal machine. And the same paper proves the halting problem: no rule at all can examine a program and say which ones finish. The dream of a rule for everything died on the same page that built the machine.",
+          "cross": [
+            {
+              "to": "turing",
+              "q": "The primer: the clerk distilled, run by your own hand"
+            },
+            {
+              "to": "x-machine",
+              "q": "The shape the desk wore when it was built — the machine itself"
+            }
+          ]
+        },
+        {
+          "icon": "match",
+          "name": "two answers, one mountain",
+          "line": "lambda and tape: two routes to one summit",
+          "blurb": "Across the Atlantic, Alonzo Church had answered the same question with almost nothing: the lambda calculus — functions calling functions, pure substitution, no machine anywhere, invented as mathematics a decade before there was hardware to run it on. Two formalisms, opposite in posture, and Stephen Kleene proved them the same: everything either computes, the other computes too. That meeting is the Church–Turing thesis — the boundary of the computable, drawn twice, from two sides, agreeing exactly.",
+          "cross": [
+            {
+              "to": "recursion",
+              "q": "The rule the lambda leans on — recursion, at ground level"
+            },
+            {
+              "to": "x-rules",
+              "q": "Kleene’s other gift — how a rule came to name itself"
+            }
+          ]
+        },
+        {
+          "icon": "app",
+          "name": "the grandchildren",
+          "line": "the universal machine, worn as architecture",
+          "blurb": "John von Neumann read Turing’s paper and did the engineering: fix the tape and call it memory, weld the rulebook into a processor — and since a description of a machine is data, keep the program in the very memory it works on. Every computer since, the room-sized ones and the one in your pocket, is that single machine wearing a costume. The argument about proof fell into hardware, and the hardware inherited the argument’s deepest finding: some questions have no procedure. That is not a defect. It is the discovery, and the machine is its monument.",
+          "cross": [
+            {
+              "to": "p-universal",
+              "q": "How one machine can be any machine — the promise, worn as a costume"
+            },
+            {
+              "to": "cpu",
+              "q": "The real machine the thought became — von Neumann’s architecture"
+            }
+          ]
+        }
+      ],
+      "bottom": "The machine was not invented; it was discovered, the way a coastline is. The argument ran ahead of the hardware by a decade, and everything you own is what it fell into.",
+      "deep": [
+        {
+          "to": "turing",
+          "q": "The Turing machine — the primer of the machine distilled"
+        },
+        {
+          "to": "recursion",
+          "q": "Recursion — the rule the whole construction leans on"
+        }
+      ]
+    },
+    "x-rules": {
+      "title": "How a rule names itself",
+      "crumb": "how a rule names itself",
+      "rung": "instructions",
+      "icon": "turn",
+      "intro": "A rule that invokes itself sounds like a circle: to know the rule, first know the rule. This is the trail of how the circle was made honest — a tower of waiting calls, a floor to land on, and the fixed point that lets a rule name itself without lying.",
+      "steps": [
+        {
+          "icon": "turn",
+          "name": "the strange definition",
+          "line": "the factorial of n: n times the factorial of n minus one",
+          "blurb": "Define the factorial of a number as that number times the factorial of the number below it. It reads like a joke — the term defined by the term itself — yet it is how half of mathematics is written. The length of a list is one more than the length of the rest of the list. A sentence is a phrase plus a smaller sentence. A sorted pile is two sorted smaller piles. Anything made of smaller things like itself is begging to be defined this way — the definition is a compressed picture of the thing’s own shape.",
+          "cross": [
+            {
+              "to": "x-facts",
+              "q": "A relation defined in its own terms — the ancestor rule"
+            },
+            {
+              "to": "p-routes",
+              "q": "A recipe that contains a copy of itself — how a route finds its way"
+            }
+          ]
+        },
+        {
+          "icon": "stairs",
+          "name": "the tower of calls",
+          "line": "each call suspends, and waits on the floor below",
+          "blurb": "Follow factorial of three by hand and the suspense is the lesson: to compute it you must first compute factorial of two, which needs factorial of one, which needs factorial of zero. Each unfinished call waits on the one below it, owing a multiplication, and the question that looks metaphysical — who remembers all this? — has the plainest answer in the world: something must hold the tower while it grows, or the tower is nowhere.",
+          "cross": [
+            {
+              "to": "p-memory",
+              "q": "Where the waiting calls live — how it remembers"
+            },
+            {
+              "to": "x-thought",
+              "q": "The thought that became the machine that holds the tower"
+            }
+          ]
+        },
+        {
+          "icon": "box",
+          "name": "the floor that stops the fall",
+          "line": "the base case: the one answer that owes nothing",
+          "blurb": "The tower needs a bottom: factorial of zero, defined outright as one — the answer that asks nobody further. Without it the rule chases itself forever, and the machine does not find that profound; it runs out of cells, and the crash is called stack overflow, nothing mystical under it. The art of the trick is choosing the floor honestly: deciding what the smallest case is, the one all the other cases can stand on.",
+          "cross": [
+            {
+              "to": "memory",
+              "q": "The cells that run out — memory, at the level of the wire"
+            },
+            {
+              "to": "x-alive",
+              "q": "When the tower falls over — how the whole survives"
+            }
+          ]
+        },
+        {
+          "icon": "fork",
+          "name": "the trick that names itself",
+          "line": "the fixed point: a rule that hands itself to itself",
+          "blurb": "Kleene, cleaning up after Gödel, found the move that makes the circle honest. Take almost-the-rule — a mould that takes any rule and builds from it a bigger rule — and it has a fixed point: a rule that behaves as if it had been fed itself. Not circular but self-given, the definition booting itself into existence. From that fixed point descend the languages defined in their own terms, the programs that print their own text, and the interpreter that fits on a page: a machine describing the describer.",
+          "cross": [
+            {
+              "to": "x-rivers",
+              "q": "The two languages built out of exactly this trick"
+            },
+            {
+              "to": "p-selfcopy",
+              "q": "The same fixed point, wearing a body — how a machine copies itself"
+            }
+          ]
+        },
+        {
+          "icon": "play",
+          "name": "what the trick buys",
+          "line": "trees, grammar, sorting: defined by their own smaller cases",
+          "blurb": "The payoff is not the factorial. It is the tree — a thing with smaller things like it hanging from it — and on the tree, everything structured: the parse that finds grammar in a sentence, the quicksort that orders a million numbers by ordering two smaller halves, the search that finds a route by finding shorter routes. Every one of them is this trail again at another size — which is the trick’s own signature: recursion, all the way down.",
+          "cross": [
+            {
+              "to": "tower",
+              "q": "The tower of abstractions, grown by exactly these habits"
+            },
+            {
+              "to": "p-words",
+              "q": "Definitions from definitions — the one-word language"
+            }
+          ]
+        }
+      ],
+      "bottom": "Recursion is not a trick of programming; it is the shape of anything made of smaller things like itself — and the machine grows a tower in ordinary memory every time you speak it.",
+      "deep": [
+        {
+          "to": "recursion",
+          "q": "Recursion — the primer, with the stack in your own hands"
+        },
+        {
+          "to": "rivers",
+          "q": "The two rivers — both languages, built on the rule"
+        }
+      ]
+    },
+    "x-rivers": {
+      "title": "How the two rivers were found",
+      "crumb": "how the two rivers were found",
+      "rung": "code",
+      "icon": "rivers",
+      "intro": "The majority road of computing runs through one big machine and a tower of layers above it. A minority tradition holds that a language can be almost nothing at all. This is the trail of the two smallest honest languages ever built — facing opposite directions, a decade apart — and of what has been quietly growing in the silt between them.",
+      "steps": [
+        {
+          "icon": "rivers",
+          "name": "two founders, one complaint",
+          "line": "Moore subtracting, McCarthy distilling",
+          "blurb": "Charles Moore, programming for astronomy through the sixties, kept doing the same thing: removing. Every tool heavier than the work was deleted, until what remained was a stack, a dictionary, and a way to teach it words. John McCarthy, five years earlier, wanted a machine that could reason about its own thoughts, and reached for the smallest mathematics there is: Church’s lambda calculus, computation as pure substitution. Neither set out to design a language. Both subtracted their way into one.",
+          "cross": [
+            {
+              "to": "x-thought",
+              "q": "The mathematics both were quietly standing on — lambda and tape"
+            },
+            {
+              "to": "p-words",
+              "q": "A language small enough for a keypad — the one-word language"
+            }
+          ]
+        },
+        {
+          "icon": "hands",
+          "name": "the earth",
+          "line": "FORTH: words that act, on a stack you can see",
+          "blurb": "Moore’s answer, named FORTH, faces the machine. Numbers ride a stack in plain sight; a word takes what it needs and leaves what it made; and teaching is one line — colon SQUARE DUP * semicolon — after which the new word is forever indistinguishable from a built-in. No variables, no precedence, no grammar between you and the act. The dictionary grows by defining words from words until it reaches the floor of primitives the hardware itself speaks. It steered telescopes with a vocabulary smaller than this paragraph.",
+          "cross": [
+            {
+              "to": "x-rules",
+              "q": "Definitions from definitions — the rule that names itself"
+            },
+            {
+              "to": "p-store",
+              "q": "The dictionary, kept the way memory keeps — how everything is stored"
+            }
+          ]
+        },
+        {
+          "icon": "wave",
+          "name": "the sky",
+          "line": "LISP: sentences that compute, lists all the way down",
+          "blurb": "McCarthy’s answer, LISP, faces mathematics. One structure — the list, a chain of pairs each holding a thing and a pointer to the rest — and one rule that is the whole genius: a program is itself a list. Not like one; is one. So the interpreter can read programs as data, and it was written in the language it interprets, its essence famously fitting on a single page: quote the sentence, eval the sentence, print the answer. A language watching itself, the way a latch watches its own state.",
+          "cross": [
+            {
+              "to": "recursion",
+              "q": "The rule the lambda leans on — recursion, at ground level"
+            },
+            {
+              "to": "x-written",
+              "q": "Where writing software meets sentences that compute"
+            }
+          ]
+        },
+        {
+          "icon": "match",
+          "name": "the mirror",
+          "line": "two minimal answers to one question — and a third",
+          "blurb": "Stack and lambda, cost and meaning, earth and sky: two minimal answers to Turing’s question of what computation is — and provably the same machine underneath, each mechanically rewritable into the other. Then in Marseille, 1972, a third way: Prolog, a program as a list of facts and the machine left to find the proof. Every river found the same discovery from its own bank: the smallest honest core is enough for everything, and everything else is vocabulary.",
+          "cross": [
+            {
+              "to": "relations",
+              "q": "The third way — relations, and the pond of truths"
+            },
+            {
+              "to": "p-learning",
+              "q": "A machine reasoning about its own guesses — what McCarthy was reaching for"
+            }
+          ]
+        },
+        {
+          "icon": "cloud",
+          "name": "where the rivers ran",
+          "line": "from the telescope to the phone: small cores everywhere",
+          "blurb": "The empires built the industry; the rivers cut the channels underneath. FORTH’s cousins run printers and hold spacecraft’s smallest loops; LISP’s lists became the data language of the web, its habit of code-as-data lives on in every program that writes programs; Prolog parsed the questions a famous machine was asked on television. The small cores carried the load while the big towers traded upstairs — which was always the minority promise: not to win, but to remain, and to be load-bearing.",
+          "cross": [
+            {
+              "to": "tower",
+              "q": "The tower — built on the habits the rivers kept"
+            },
+            {
+              "to": "x-satellite",
+              "q": "Steered by words in the sky — the machine aboard"
+            }
+          ]
+        }
+      ],
+      "bottom": "The two rivers never met. They eroded the same valley from opposite ends — and the valley is where you work.",
+      "deep": [
+        {
+          "to": "rivers",
+          "q": "The primer: two rivers, one sky — FORTH and LISP for your hands"
+        },
+        {
+          "to": "relations",
+          "q": "Relations — the third way, in the primer’s pond"
+        }
+      ]
     }
   },
   "ladder": [
@@ -4326,6 +4647,18 @@ const DATA = {
       "icon": "app",
       "title": "how one machine can be any machine",
       "line": "the same machine, wearing a different program"
+    },
+    "p-proof": {
+      "level": 1,
+      "icon": "match",
+      "title": "how a proof becomes a program",
+      "line": "a proposition a type, a proof a program: one shape read three ways"
+    },
+    "p-selfcopy": {
+      "level": 1,
+      "icon": "copy",
+      "title": "how a machine copies itself",
+      "line": "a description that describes the describer: the seed of every living thing"
     }
   },
   "map": [
@@ -4357,12 +4690,12 @@ const DATA = {
       "col": null,
       "views": [
         "x-many",
-        "x-race",
-        "x-network",
         "x-satellite",
-        "x-copies",
         "x-fail",
-        "x-alive"
+        "x-race",
+        "x-alive",
+        "x-network",
+        "x-copies"
       ]
     },
     {
@@ -4372,13 +4705,14 @@ const DATA = {
       "views": [
         "x-machine",
         "x-choices",
+        "x-clock",
         "x-os",
         "x-simulate",
-        "x-secrets",
-        "x-clock",
         "x-watch",
+        "x-secrets",
         "p-gpu",
-        "p-universal"
+        "p-universal",
+        "time"
       ]
     },
     {
@@ -4397,16 +4731,23 @@ const DATA = {
       ]
     },
     {
-      "id": "m-abstract",
-      "label": "abstract computers",
+      "id": "m-ideas",
+      "label": "the machinery of thought",
+      "col": null,
+      "views": [
+        "x-rivers",
+        "x-rules",
+        "x-thought",
+        "p-proof",
+        "p-selfcopy"
+      ]
+    },
+    {
+      "id": "m-tower",
+      "label": "the tower of abstractions",
       "col": "left",
       "views": [
-        "turing",
-        "rivers",
-        "tower",
-        "recursion",
-        "relations",
-        "time"
+        "tower"
       ]
     },
     {
@@ -4418,12 +4759,30 @@ const DATA = {
       ]
     },
     {
+      "id": "m-speaking",
+      "label": "the ways of speaking",
+      "col": "left",
+      "views": [
+        "relations",
+        "rivers"
+      ]
+    },
+    {
       "id": "m-components",
       "label": "the components",
       "col": "right",
       "views": [
         "adders",
         "memory"
+      ]
+    },
+    {
+      "id": "m-formal",
+      "label": "the formal machines",
+      "col": "left",
+      "views": [
+        "turing",
+        "recursion"
       ]
     },
     {
@@ -4488,36 +4847,6 @@ const DATA = {
       "kind": "land"
     },
     {
-      "from": "x-network",
-      "to": "x-machine",
-      "kind": "land"
-    },
-    {
-      "from": "x-network",
-      "to": "bits",
-      "kind": "land"
-    },
-    {
-      "from": "x-satellite",
-      "to": "cpu",
-      "kind": "land"
-    },
-    {
-      "from": "x-satellite",
-      "to": "bits",
-      "kind": "land"
-    },
-    {
-      "from": "x-race",
-      "to": "time",
-      "kind": "land"
-    },
-    {
-      "from": "x-race",
-      "to": "memory",
-      "kind": "land"
-    },
-    {
       "from": "x-many",
       "to": "x-network",
       "kind": "land"
@@ -4528,6 +4857,36 @@ const DATA = {
       "kind": "land"
     },
     {
+      "from": "x-race",
+      "to": "time",
+      "kind": "land"
+    },
+    {
+      "from": "x-race",
+      "to": "memory",
+      "kind": "land"
+    },
+    {
+      "from": "x-network",
+      "to": "x-machine",
+      "kind": "land"
+    },
+    {
+      "from": "x-network",
+      "to": "bits",
+      "kind": "land"
+    },
+    {
+      "from": "x-satellite",
+      "to": "cpu",
+      "kind": "land"
+    },
+    {
+      "from": "x-satellite",
+      "to": "bits",
+      "kind": "land"
+    },
+    {
       "from": "x-copies",
       "to": "time",
       "kind": "land"
@@ -4539,12 +4898,17 @@ const DATA = {
     },
     {
       "from": "x-fail",
-      "to": "turing",
+      "to": "tower",
       "kind": "land"
     },
     {
       "from": "x-fail",
-      "to": "tower",
+      "to": "turing",
+      "kind": "land"
+    },
+    {
+      "from": "x-alive",
+      "to": "cpu",
       "kind": "land"
     },
     {
@@ -4553,7 +4917,7 @@ const DATA = {
       "kind": "land"
     },
     {
-      "from": "x-alive",
+      "from": "x-machine",
       "to": "cpu",
       "kind": "land"
     },
@@ -4563,8 +4927,13 @@ const DATA = {
       "kind": "land"
     },
     {
-      "from": "x-machine",
-      "to": "cpu",
+      "from": "x-choices",
+      "to": "bits",
+      "kind": "land"
+    },
+    {
+      "from": "x-choices",
+      "to": "gates",
       "kind": "land"
     },
     {
@@ -4578,22 +4947,22 @@ const DATA = {
       "kind": "land"
     },
     {
-      "from": "x-choices",
-      "to": "bits",
-      "kind": "land"
-    },
-    {
-      "from": "x-choices",
-      "to": "gates",
-      "kind": "land"
-    },
-    {
       "from": "x-simulate",
       "to": "memory",
       "kind": "land"
     },
     {
       "from": "x-simulate",
+      "to": "bits",
+      "kind": "land"
+    },
+    {
+      "from": "x-secrets",
+      "to": "time",
+      "kind": "land"
+    },
+    {
+      "from": "x-secrets",
       "to": "bits",
       "kind": "land"
     },
@@ -4614,16 +4983,6 @@ const DATA = {
     },
     {
       "from": "x-watch",
-      "to": "bits",
-      "kind": "land"
-    },
-    {
-      "from": "x-secrets",
-      "to": "time",
-      "kind": "land"
-    },
-    {
-      "from": "x-secrets",
       "to": "bits",
       "kind": "land"
     },
@@ -4639,11 +4998,41 @@ const DATA = {
     },
     {
       "from": "x-facts",
-      "to": "recursion",
+      "to": "relations",
       "kind": "land"
     },
     {
       "from": "x-facts",
+      "to": "recursion",
+      "kind": "land"
+    },
+    {
+      "from": "x-thought",
+      "to": "turing",
+      "kind": "land"
+    },
+    {
+      "from": "x-thought",
+      "to": "recursion",
+      "kind": "land"
+    },
+    {
+      "from": "x-rules",
+      "to": "rivers",
+      "kind": "land"
+    },
+    {
+      "from": "x-rules",
+      "to": "recursion",
+      "kind": "land"
+    },
+    {
+      "from": "x-rivers",
+      "to": "rivers",
+      "kind": "land"
+    },
+    {
+      "from": "x-rivers",
       "to": "relations",
       "kind": "land"
     },
@@ -4669,22 +5058,22 @@ const DATA = {
     },
     {
       "from": "x-image",
-      "to": "x-network",
-      "kind": "cross"
-    },
-    {
-      "from": "x-image",
       "to": "x-race",
       "kind": "cross"
     },
     {
       "from": "x-image",
-      "to": "x-os",
+      "to": "x-network",
       "kind": "cross"
     },
     {
       "from": "x-image",
       "to": "x-choices",
+      "kind": "cross"
+    },
+    {
+      "from": "x-image",
+      "to": "x-os",
       "kind": "cross"
     },
     {
@@ -4854,12 +5243,12 @@ const DATA = {
     },
     {
       "from": "x-motion",
-      "to": "x-os",
+      "to": "x-choices",
       "kind": "cross"
     },
     {
       "from": "x-motion",
-      "to": "x-choices",
+      "to": "x-os",
       "kind": "cross"
     },
     {
@@ -4878,8 +5267,73 @@ const DATA = {
       "kind": "cross"
     },
     {
-      "from": "x-network",
+      "from": "x-many",
+      "to": "x-race",
+      "kind": "cross"
+    },
+    {
+      "from": "x-many",
+      "to": "x-machine",
+      "kind": "cross"
+    },
+    {
+      "from": "x-many",
+      "to": "x-choices",
+      "kind": "cross"
+    },
+    {
+      "from": "x-many",
+      "to": "x-os",
+      "kind": "cross"
+    },
+    {
+      "from": "x-many",
+      "to": "memory",
+      "kind": "cross"
+    },
+    {
+      "from": "x-race",
+      "to": "x-many",
+      "kind": "cross"
+    },
+    {
+      "from": "x-race",
+      "to": "x-network",
+      "kind": "cross"
+    },
+    {
+      "from": "x-race",
       "to": "x-satellite",
+      "kind": "cross"
+    },
+    {
+      "from": "x-race",
+      "to": "x-machine",
+      "kind": "cross"
+    },
+    {
+      "from": "x-race",
+      "to": "x-os",
+      "kind": "cross"
+    },
+    {
+      "from": "x-race",
+      "to": "x-simulate",
+      "kind": "cross"
+    },
+    {
+      "from": "x-race",
+      "to": "x-facts",
+      "kind": "cross"
+    },
+    {
+      "from": "x-race",
+      "to": "p-memory",
+      "kind": "cross"
+    },
+    {
+      "from": "x-race",
+      "to": "relations",
       "kind": "cross"
     },
     {
@@ -4889,7 +5343,17 @@ const DATA = {
     },
     {
       "from": "x-network",
+      "to": "x-satellite",
+      "kind": "cross"
+    },
+    {
+      "from": "x-network",
       "to": "x-secrets",
+      "kind": "cross"
+    },
+    {
+      "from": "x-network",
+      "to": "time",
       "kind": "cross"
     },
     {
@@ -4905,11 +5369,6 @@ const DATA = {
     {
       "from": "x-network",
       "to": "p-store",
-      "kind": "cross"
-    },
-    {
-      "from": "x-network",
-      "to": "time",
       "kind": "cross"
     },
     {
@@ -4944,12 +5403,12 @@ const DATA = {
     },
     {
       "from": "x-satellite",
-      "to": "x-os",
+      "to": "x-choices",
       "kind": "cross"
     },
     {
       "from": "x-satellite",
-      "to": "x-choices",
+      "to": "x-os",
       "kind": "cross"
     },
     {
@@ -4959,12 +5418,12 @@ const DATA = {
     },
     {
       "from": "x-satellite",
-      "to": "p-memory",
+      "to": "p-words",
       "kind": "cross"
     },
     {
       "from": "x-satellite",
-      "to": "p-words",
+      "to": "p-memory",
       "kind": "cross"
     },
     {
@@ -4973,78 +5432,8 @@ const DATA = {
       "kind": "cross"
     },
     {
-      "from": "x-race",
-      "to": "x-network",
-      "kind": "cross"
-    },
-    {
-      "from": "x-race",
-      "to": "x-satellite",
-      "kind": "cross"
-    },
-    {
-      "from": "x-race",
-      "to": "x-many",
-      "kind": "cross"
-    },
-    {
-      "from": "x-race",
-      "to": "x-machine",
-      "kind": "cross"
-    },
-    {
-      "from": "x-race",
-      "to": "x-os",
-      "kind": "cross"
-    },
-    {
-      "from": "x-race",
-      "to": "x-simulate",
-      "kind": "cross"
-    },
-    {
-      "from": "x-race",
-      "to": "x-facts",
-      "kind": "cross"
-    },
-    {
-      "from": "x-race",
-      "to": "p-memory",
-      "kind": "cross"
-    },
-    {
-      "from": "x-race",
-      "to": "relations",
-      "kind": "cross"
-    },
-    {
-      "from": "x-many",
-      "to": "x-race",
-      "kind": "cross"
-    },
-    {
-      "from": "x-many",
-      "to": "x-machine",
-      "kind": "cross"
-    },
-    {
-      "from": "x-many",
-      "to": "x-os",
-      "kind": "cross"
-    },
-    {
-      "from": "x-many",
-      "to": "x-choices",
-      "kind": "cross"
-    },
-    {
-      "from": "x-many",
-      "to": "memory",
-      "kind": "cross"
-    },
-    {
       "from": "x-copies",
-      "to": "x-network",
+      "to": "x-many",
       "kind": "cross"
     },
     {
@@ -5054,7 +5443,7 @@ const DATA = {
     },
     {
       "from": "x-copies",
-      "to": "x-many",
+      "to": "x-network",
       "kind": "cross"
     },
     {
@@ -5089,7 +5478,7 @@ const DATA = {
     },
     {
       "from": "x-fail",
-      "to": "x-satellite",
+      "to": "x-many",
       "kind": "cross"
     },
     {
@@ -5099,7 +5488,7 @@ const DATA = {
     },
     {
       "from": "x-fail",
-      "to": "x-many",
+      "to": "x-satellite",
       "kind": "cross"
     },
     {
@@ -5133,8 +5522,13 @@ const DATA = {
       "kind": "cross"
     },
     {
+      "from": "x-fail",
+      "to": "x-thought",
+      "kind": "cross"
+    },
+    {
       "from": "x-alive",
-      "to": "x-network",
+      "to": "x-many",
       "kind": "cross"
     },
     {
@@ -5144,7 +5538,7 @@ const DATA = {
     },
     {
       "from": "x-alive",
-      "to": "x-many",
+      "to": "x-network",
       "kind": "cross"
     },
     {
@@ -5174,12 +5568,12 @@ const DATA = {
     },
     {
       "from": "x-machine",
-      "to": "x-os",
+      "to": "x-choices",
       "kind": "cross"
     },
     {
       "from": "x-machine",
-      "to": "x-choices",
+      "to": "x-os",
       "kind": "cross"
     },
     {
@@ -5195,6 +5589,41 @@ const DATA = {
     {
       "from": "x-machine",
       "to": "p-words",
+      "kind": "cross"
+    },
+    {
+      "from": "x-machine",
+      "to": "x-thought",
+      "kind": "cross"
+    },
+    {
+      "from": "x-choices",
+      "to": "x-machine",
+      "kind": "cross"
+    },
+    {
+      "from": "x-choices",
+      "to": "x-written",
+      "kind": "cross"
+    },
+    {
+      "from": "x-choices",
+      "to": "x-facts",
+      "kind": "cross"
+    },
+    {
+      "from": "x-choices",
+      "to": "p-words",
+      "kind": "cross"
+    },
+    {
+      "from": "x-choices",
+      "to": "p-learning",
+      "kind": "cross"
+    },
+    {
+      "from": "x-choices",
+      "to": "adders",
       "kind": "cross"
     },
     {
@@ -5218,43 +5647,8 @@ const DATA = {
       "kind": "cross"
     },
     {
-      "from": "x-choices",
-      "to": "x-machine",
-      "kind": "cross"
-    },
-    {
-      "from": "x-choices",
-      "to": "x-written",
-      "kind": "cross"
-    },
-    {
-      "from": "x-choices",
-      "to": "x-facts",
-      "kind": "cross"
-    },
-    {
-      "from": "x-choices",
-      "to": "p-learning",
-      "kind": "cross"
-    },
-    {
-      "from": "x-choices",
-      "to": "p-words",
-      "kind": "cross"
-    },
-    {
-      "from": "x-choices",
-      "to": "adders",
-      "kind": "cross"
-    },
-    {
       "from": "x-simulate",
       "to": "x-image",
-      "kind": "cross"
-    },
-    {
-      "from": "x-simulate",
-      "to": "x-race",
       "kind": "cross"
     },
     {
@@ -5264,17 +5658,22 @@ const DATA = {
     },
     {
       "from": "x-simulate",
+      "to": "x-race",
+      "kind": "cross"
+    },
+    {
+      "from": "x-simulate",
       "to": "x-machine",
       "kind": "cross"
     },
     {
       "from": "x-simulate",
-      "to": "x-os",
+      "to": "x-choices",
       "kind": "cross"
     },
     {
       "from": "x-simulate",
-      "to": "x-choices",
+      "to": "x-os",
       "kind": "cross"
     },
     {
@@ -5295,6 +5694,56 @@ const DATA = {
     {
       "from": "x-simulate",
       "to": "p-memory",
+      "kind": "cross"
+    },
+    {
+      "from": "x-secrets",
+      "to": "x-measure",
+      "kind": "cross"
+    },
+    {
+      "from": "x-secrets",
+      "to": "x-many",
+      "kind": "cross"
+    },
+    {
+      "from": "x-secrets",
+      "to": "x-network",
+      "kind": "cross"
+    },
+    {
+      "from": "x-secrets",
+      "to": "x-copies",
+      "kind": "cross"
+    },
+    {
+      "from": "x-secrets",
+      "to": "x-fail",
+      "kind": "cross"
+    },
+    {
+      "from": "x-secrets",
+      "to": "x-alive",
+      "kind": "cross"
+    },
+    {
+      "from": "x-secrets",
+      "to": "x-machine",
+      "kind": "cross"
+    },
+    {
+      "from": "x-secrets",
+      "to": "x-watch",
+      "kind": "cross"
+    },
+    {
+      "from": "x-secrets",
+      "to": "p-ledger",
+      "kind": "cross"
+    },
+    {
+      "from": "x-secrets",
+      "to": "p-store",
       "kind": "cross"
     },
     {
@@ -5334,12 +5783,12 @@ const DATA = {
     },
     {
       "from": "x-clock",
-      "to": "x-os",
+      "to": "x-choices",
       "kind": "cross"
     },
     {
       "from": "x-clock",
-      "to": "x-choices",
+      "to": "x-os",
       "kind": "cross"
     },
     {
@@ -5398,63 +5847,8 @@ const DATA = {
       "kind": "cross"
     },
     {
-      "from": "x-secrets",
-      "to": "x-measure",
-      "kind": "cross"
-    },
-    {
-      "from": "x-secrets",
-      "to": "x-network",
-      "kind": "cross"
-    },
-    {
-      "from": "x-secrets",
-      "to": "x-many",
-      "kind": "cross"
-    },
-    {
-      "from": "x-secrets",
-      "to": "x-copies",
-      "kind": "cross"
-    },
-    {
-      "from": "x-secrets",
-      "to": "x-fail",
-      "kind": "cross"
-    },
-    {
-      "from": "x-secrets",
-      "to": "x-alive",
-      "kind": "cross"
-    },
-    {
-      "from": "x-secrets",
-      "to": "x-machine",
-      "kind": "cross"
-    },
-    {
-      "from": "x-secrets",
-      "to": "x-watch",
-      "kind": "cross"
-    },
-    {
-      "from": "x-secrets",
-      "to": "p-ledger",
-      "kind": "cross"
-    },
-    {
-      "from": "x-secrets",
-      "to": "p-store",
-      "kind": "cross"
-    },
-    {
       "from": "x-written",
       "to": "x-machine",
-      "kind": "cross"
-    },
-    {
-      "from": "x-written",
-      "to": "x-os",
       "kind": "cross"
     },
     {
@@ -5464,12 +5858,12 @@ const DATA = {
     },
     {
       "from": "x-written",
-      "to": "x-facts",
+      "to": "x-os",
       "kind": "cross"
     },
     {
       "from": "x-written",
-      "to": "p-learning",
+      "to": "x-facts",
       "kind": "cross"
     },
     {
@@ -5479,7 +5873,12 @@ const DATA = {
     },
     {
       "from": "x-written",
-      "to": "recursion",
+      "to": "p-learning",
+      "kind": "cross"
+    },
+    {
+      "from": "x-written",
+      "to": "x-rivers",
       "kind": "cross"
     },
     {
@@ -5499,17 +5898,22 @@ const DATA = {
     },
     {
       "from": "x-written",
+      "to": "recursion",
+      "kind": "cross"
+    },
+    {
+      "from": "x-written",
       "to": "bits",
       "kind": "cross"
     },
     {
       "from": "x-facts",
-      "to": "x-race",
+      "to": "x-many",
       "kind": "cross"
     },
     {
       "from": "x-facts",
-      "to": "x-many",
+      "to": "x-race",
       "kind": "cross"
     },
     {
@@ -5529,6 +5933,11 @@ const DATA = {
     },
     {
       "from": "x-facts",
+      "to": "p-words",
+      "kind": "cross"
+    },
+    {
+      "from": "x-facts",
       "to": "p-learning",
       "kind": "cross"
     },
@@ -5539,22 +5948,157 @@ const DATA = {
     },
     {
       "from": "x-facts",
-      "to": "p-words",
-      "kind": "cross"
-    },
-    {
-      "from": "x-facts",
       "to": "p-store",
       "kind": "cross"
     },
     {
-      "from": "gates",
-      "to": "adders",
+      "from": "x-facts",
+      "to": "x-rules",
+      "kind": "cross"
+    },
+    {
+      "from": "x-thought",
+      "to": "x-fail",
+      "kind": "cross"
+    },
+    {
+      "from": "x-thought",
+      "to": "x-machine",
+      "kind": "cross"
+    },
+    {
+      "from": "x-thought",
+      "to": "p-universal",
+      "kind": "cross"
+    },
+    {
+      "from": "x-thought",
+      "to": "x-facts",
+      "kind": "cross"
+    },
+    {
+      "from": "x-thought",
+      "to": "x-rules",
+      "kind": "cross"
+    },
+    {
+      "from": "x-thought",
+      "to": "p-proof",
+      "kind": "cross"
+    },
+    {
+      "from": "x-thought",
+      "to": "p-selfcopy",
+      "kind": "cross"
+    },
+    {
+      "from": "x-thought",
+      "to": "cpu",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rules",
+      "to": "x-alive",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rules",
+      "to": "x-facts",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rules",
+      "to": "p-words",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rules",
+      "to": "p-routes",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rules",
+      "to": "p-memory",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rules",
+      "to": "x-thought",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rules",
+      "to": "x-rivers",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rules",
+      "to": "p-selfcopy",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rules",
+      "to": "tower",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rules",
+      "to": "memory",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rivers",
+      "to": "x-satellite",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rivers",
+      "to": "x-written",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rivers",
+      "to": "p-words",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rivers",
+      "to": "p-learning",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rivers",
+      "to": "p-store",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rivers",
+      "to": "x-thought",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rivers",
+      "to": "x-rules",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rivers",
+      "to": "tower",
+      "kind": "cross"
+    },
+    {
+      "from": "x-rivers",
+      "to": "recursion",
+      "kind": "cross"
+    },
+    {
+      "from": "rivers",
+      "to": "tower",
       "kind": "build"
     },
     {
-      "from": "gates",
-      "to": "memory",
+      "from": "relations",
+      "to": "tower",
       "kind": "build"
     },
     {
@@ -5565,6 +6109,26 @@ const DATA = {
     {
       "from": "memory",
       "to": "cpu",
+      "kind": "build"
+    },
+    {
+      "from": "turing",
+      "to": "relations",
+      "kind": "build"
+    },
+    {
+      "from": "recursion",
+      "to": "rivers",
+      "kind": "build"
+    },
+    {
+      "from": "gates",
+      "to": "adders",
+      "kind": "build"
+    },
+    {
+      "from": "gates",
+      "to": "memory",
       "kind": "build"
     }
   ]
@@ -6055,12 +6619,22 @@ function renderFundDAG() {
   svgTop.setAttribute('class', 'dag-svg-top');
   holder.appendChild(svgTop);
   // the fork: once a band takes a side, the storeys split in two
-  // columns drawn side by side — the abstract computers on the
-  // left, the machine as built on the right — and the left side
-  // ends in its own floor: mathematics itself, nothing drawn
+  // columns drawn side by side — the machine as thought on the
+  // left, the machine as built on the right — and each side
+  // ends in its own floor: the thought bottoms in mathematics,
+  // the sand bottoms in physics. The floors follow the deepest
+  // band of their column, so they are removed and re-appended as
+  // the columns grow
   let fork = null;
   let forkLeft = null;
   let forkRight = null;
+  let forkFloorLeft = null;
+  let forkFloorRight = null;
+  const makeFloor = (text) => {
+    const floor = el('div', 'dag-floor');
+    floor.textContent = text;
+    return floor;
+  };
   MAP.forEach((b) => {
     const r = el('div', 'dag-row dag-band');
     r.insertAdjacentHTML('beforeend',
@@ -6094,12 +6668,18 @@ function renderFundDAG() {
     }
     if (b.col === 'left') {
       forkLeft.appendChild(r);
-      const floor = el('div', 'dag-floor');
-      floor.textContent = 'the floor beneath is mathematics itself — ' +
-        'nothing is drawn under the abstract computers';
-      forkLeft.appendChild(floor);
+      if (forkFloorLeft) forkFloorLeft.remove();
+      forkFloorLeft = makeFloor(
+        'the floor beneath is mathematics itself — ' +
+        'the machine as thought, all the way down');
+      forkLeft.appendChild(forkFloorLeft);
     } else {
       forkRight.appendChild(r);
+      if (forkFloorRight) forkFloorRight.remove();
+      forkFloorRight = makeFloor(
+        'the floor beneath is physics itself — ' +
+        'a voltage high or low, all the way down');
+      forkRight.appendChild(forkFloorRight);
     }
   });
   const edges = fundEdges();
@@ -6194,13 +6774,32 @@ function viewTitle(id) {
   const s = document.getElementById(id);
   return (s && s.dataset && s.dataset.title) || id;
 }
+/* the reader's place: every view remembers the height it was
+   left at, and the URL carries the view, so a reload (or a
+   bookmark, or a link) reopens the door it names. Going back
+   returns to the spot the reader left, not to the top of the
+   page — the map keeps its place like any good book */
+const PLACE = {};
+function savePlace() {
+  if (VIEW.cur) PLACE[VIEW.cur] = window.scrollY || 0;
+}
+function setHash(id) {
+  /* replaceState, not a new entry: the app owns its back button,
+     and the address stays honest; where history is not allowed
+     (some file and privacy modes) the place memory still works */
+  try { history.replaceState(null, '', id === 'deck' ? '#' : '#' + id); }
+  catch (e) { /* no history here: the place memory carries on */ }
+}
 function go(id, push) {
   const target = document.getElementById(id);
   if (!target || !target.classList.contains('view')) return;
+  savePlace();
   document.querySelectorAll('.view').forEach((v) => v.classList.toggle('hidden', v.id !== id));
   if (push !== false && VIEW.cur !== id) VIEW.trail.push(VIEW.cur);
   VIEW.cur = id;
-  if (window.scrollTo) window.scrollTo(0, 0);
+  setHash(id);
+  const y = PLACE[id] || 0;
+  requestAnimationFrame(() => { if (window.scrollTo) window.scrollTo(0, y); });
   $('#crumb').textContent = viewTitle(id);
   $('#back-btn').classList.toggle('hidden', VIEW.trail.length === 0);
 }
@@ -6220,7 +6819,18 @@ renderExplainers();
 renderFundDAG();
 document.querySelectorAll('a.dgo, button.dgo').forEach((a) =>
   a.addEventListener('click', () => go(a.dataset.go)));
-go('deck', false);
+(function arrive() {
+  /* the URL may name a door: open it, with the deck beneath it
+     so the back button works; otherwise the deck itself */
+  const h = (location.hash || '').slice(1);
+  const t = h && document.getElementById(h);
+  if (t && t.classList.contains('view')) {
+    VIEW.trail.push('deck');
+    go(h, false);
+  } else {
+    go('deck', false);
+  }
+})();
 
 /* ================================================================
    1 · ONE TABLE OF GATES — the single source of truth for
@@ -7152,6 +7762,6 @@ document.querySelectorAll('#race-modes .btn').forEach((b) => {
 });
 raceReset();
 </script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="oitgvRUTJOCplB+2EIYj5A==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="dKhuDIvpqjlDrURrUrv5Kg==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
