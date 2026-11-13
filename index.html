@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Everything to bits</title>
 <meta name="description" content="Pick a card — playing games, delivering food, watching movies — and tap the parts down to bits, gates, memory, programs, and the machine itself.">
+<meta name="generator" content="Everything to bits v1.2.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width=%2224%22 height=%2224%22 rx=%225%22 fill='%23fffdf6'/%3E%3Ccircle cx='7.5' cy='12' r='2.9' fill='%23b3002d'/%3E%3Ccircle cx='16.5' cy='12' r='2.9' fill='none' stroke='%23111111' stroke-width='1.7'/%3E%3C/svg%3E">
 <style>
 :root{
   --ink:#111111;
@@ -268,17 +270,23 @@ header .overline{font:600 12px var(--sans);letter-spacing:.14em;text-transform:u
 #fund-dag.dag-focusing .dag-edge.dag-build.dag-hi{stroke-width:2.5}
 .dag-row{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 28px;margin:0 0 56px;position:relative;z-index:1}
 .dag-row:last-child{margin-bottom:0}
-.dag-band{border:1px solid var(--hair);border-radius:999px;gap:6px 14px;margin:0 0 46px;padding:8px 16px 10px}
+/* no band ever wraps: a wrapped band is a tall capsule whose
+   rounded border swings across its own circles — on a phone
+   every storey stays one line, and the map scrolls as one */
+.dag-band{border:1px solid var(--hair);border-radius:999px;gap:6px 14px;margin:0 0 46px;padding:8px 16px 10px;flex-wrap:nowrap}
 .dag-band:last-child{margin-bottom:0}
 .dag-band-label{align-self:center;font-size:.72rem;letter-spacing:.06em;opacity:.6;margin-right:6px;white-space:nowrap}
 /* the fork: once the storeys split, the two sides draw side by
    side — the machine as thought on the left, the machine as
    built on the right — with a seam down the middle, and each
    side ends on its own floor: mathematics beneath the thought,
-   physics beneath the sand */
+   physics beneath the sand. The columns never shrink below the
+   width their bands need, and the map scrolls sideways below
+   it — the drawing keeps its geometry at every window width */
+.dag{overflow-x:auto}
 .dag-fork{display:flex;gap:0;margin:0 0 46px;position:relative;z-index:1}
 .dag-fork::before{content:'';position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed var(--hair)}
-.dag-fork-col{flex:1;min-width:0;padding:0 24px}
+.dag-fork-col{flex:1;min-width:460px;padding:0 24px}
 .dag-fork-col .dag-band{margin-bottom:34px}
 .dag-floor{border-top:1px dashed var(--hair);color:var(--faint);font-size:.78rem;font-style:italic;margin-top:4px;padding-top:14px;text-align:center}
 /* the door component: a round icon wearing a view's own name.
@@ -401,6 +409,9 @@ table.mirror td.s{font-style:italic;color:#4c473c}
 /* ---------- colophon ---------- */
 .colophon{font-size:15px;color:#4c473c;font-style:italic;border-top:1px solid var(--hair);margin-top:4em;padding-top:1em}
 footer{padding-bottom:80px}
+.foot{max-width:1120px;margin:0 auto;padding:0 5vw;font-size:13px;color:#7c7668}
+.foot a{color:var(--accent);text-decoration:none}
+.foot a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -943,7 +954,7 @@ The student was enlightened, and returned to his work.
 </section>
 
 </div>
-<footer></footer>
+<footer><p class="foot">Everything to bits · v1.2.0 · supported by <a href="https://naveo.dev">Naveo</a>, sociotechnical consulting — <a href="https://naveo.dev">an organization is a program that writes itself</a></p></footer>
 
 <script>
 'use strict';
@@ -1207,7 +1218,7 @@ const DATA = {
           "blurb": "The courier’s phone speaks the way machines speak: one instruction at a time — left in two hundred metres, then arrive. The rider never sees the whole plan; they see the next word, and the next word is always enough. There is a whole tradition of computing built on exactly that discipline: a vocabulary of small words, each obeyed exactly, out of which anything can be composed.",
           "deep": [
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "Can a language be small enough to trust?"
             },
             {
@@ -1348,7 +1359,7 @@ const DATA = {
           "blurb": "Play. Pause. Back ten seconds. The remote’s whole vocabulary is a dozen words, and the player obeys one at a time, in the order pressed, without ever guessing. It is the oldest arrangement in computing — a small vocabulary, exact obedience — and there are whole languages built on nothing but it.",
           "deep": [
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "Two whole languages made of almost nothing"
             },
             {
@@ -1745,7 +1756,7 @@ const DATA = {
               "q": "The machine in every box, at its angriest"
             },
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "A vocabulary small enough for a valve: light, throttle, stop"
             },
             {
@@ -1835,7 +1846,7 @@ const DATA = {
               "q": "How does a word become a place?"
             },
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "How small can a language made for a machine be?"
             }
           ]
@@ -2327,7 +2338,7 @@ const DATA = {
               "q": "Numbers all the way down — what carries them?"
             },
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "A long story chopped into small words — how small can a language get?"
             }
           ]
@@ -2659,7 +2670,7 @@ const DATA = {
           "blurb": "In memory a program looks like nothing at all: numbers in cells, indistinguishable from data. The number 108 in one cell is an instruction — load — and the same 108 elsewhere is a piece of data. The difference is not in the cell; it is where the machine is looking. Code is data, and attention makes it code.",
           "cross": [
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "A vocabulary of a few dozen words — the one-word tradition"
             },
             {
@@ -2735,7 +2746,7 @@ const DATA = {
               "q": "The dance that ends holding the number"
             },
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "The vocabulary of commands — light, throttle, stop"
             }
           ]
@@ -2847,7 +2858,7 @@ const DATA = {
           "blurb": "Jump if pressed AND on the ground. Fire if either button is pressed: OR. Move unless paused: NOT. The words that combine questions in daily speech are the exact ones the machine needs, and each is a small circuit of switches that answers the combined question electrically, in an instant, with nobody home.",
           "cross": [
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "Three words for every decision — how small can a language get?"
             },
             {
@@ -2947,7 +2958,7 @@ const DATA = {
           "blurb": "No hand reaches the machine, so everything it does is told to it: a command list uploaded on the radio, checked, and obeyed — spin up, take the picture, hold, sleep. The vocabulary is small, exact, and counted when the machine is built: every command it will ever be allowed to hear is listed years before launch, and the machine never improvises; that is the point. A satellite is not operated so much as it is recited to, and it answers in numbers — its own health, poured back on the same small channel — the telling and the telling-what-to-do riding together, one link up, one link down.",
           "cross": [
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "A language small enough for a sky"
             },
             {
@@ -3035,7 +3046,7 @@ const DATA = {
           "blurb": "English is too loose for a machine: “put the thing near the other thing” could mean anything. So programs are written in languages built the other way round — a few dozen exact words, sentences of a shape agreed in advance, no idiom, no irony, no “you know what I mean”. The smallness is not poverty. It is the price of being understood exactly, every time, by something that has no idea what you mean.",
           "cross": [
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "The one-word tradition — a language small enough for a keypad"
             },
             {
@@ -3219,7 +3230,7 @@ const DATA = {
               "q": "The other way of answering: guesses scored, not facts walked"
             },
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "The query — a language small enough for one line"
             }
           ]
@@ -4323,7 +4334,7 @@ const DATA = {
               "q": "The tower of abstractions, grown by exactly these habits"
             },
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "Definitions from definitions — the one-word language"
             }
           ]
@@ -4359,7 +4370,7 @@ const DATA = {
               "q": "The mathematics both were quietly standing on — lambda and tape"
             },
             {
-              "to": "p-words",
+              "to": "x-words",
               "q": "A language small enough for a keypad — the one-word language"
             }
           ]
@@ -4438,6 +4449,106 @@ const DATA = {
         {
           "to": "relations",
           "q": "Relations — the third way, in the primer’s pond"
+        }
+      ]
+    },
+    "x-words": {
+      "title": "The one-word language",
+      "crumb": "the one-word language",
+      "rung": "code",
+      "icon": "remote",
+      "intro": "Charles Moore did not set out to design a language. Subtracting from his tools everything heavier than the work, he was left with a dictionary, a stack, and a way to teach both new words — a system so useful he called it a fourth-generation language, on a machine that allowed five characters, so FOURTH became FORTH. This is the trail of what that language is inside: words defined by words, a list walked by one small loop, a compiler that runs while it compiles — and the whole thing small enough for a keypad.",
+      "steps": [
+        {
+          "icon": "ram",
+          "name": "the dictionary",
+          "line": "every word an entry, linked to the word defined before it",
+          "blurb": "The language is one growing list in memory: the dictionary. Each entry has a head — the word’s name and a link to the entry defined just before it — and a body: what the word does, and whatever it needs to do it. To find a word, the interpreter starts at the newest entry and walks backward, so a word redefined today quietly replaces the same word defined last year: the newest meaning wins. And the entries are made of entries — words defined by words, all the way down to the floor of primitives, which are not definitions at all but the machine’s own code, the language’s first vocabulary.",
+          "cross": [
+            {
+              "to": "x-written",
+              "q": "The other tradition: one long text, translated once, all at once"
+            },
+            {
+              "to": "x-rules",
+              "q": "Definitions from definitions, made honest — the rule that names itself"
+            }
+          ]
+        },
+        {
+          "icon": "stairs",
+          "name": "the stack",
+          "line": "the data waits in a column; the word takes what it finds",
+          "blurb": "To compute, put numbers on a stack — last in, first out. Two, three, plus: the word + takes the top two numbers and leaves their sum in their place. No variables, no precedence, no parentheses to negotiate: the operation arrives after its data and takes exactly what it finds, so a calculation is a plain column of work. A FORTH definition is honest about the exchange as a matter of contract — its comment is a stack picture, what it consumes and what it leaves — and when a definition misbehaves, the first question a FORTH programmer asks is not what the code says but what the stack holds.",
+          "cross": [
+            {
+              "to": "x-machine",
+              "q": "Push and pop — the machine’s own way of holding work in hand"
+            },
+            {
+              "to": "x-os",
+              "q": "The other stack: where a paused task waits its turn"
+            }
+          ]
+        },
+        {
+          "icon": "chip",
+          "name": "the inner interpreter",
+          "line": "a compiled word is a list of addresses, walked one cell at a time",
+          "blurb": "What does a defined word become? Not a translation into machine code: a list of addresses, one per word it calls, ending in the address of EXIT. Walking that list is the work of the inner interpreter, sometimes called the address interpreter — a loop of a few machine instructions with one pointer to the next address. Entering a word, it saves the pointer on a second stack, the return stack, and loads the new word’s list; EXIT takes the saved pointer back, and the suspended walk resumes one level up, where it left off. DINNER is SOUP, ENTREE, DESSERT; ENTREE is CHICKEN, RICE: every nest of words in the language is served by the same three instructions.",
+          "cross": [
+            {
+              "to": "turing",
+              "q": "Obeying a description, one cell at a time — the universal machine"
+            },
+            {
+              "to": "x-simulate",
+              "q": "A machine pretending to be a machine — simulation"
+            }
+          ]
+        },
+        {
+          "icon": "play",
+          "name": "the compiler that runs",
+          "line": "compiling is executing, one word at a time",
+          "blurb": "The surprise is that the compiler is not a separate program but a word, running inside the language it compiles. The colon that opens a definition starts a loop that reads each following word and decides: write its address into the entry being built — or execute it right now. The decision is one bit kept with each word, the precedence bit, and any word can set it: IMMEDIATE turns a definition into a compile-time actor. The compiler’s own control words work exactly this way — BEGIN is nothing but HERE, the address of the next free cell, executed while the entry is still being written. Defining a word is therefore running a word: the language extends itself by executing itself.",
+          "cross": [
+            {
+              "to": "x-thought",
+              "q": "The idea underneath: a machine that describes itself"
+            },
+            {
+              "to": "recursion",
+              "q": "The same move in mathematics — a rule that hands itself to itself"
+            }
+          ]
+        },
+        {
+          "icon": "remote",
+          "name": "the keypad",
+          "line": "the whole system in a few thousand bytes",
+          "blurb": "The consequence is smallness: an entire FORTH system — language, interpreter, compiler, and the manager that reads the keyboard — lives in less than 8K bytes, and an application on top may need less than a thousand more. That is why FORTH ran where nothing else could: steering telescopes, living inside instruments, answering a keypad with one word per button. The smallness is a philosophy, not an accident. Moore’s rule: given two adequate solutions, the correct one is the simpler. Asked how he would build a children’s game, he said he would start at the bottom, with the word that draws one box, and grow upward until a single word, GO, ran the whole game.",
+          "cross": [
+            {
+              "to": "x-rivers",
+              "q": "The founding story — how this river was found"
+            },
+            {
+              "to": "p-drawing",
+              "q": "A picture pushed onto a stack — how drawing is promised"
+            }
+          ]
+        }
+      ],
+      "bottom": "A dictionary of words made of words, a stack, one small loop walking addresses, a compiler that is itself a word: a whole language with nothing left to remove. Underneath, there is only the list in memory, and the machine obeying the loop.",
+      "deep": [
+        {
+          "to": "memory",
+          "q": "Memory — the dictionary and the stack, held in numbered cells"
+        },
+        {
+          "to": "cpu",
+          "q": "A real machine — the metal that obeys the loop"
         }
       ]
     }
@@ -4600,12 +4711,6 @@ const DATA = {
       "title": "how a route finds its way",
       "line": "a recipe that contains a copy of itself"
     },
-    "p-words": {
-      "level": 1,
-      "icon": "remote",
-      "title": "the one-word language",
-      "line": "a language small enough for a keypad"
-    },
     "p-ledger": {
       "level": 1,
       "icon": "save",
@@ -4722,7 +4827,7 @@ const DATA = {
       "views": [
         "x-written",
         "x-facts",
-        "p-words",
+        "x-words",
         "p-learning",
         "p-routes",
         "p-memory",
@@ -5037,6 +5142,16 @@ const DATA = {
       "kind": "land"
     },
     {
+      "from": "x-words",
+      "to": "memory",
+      "kind": "land"
+    },
+    {
+      "from": "x-words",
+      "to": "cpu",
+      "kind": "land"
+    },
+    {
       "from": "x-image",
       "to": "x-audio",
       "kind": "cross"
@@ -5263,7 +5378,7 @@ const DATA = {
     },
     {
       "from": "x-motion",
-      "to": "p-words",
+      "to": "x-words",
       "kind": "cross"
     },
     {
@@ -5358,7 +5473,7 @@ const DATA = {
     },
     {
       "from": "x-network",
-      "to": "p-words",
+      "to": "x-words",
       "kind": "cross"
     },
     {
@@ -5418,7 +5533,7 @@ const DATA = {
     },
     {
       "from": "x-satellite",
-      "to": "p-words",
+      "to": "x-words",
       "kind": "cross"
     },
     {
@@ -5588,7 +5703,7 @@ const DATA = {
     },
     {
       "from": "x-machine",
-      "to": "p-words",
+      "to": "x-words",
       "kind": "cross"
     },
     {
@@ -5613,7 +5728,7 @@ const DATA = {
     },
     {
       "from": "x-choices",
-      "to": "p-words",
+      "to": "x-words",
       "kind": "cross"
     },
     {
@@ -5868,7 +5983,7 @@ const DATA = {
     },
     {
       "from": "x-written",
-      "to": "p-words",
+      "to": "x-words",
       "kind": "cross"
     },
     {
@@ -5933,7 +6048,7 @@ const DATA = {
     },
     {
       "from": "x-facts",
-      "to": "p-words",
+      "to": "x-words",
       "kind": "cross"
     },
     {
@@ -6008,7 +6123,7 @@ const DATA = {
     },
     {
       "from": "x-rules",
-      "to": "p-words",
+      "to": "x-words",
       "kind": "cross"
     },
     {
@@ -6058,7 +6173,7 @@ const DATA = {
     },
     {
       "from": "x-rivers",
-      "to": "p-words",
+      "to": "x-words",
       "kind": "cross"
     },
     {
@@ -6089,6 +6204,56 @@ const DATA = {
     {
       "from": "x-rivers",
       "to": "recursion",
+      "kind": "cross"
+    },
+    {
+      "from": "x-words",
+      "to": "x-written",
+      "kind": "cross"
+    },
+    {
+      "from": "x-words",
+      "to": "x-rules",
+      "kind": "cross"
+    },
+    {
+      "from": "x-words",
+      "to": "x-machine",
+      "kind": "cross"
+    },
+    {
+      "from": "x-words",
+      "to": "x-os",
+      "kind": "cross"
+    },
+    {
+      "from": "x-words",
+      "to": "turing",
+      "kind": "cross"
+    },
+    {
+      "from": "x-words",
+      "to": "x-simulate",
+      "kind": "cross"
+    },
+    {
+      "from": "x-words",
+      "to": "x-thought",
+      "kind": "cross"
+    },
+    {
+      "from": "x-words",
+      "to": "recursion",
+      "kind": "cross"
+    },
+    {
+      "from": "x-words",
+      "to": "x-rivers",
+      "kind": "cross"
+    },
+    {
+      "from": "x-words",
+      "to": "p-drawing",
       "kind": "cross"
     },
     {
@@ -6528,7 +6693,13 @@ function applyHighlight(holder, svg, svgTop, hi) {
   });
   while (svgTop.firstChild) svgTop.removeChild(svgTop.firstChild);
   if (!hi) return;
-  const box = holder.getBoundingClientRect();
+  /* the same content space as draw(): the traced walks ignore
+     the sideways scroll of a narrow window */
+  const r = holder.getBoundingClientRect();
+  const box = {
+    left: r.left - holder.scrollLeft,
+    top: r.top - holder.scrollTop
+  };
   hi.walks.forEach((w) => {
     const a = holder.querySelector('[data-go="' + w[0] + '"]');
     const b = holder.querySelector('[data-go="' + w[1] + '"]');
@@ -6691,7 +6862,21 @@ function renderFundDAG() {
       focusId ? fundHighlight(focusId) : null);
   };
   const draw = () => {
-    const box = holder.getBoundingClientRect();
+    /* measure in content space: when the map scrolls sideways
+       (a window too narrow for the fork's fixed columns) the
+       visible rect is not the whole drawing, so the overlay
+       spans the scrollable extent and the coordinates ignore
+       the current scroll — the lines stay glued to the circles
+       at every width and every scroll position */
+    const r = holder.getBoundingClientRect();
+    const w = Math.max(Math.ceil(r.width), holder.scrollWidth);
+    const h = Math.max(Math.ceil(r.height), holder.scrollHeight);
+    const box = {
+      left: r.left - holder.scrollLeft,
+      top: r.top - holder.scrollTop,
+      width: w,
+      height: h
+    };
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     while (svgTop.firstChild) svgTop.removeChild(svgTop.firstChild);
     const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
@@ -6706,6 +6891,10 @@ function renderFundDAG() {
     svgTop.appendChild(defsTop);
     svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
     svgTop.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
+    svg.style.width = box.width + 'px';
+    svg.style.height = box.height + 'px';
+    svgTop.style.width = box.width + 'px';
+    svgTop.style.height = box.height + 'px';
     edges.forEach((e) => {
       const a = holder.querySelector('[data-go="' + e[0] + '"]');
       const b = holder.querySelector('[data-go="' + e[1] + '"]');
@@ -7762,6 +7951,5 @@ document.querySelectorAll('#race-modes .btn').forEach((b) => {
 });
 raceReset();
 </script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="dKhuDIvpqjlDrURrUrv5Kg==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
