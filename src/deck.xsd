@@ -4,9 +4,9 @@
 
      One XML file (deck.xml) holds everything the page renders from
      data: icons, the primer index, the named placeholders, the
-     cards, the trails, the ladder, the rails, and the pattern. This
-     schema states what that file may be; the build (build.py)
-     validates against it before rendering anything.
+     cards, the trails, and the ladder. This schema states what
+     that file may be; the build (build.py) validates against it
+     before rendering anything.
 
      The deck is layered, and the layers are data:
        level 0 — cards: the high stories, the way in
@@ -17,16 +17,37 @@
      A door eases the reader down: from a card (level 0) a door may
      lead to a trail, a placeholder, or another card — never straight
      to a primer. From a trail (level 1) anything below may be
-     reached. The pattern stands outside the ladder; it may door
-     anywhere. The build enforces this on top of the schema.
+     reached. The build enforces this on top of the schema.
+
+     There is no pattern page, by design. The deck starts at the
+     cards and the reader drills down; nothing stands above them.
+     The ladder survives as data only: the order of its rungs sorts
+     the parts of every card, and the chips label them. The rails
+     are gone as a container — what they named is merged into the
+     ladder as ordinary rungs, in their climbing order.
 
      A placeholder is a named promise: never an anonymous gap. It
      carries its own id, icon, title, and one line, so a later pass
      can flesh it out into a real trail and re-point its doors.
 
-     A part, a step, a rung: prose and doors, nothing else. There
-     are no diagrams in this deck; the interactive figures live in
-     the template, not the data.
+     The model is data too, and it is the source of truth: the
+     whole system as one structure, the territory every other part
+     is checked against. A stratum is an id, a label, and the
+     nodes it holds, in the deck's canonical order — and a road is
+     an edge with a kind: land (where a trail bottoms out, lit on
+     hover, never drawn climbing), cross (a door inside a trail's
+     steps, drawn only when it descends exactly one storey), or
+     build (ingredient to built thing, one storey up, never
+     across the fork, never a promise). The cards are not nodes —
+     the stories sit above the territory — and every trail,
+     placeholder, and primer is a node of exactly one stratum.
+     A trail may only open a door the model has a road for; the
+     build checks every walk against the territory it walks.
+
+     A part and a step are prose and doors, nothing else. A rung
+     is an id and a chip, nothing else. There are no diagrams in
+     this deck; the interactive figures live in the template, not
+     the data.
 
      The subset this schema deliberately uses — the build carries
      its own small interpreter for exactly this subset, since the
@@ -73,6 +94,15 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="1"/>
       <xs:enumeration value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- the fork: a stratum may stand on the left side of the fork
+       (abstract computers) or the right side (the machine as built);
+       a stratum with no col runs the full width of the map -->
+  <xs:simpleType name="stratumcol">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="left"/>
+      <xs:enumeration value="right"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -167,27 +197,12 @@
     <xs:attribute name="icon" type="iconname" use="required"/>
   </xs:complexType>
 
-  <!-- a rung of the ladder, or a rail: one door down, and — when
-       the bedrock stands alone — a second named neighbor -->
+  <!-- a rung of the ladder: an id and a chip, nothing else. The
+       order of the rungs sorts the parts of every card; the chip
+       labels them. No page renders from a rung by itself -->
   <xs:complexType name="rung">
-    <xs:sequence>
-      <xs:element name="blurb" type="xs:string"/>
-      <xs:element name="door" type="door" minOccurs="1" maxOccurs="2"/>
-    </xs:sequence>
     <xs:attribute name="id" type="id" use="required"/>
-    <xs:attribute name="icon" type="iconname" use="required"/>
     <xs:attribute name="chip" type="xs:string" use="required"/>
-    <xs:attribute name="name" type="xs:string" use="required"/>
-    <xs:attribute name="line" type="xs:string" use="required"/>
-  </xs:complexType>
-
-  <!-- the pattern: outside the ladder, free to door anywhere -->
-  <xs:complexType name="pattern">
-    <xs:sequence>
-      <xs:element name="intro" type="xs:string"/>
-      <xs:element name="bottom" type="xs:string"/>
-      <xs:element name="door" type="door" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
   </xs:complexType>
 
   <!-- containers -->
@@ -221,11 +236,59 @@
       <xs:element name="rung" type="rung" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="rails">
+
+  <!-- the model: the whole system as one structure, the source of
+       truth. The strata are the layers of the territory, drawn top
+       to bottom in authored order; the edges are the roads the
+       territory has. A trail may only open a door the model has a
+       road for; roads no trail walks still stand, unclaimed -->
+  <xs:complexType name="model">
     <xs:sequence>
-      <xs:element name="rail" type="rung" maxOccurs="unbounded"/>
+      <xs:element name="stratum" type="stratum" maxOccurs="unbounded"/>
+      <xs:element name="edge" type="modeledge" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="stratum">
+    <xs:sequence>
+      <xs:element name="node" type="stratumnode" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="id" use="required"/>
+    <xs:attribute name="label" type="xs:string" use="required"/>
+    <xs:attribute name="col" type="stratumcol"/>
+  </xs:complexType>
+  <xs:complexType name="stratumnode">
+    <xs:attribute name="ref" type="id" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="modeledge">
+    <xs:attribute name="from" type="id" use="required"/>
+    <xs:attribute name="to" type="id" use="required"/>
+    <xs:attribute name="kind" type="edgekind" use="required"/>
+  </xs:complexType>
+
+  <!-- the kinds of road the territory has: a landing (where a
+       trail bottoms out, lit on hover, never drawn climbing), a
+       crossing (a door inside a trail's steps, drawn only when it
+       descends exactly one storey), and built-from (ingredient to
+       built thing, one storey up) -->
+  <xs:simpleType name="edgekind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="land"/>
+      <xs:enumeration value="cross"/>
+      <xs:enumeration value="build"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- the parts, as separate source files under data/: each part
+       file carries one of these roots, so the build can validate
+       a part alone (build.py with the part option). The deck
+       element below is the assembled whole, in reading order -->
+  <xs:element name="icons" type="icons"/>
+  <xs:element name="primers" type="primers"/>
+  <xs:element name="placeholders" type="placeholders"/>
+  <xs:element name="cards" type="cards"/>
+  <xs:element name="trails" type="trails"/>
+  <xs:element name="ladder" type="rungs"/>
+  <xs:element name="model" type="model"/>
 
   <!-- the deck, in reading order -->
   <xs:element name="deck">
@@ -237,8 +300,7 @@
         <xs:element name="cards" type="cards"/>
         <xs:element name="trails" type="trails"/>
         <xs:element name="ladder" type="rungs"/>
-        <xs:element name="rails" type="rails"/>
-        <xs:element name="pattern" type="pattern"/>
+        <xs:element name="model" type="model"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
