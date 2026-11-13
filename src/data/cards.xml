@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================
+     data/cards.xml — the cards (level 0): the high stories, the way in. Parts
+     are prose and doors; a card door never skips straight to
+     a primer.
+     Governed by deck.xsd; the build validates this part
+     alone (build.py with the part option) and all parts
+     assembled (the default build).
+     ================================================================ -->
+  <cards>
+    <card id="games" level="0" title="Playing games" icon="controller" q="How does a button under your thumb move a world?">
+      <part icon="controller" rung="sense" name="the controller" line="two sticks and eight buttons — every one a switch">
+        <blurb>Under every button is a switch, and a switch has two words: pressed and not pressed. The console never sees your thumbs; it reads a short row of ones and zeros, hundreds of times a second. Everything you ever do in the game arrives as that row, and as nothing else.</blurb>
+        <door to="p-input" q="What happens between a thumb and a number?"/>
+        <door to="x-choices" q="A switch says one word — yes or no. Where does that lead?"/>
+      </part>
+      <part icon="console" rung="machine" name="the box under the television" line="a computer, wearing a costume">
+        <blurb>Take the case off and the parts are the same as in the phone and the laptop: a processor to follow instructions, memory to hold the world, a program saying what to do. The makers do not hide this — the processor’s name is printed on the box. A console is a computer whose program tells it to behave like a toy.</blurb>
+        <door to="x-machine" q="What is inside, and how does it follow a program?"/>
+        <door to="x-os" q="Who keeps the box in order while it plays?"/>
+      </part>
+      <part icon="chip" rung="instructions" name="the processor" line="billions of instructions a second, none of them clever">
+        <blurb>Sixty times every second the processor runs the same round: read the controller, move the world forward one step, work out what the world now looks like, hand the picture to the screen. Each of the billions of instructions is no cleverer than “add these two numbers”. The speed is astonishing; every single instruction is dumb.</blurb>
+        <door to="x-choices" q="How does it decide, sixty times a second, what happens next?"/>
+        <door to="x-machine" q="What are the billions of instructions made of?"/>
+        <door to="p-drawing" q="Working out what the world looks like — the trail of the thousand painters"/>
+      </part>
+      <part icon="ram" rung="memory" name="memory" line="the world you move through, held in numbered cells">
+        <blurb>The city, your position in it, the score: all of it lives in memory, which is an enormous row of numbered cells, each holding a number. Change a cell and the world changes; the machine has no other way to be different. Cut the power and every cell forgets — which is why there is a save file, further down this trail.</blurb>
+        <door to="p-memory" q="How does a circuit hold the world you move through?"/>
+        <door to="x-image" q="Where does the picture you see live?"/>
+      </part>
+      <part icon="screen" rung="show" name="the picture" line="two million lamps, each told how bright to be">
+        <blurb>The screen is a wall of tiny lamps, and each lamp is told, dozens of times a second, three numbers: how much red, how much green, how much blue. A frame of a game is about two million such trios, and the television is simply the machine obedient enough to display them. Nobody draws anything; numbers are obeyed.</blurb>
+        <door to="x-image" q="How is a picture made, from lamp to number?"/>
+        <door to="p-memory" q="What holds two million lamps between the frames?"/>
+      </part>
+      <part icon="wifi" rung="network" name="the shared world" line="two consoles, two copies, one truth to agree on">
+        <blurb>Play with someone far away and there is no single machine holding the world: there are two, each with its own copy, trading messages as fast as the wires allow. When two players grab the same object in the same instant, the copies disagree — and every trick the game’s programmers use to settle it descends from one old, hard question.</blurb>
+        <door to="x-network" q="How do two machines share one world?"/>
+        <door to="x-race" q="Two players, one world — what keeps it whole?"/>
+      </part>
+      <part icon="save" rung="os" name="the save file" line="memory that survives the off switch">
+        <blurb>A save is a copy of the interesting cells, written onto a disk that does not forget when the power leaves. Switch on tomorrow and those numbers are read back into memory, and the world resumes exactly where it stopped. Nothing in the machine understands “saved game”; it is numbers copied faithfully from one kind of memory to another.</blurb>
+        <door to="x-os" q="Who keeps the files, and who runs the machine?"/>
+        <door to="p-memory" q="How does anything survive the off switch?"/>
+      </part>
+      <bottom>Follow any part of this trail far enough down and it dissolves into switches: pressed and not pressed, high and low, 0 and 1. The trails below lead the rest of the way down; at their ends, the primers are waiting.</bottom>
+      <door to="x-choices" q="The choices that lead down to the gates"/>
+      <door to="x-image" q="The trail that ends at the Bit"/>
+    </card>
+    <card id="food" level="0" title="Delivering food" icon="box" q="What happens between the tap and the doorbell?">
+      <part icon="phone" rung="sense" name="the phone" line="a computer that happens to fit in a pocket">
+        <blurb>The phone is the same machine as the console and the laptop: a processor, memory, and programs that give it its habits. The glass is a fine invisible grid of wires; where your finger lands, one row and one column cross, and the machine is told a coordinate — two numbers — and nothing more. It has never seen a finger in its life.</blurb>
+        <door to="p-input" q="What does the glass understand?"/>
+        <door to="x-network" q="What is the phone saying, and to whom?"/>
+      </part>
+      <part icon="app" rung="app" name="the app" line="a list of instructions, written down in advance">
+        <blurb>The app is not a place and not a person: it is a long list of instructions, written in advance and followed without opinion. Each tap hands it one new fact, and it answers with the next instruction on the list. Doorbells, spaceships and food apps are all the same arrangement — instructions, obeyed exactly.</blurb>
+        <door to="x-written" q="The list was written by a person, in words — the trail of how software is written"/>
+        <door to="x-os" q="Who lets a hundred apps share one phone?"/>
+      </part>
+      <part icon="server" rung="network" name="the restaurant’s side of the internet" line="a warehouse computer answering ten thousand strangers">
+        <blurb>Your tap becomes a small message, copied from your phone to a tower to a wire to a building full of computers — a server, which is a computer with no screen of its own, kept cool in a warehouse and answering ten thousand strangers at once. Your order lands in its memory like a note on a spike, and the reply — received — is copied back down the same road.</blurb>
+        <door to="x-network" q="How does an order cross the wire to the warehouse?"/>
+        <door to="x-facts" q="Ten thousand strangers — how does it keep track?"/>
+        <door to="p-store" q="Where do ten thousand strangers’ orders park, and how are they found again?"/>
+      </part>
+      <part icon="match" rung="app" name="the match" line="facts and rules, searched for the answer">
+        <blurb>Which restaurant, which rider: the assignment is made by a machine walking through facts — this rider is two kilometres away, that one is busy, this kitchen needs twenty minutes — hunting for the combination that satisfies all the rules at once. No person weighs the offers; the search does. Some of the most useful software ever written is exactly this, and it is a way of speaking to a machine, not a kind of hardware.</blurb>
+        <door to="x-facts" q="Can you tell a machine only facts, and still get answers?"/>
+        <door to="x-os" q="Who decides which order goes first?"/>
+      </part>
+      <part icon="map" rung="code" name="the route" line="a city as a picture the machine can walk">
+        <blurb>To the machine the city is not streets and houses but corners joined by edges, each edge with a length. The best route is found by a recipe that contains a copy of itself: the cheapest way to a far corner is built out of cheapest ways to nearer ones, the same step applied again and again until nothing remains. The machine has no idea what a street is. It never needs one.</blurb>
+        <door to="p-routes" q="What happens when a task contains a copy of itself?"/>
+        <door to="x-network" q="How does the map reach the courier’s phone?"/>
+        <door to="gps" q="The dot that starts the route — where does the phone know itself to be?"/>
+      </part>
+      <part icon="turn" rung="code" name="the courier’s phone" line="instructions, one word at a time">
+        <blurb>The courier’s phone speaks the way machines speak: one instruction at a time — left in two hundred metres, then arrive. The rider never sees the whole plan; they see the next word, and the next word is always enough. There is a whole tradition of computing built on exactly that discipline: a vocabulary of small words, each obeyed exactly, out of which anything can be composed.</blurb>
+        <door to="p-words" q="Can a language be small enough to trust?"/>
+        <door to="x-network" q="What is the phone saying to the dispatch?"/>
+      </part>
+      <part icon="hands" rung="time" name="one order, two riders" line="the bug the whole system exists to prevent">
+        <blurb>The dangerous moment is invisible: two couriers press accept on the same order in the same instant. Two hands, one memory cell, no agreed order — and a carelessly built system can hand one meal to two riders, or to none. Every ordering system on earth is, at bottom, a scheme for making that impossible.</blurb>
+        <door to="x-race" q="What happens when two act on the same thing at once?"/>
+        <door to="x-network" q="How does the order reach exactly one rider?"/>
+        <door to="p-ledger" q="One meal, one rider, one payment — how money stays counted once"/>
+      </part>
+      <bottom>The phone, the app, the warehouse, the match: each is the same machine — switches, numbers, instructions — wearing different clothes. The trails below take those words one layer at a time; at their ends stand the primers, each one alone.</bottom>
+      <door to="x-machine" q="The trail that ends at a real machine"/>
+      <door to="x-network" q="The trail that ends at the Bit"/>
+    </card>
+    <card id="movies" level="0" title="Watching movies" icon="play" q="Where does a film live while you watch it?">
+      <part icon="screen" rung="show" name="the screen" line="two million lamps, each told what to be">
+        <blurb>A television picture is about two million tiny lamps, each given, dozens of times a second, three numbers: how much red, how much green, how much blue. A film is therefore a river of numbers arriving just in time to be shown, and the screen is the machine obedient enough to turn them into light. The pause button does not stop the world; it stops the numbers.</blurb>
+        <door to="x-image" q="How is a picture made, from lamp to number?"/>
+        <door to="p-memory" q="What holds the picture between the beats?"/>
+      </part>
+      <part icon="wave" rung="sense" name="the sound" line="your evening, measured 44,100 times a second">
+        <blurb>Sound reaches the ear as pressure in the air. A microphone measures it 44,100 times a second and writes each measurement down as a number; a speaker reads the numbers back and recreates the pressure. Music on a computer is a long column of numbers and nothing else — the screen’s trick, one dimension over.</blurb>
+        <door to="x-audio" q="How does a song become numbers, and back again?"/>
+        <door to="x-image" q="Is a picture caught the same way?"/>
+      </part>
+      <part icon="wave" rung="network" name="the stream" line="a film poured through a wire, just in time">
+        <blurb>The numbers cannot all be sent at once, so they are poured: a few million bits a second, arriving shortly before they are needed. When more arrives than the wire can carry, the picture thins — grey blocks, a stutter — and that is the wire telling the truth about itself.</blurb>
+        <door to="x-network" q="How does a film cross the wire, just in time?"/>
+        <door to="x-os" q="Who keeps the film arriving just in time?"/>
+      </part>
+      <part icon="buffer" rung="memory" name="the buffer" line="the next minute of the film, parked in your living room">
+        <blurb>Because wires stutter, the player keeps a cushion: half a minute or so of the future, already arrived and held in memory. When the wire coughs, the film keeps playing out of the cushion, and the race between arrival and playback starts again quietly. The buffer is memory doing what memory exists to do: holding a state against time.</blurb>
+        <door to="p-memory" q="How does a circuit hold anything against time?"/>
+        <door to="x-network" q="Why hold a copy until the far end answers?"/>
+      </part>
+      <part icon="squeeze" rung="app" name="the squeeze" line="a program that decides what your eye will not miss">
+        <blurb>Two million lamps repainted dozens of times a second is far more than any household wire can carry, so a program — the codec — compresses the numbers: this frame is nearly the last frame; this block of sky barely changes; the eye forgives. The film you see is the codec’s opinion of the film, computed on the fly, and it is a program like any other: instructions, obeyed exactly.</blurb>
+        <door to="x-image" q="What exactly is being squeezed, and what is it made of?"/>
+        <door to="x-choices" q="The codec decides — what is deciding made of?"/>
+      </part>
+      <part icon="remote" rung="sense" name="the buttons" line="a language of a dozen words">
+        <blurb>Play. Pause. Back ten seconds. The remote’s whole vocabulary is a dozen words, and the player obeys one at a time, in the order pressed, without ever guessing. It is the oldest arrangement in computing — a small vocabulary, exact obedience — and there are whole languages built on nothing but it.</blurb>
+        <door to="p-words" q="Two whole languages made of almost nothing"/>
+        <door to="p-input" q="Every button a switch — what do switches say?"/>
+      </part>
+      <part icon="star" rung="app" name="the suggestions" line="facts about millions of evenings, walked to a guess">
+        <blurb>“Because you watched” is a machine searching recorded facts — millions of evenings, what was finished, what was abandoned — for what fits yours. It is not a person and it is not magic; it is search through relations, the same craft that assigns a rider to an order, run at planetary scale.</blurb>
+        <door to="x-facts" q="Facts about millions of evenings, walked to a guess"/>
+        <door to="x-network" q="Where do the facts about evenings come from?"/>
+        <door to="p-learning" q="Search is where it starts — how a machine improves its guesses"/>
+        <door to="chat" q="The other guesser — a machine that answers in words"/>
+      </part>
+      <bottom>Lamps, pressure, wires, cushions: numbers all the way down, and numbers the machine can only hold and obey. The bottom of the deck explains how anything this obedient can also be this capable.</bottom>
+      <door to="x-audio" q="The trail that ends at the Bit and at memory"/>
+      <door to="x-image" q="The trail that ends at the Bit"/>
+    </card>
+    <card id="weather" level="0" title="Forecasting the weather" icon="cloud" q="Where does tomorrow's weather come from?">
+      <part icon="balloon" rung="sense" name="the observation" line="the whole sky, measured and rounded to numbers">
+        <blurb>On the hour, all round the world, the air is read: thermometers and barometers in tens of thousands of stations, balloons climbing through the cold with little boxes dangling beneath them, radar sweeping the rain, satellites photographing the clouds from above. Every instrument does the same one thing: it measures — heat, pressure, wind, wetness — and rounds each measurement to a number. The sky at this hour is, to the machine, a few million numbers, and nothing else.</blurb>
+        <door to="x-audio" q="The air, measured and numbered, exactly like a song"/>
+        <door to="x-network" q="How do a million readings reach the model in time?"/>
+        <door to="x-satellite" q="The satellites among the observers — the trail of how they are run"/>
+      </part>
+      <part icon="screen" rung="show" name="the picture" line="tomorrow, painted from numbers">
+        <blurb>What reaches you is a picture: a map washed in colours, a ribbon of little hour-by-hour icons, a sun that is itself a small drawing. None of it is sent; all of it is drawn, on your phone, from the model’s numbers, by a program whose whole job is turning a column of figures into reds and blues. The sun on the forecast screen is three numbers telling a lamp how brightly to shine.</blurb>
+        <door to="x-image" q="How is a picture made, from lamp to number?"/>
+        <door to="x-network" q="How does the forecast cross the wire to your pocket?"/>
+      </part>
+      <part icon="app" rung="app" name="the model" line="the laws of the air, spelled as arithmetic">
+        <blurb>Air is not mysterious; it obeys a short list of laws, known for two centuries. It is pushed from where the pressure is high to where it is low; warm air rises and carries its wetness with it; steam lets go of its heat the moment it turns to rain. A weather model is those laws rewritten as arithmetic — millions of small sums, one minute of sky at a time — followed exactly, with no opinion about picnics. It is a program like any other: instructions, obeyed.</blurb>
+        <door to="x-simulate" q="One rule, every cell, one beat — the trail of simulated worlds"/>
+        <door to="x-choices" q="A million yes-or-no forks inside one step of sky"/>
+      </part>
+      <part icon="ram" rung="code" name="the grid" line="the sky, cut into a lattice of numbered cells">
+        <blurb>A machine cannot hold the continuous sky, so it cuts the sky up: the globe laid out in a lattice of boxes a few kilometres wide, stacked upward in floors, each box carrying its own numbers — pressure, temperature, wind, wetness. Each minute of the forecast is every box asking its neighbours a question at once. The machine has no idea what weather is. It walks a lattice of cells, and the lattice is enough.</blurb>
+        <door to="x-image" q="A picture is a grid of trios — is the sky caught the same way?"/>
+        <door to="x-simulate" q="Cells, neighbours, a rule — the trail of worlds walked this way"/>
+      </part>
+      <part icon="server" rung="machine" name="the machine that runs it" line="the largest computers on earth, doing sums about rain">
+        <blurb>Walking millions of boxes forward, minute by minute, is the heaviest routine arithmetic in the world, and it runs on the largest machines there are: warehouses of cabinets, each cabinet the same design as the phone in your pocket, thousands of them computing one sky side by side. Nothing exotic hides inside. It is the familiar dance — fetch, decode, execute — multiplied until tomorrow fits inside an afternoon.</blurb>
+        <door to="x-machine" q="The stored program — the one design in every box"/>
+        <door to="x-many" q="Thousands of boxes, one sky — the trail of many machines as one"/>
+      </part>
+      <part icon="fork" rung="logic" name="the forty skies" line="the same question asked of slightly different mornings">
+        <blurb>The observation is honest but incomplete: a breeze missed here, a degree missed there. So the model is run not once but many times, from many slightly different first numbers, and the copies agree at first, then slowly drift apart — tomorrow they still match; by the weekend they fan out. The “70% chance of rain” is not a mood, it is a count: of all the skies the machine tried, seven in ten brought the rain.</blurb>
+        <door to="x-simulate" q="Forty skies, one rule — the walk of simulated worlds"/>
+        <door to="x-os" q="Forty skies to compute — who shares the machine among them?"/>
+      </part>
+      <part icon="clock" rung="time" name="the race" line="a forecast must arrive before the weather does">
+        <blurb>All of this is run against a deadline. If the machine needed six hours to tell you about the next six hours, the forecast would be a history lesson; the model is cut and trimmed until tomorrow fits inside a couple of hours, and the answer must then cross the wires to your pocket before the first drop falls. Speed, here, is not a convenience. It is the difference between a warning and a report.</blurb>
+        <door to="x-os" q="Who gives the beat, and who goes next?"/>
+        <door to="x-network" q="The answer must cross the wire before the rain does"/>
+      </part>
+      <bottom>Readings, cells, sums, and a picture: tomorrow is the deck’s oldest trick — the world measured into numbers, a program walking them forward, and the answer painted back. The trails below open each step of the trick; at their ends, the primers are waiting.</bottom>
+      <door to="x-machine" q="The trail that ends at a real machine"/>
+      <door to="x-network" q="The trail that ends at the Bit"/>
+    </card>
+    <card id="gps" level="0" title="Finding where you are" icon="map" q="How does your phone know where it is?">
+      <part icon="star" rung="sense" name="the four whispers" line="the sky, talking and never listening">
+        <blurb>Somewhere above you, a machine is falling around the Earth and shouting where it is and what time it is. Your phone hears four of these whispers and answers nothing: it never speaks back; it only listens. Four is not a whim — three whispers narrow the dot to one place, and the fourth is for the phone’s own cheap clock, so the sum can come out right.</blurb>
+        <door to="x-satellite" q="The machines doing the shouting — the trail of the machines themselves"/>
+        <door to="x-network" q="A message chopped, numbered, and kept until received"/>
+      </part>
+      <part icon="screen" rung="show" name="the blue dot" line="your position, painted onto a picture of numbers">
+        <blurb>The fix arrives as numbers, and what you see is a dot on a map. The map is not a rolled-up photograph: to the phone it is a list of corners and edges with lengths, painted as a picture only when you look. The blue dot is three numbers wearing a halo of honesty — the little circle around it is the machine admitting how unsure it is, and the halo is drawn, too, from arithmetic.</blurb>
+        <door to="x-image" q="How is a picture made, from lamp to number?"/>
+        <door to="p-routes" q="A dot wants a route — how a route finds its way"/>
+      </part>
+      <part icon="app" rung="app" name="the solve" line="four distances, one point, arithmetic to the rescue">
+        <blurb>Each whisper tells the phone how long it travelled: light crosses about three hundred metres in a millionth of a second, so the delay becomes a distance. Four distances mean four spheres that must meet in one place — you. The phone solves it by walking: guess a point, see how wrong the guess is, step toward less wrong, and repeat until the answer stops moving. Then it does it again, and again, while you walk to the corner shop.</blurb>
+        <door to="p-routes" q="Stepping toward the answer until it stops moving — a recipe that contains a copy of itself"/>
+        <door to="x-machine" q="The arithmetic, walked by a machine — what the machine is"/>
+      </part>
+      <part icon="remote" rung="code" name="the roads" line="the city, spelled as corners and edges">
+        <blurb>Between fixes, the dot must keep walking: the phone guesses where you have moved and snaps the guess to the likeliest road — a search through facts (these edges, these lengths, these one-way streets) for the path that best explains the numbers. This is why the dot sometimes slides along a fence: the roads in the machine are not the roads in the world, and the search only knows the numbers it was given.</blurb>
+        <door to="x-facts" q="Roads as facts, walked to the likeliest answer"/>
+        <door to="p-routes" q="The likeliest path, found by a recipe that contains a copy of itself"/>
+      </part>
+      <part icon="phone" rung="machine" name="the receiver" line="a machine in your pocket, listening to the sky">
+        <blurb>The listener is a chip smaller than your thumbnail. It strains the whispers out of noise far louder than they are, and hands the phone numbers to walk; the trick of hearing a whisper below the noise is old and clever, and the chip doing it is the same design as everything else in the phone — fetch, decode, execute — one more costume on the one machine.</blurb>
+        <door to="x-machine" q="The one design, in every box — even this one"/>
+        <door to="x-audio" q="The faintest song: a whisper measured out of noise"/>
+      </part>
+      <part icon="wifi" rung="network" name="the assist" line="the wire lending a hand to the sky">
+        <blurb>A phone that knows nothing must find satellites blind — listening for whispers it cannot name, which takes minutes. So the phone cheats, politely: over the wire it downloads the sky’s timetable, which machines are overhead and roughly where, and the fix arrives in seconds instead. Your phone and the sky work together every time the dot appears, one feeding the other the numbers it needs, just in time.</blurb>
+        <door to="x-network" q="The timetable, poured over the wire, just in time"/>
+        <door to="x-os" q="One receiver, every app that wants a fix — who shares it?"/>
+      </part>
+      <part icon="clock" rung="time" name="the clock" line="the whole trick is a clock race">
+        <blurb>Distances from delays stand or fall on time, and not roughly: a millionth of a second is three hundred metres, so the satellites carry atomic clocks, tended from the ground. Even Einstein gets a correction in — the satellites move fast enough, and sit far enough from the Earth’s pull, that time ticks differently for them, and the sky’s clocks are wound back to match ours, daily, on purpose. Positioning is not a map service that happens to use clocks. It is clocks, wearing a map.</blurb>
+        <door to="x-clock" q="What is a clock, that its ticks can be counted on?"/>
+        <door to="x-satellite" q="Who keeps the satellite’s clock honest?"/>
+      </part>
+      <bottom>Whispers, ticks, sums, roads: the blue dot is arithmetic on time, all the way down. The trails below open each step; at their ends, the primers are waiting.</bottom>
+      <door to="x-satellite" q="The trail of the machines that whisper"/>
+      <door to="x-machine" q="The trail that ends at a real machine"/>
+    </card>
+    <card id="launches" level="0" title="Getting to orbit" icon="rocket" q="How do you put a machine in the sky and make it stay?">
+      <part icon="turn" rung="sense" name="the senses" line="a stubborn wheel that feels every tilt">
+        <blurb>A rocket must know its own lean, and the classic answer is a wheel: spin it fast and it keeps its direction, stubbornly, the way a bicycle wheel resists a sideways shove. Ask the wheel which way it points now and it tells you; small weights on springs feel the shove of the engines; every answer is rounded to a number. The machine never feels the sky. It reads a column of numbers about itself, and steers on them.</blurb>
+        <door to="p-input" q="Glass, buttons, spinning wheels: what does a machine feel of the world?"/>
+        <door to="x-choices" q="A lean past a limit is a yes-or-no fork"/>
+      </part>
+      <part icon="app" rung="app" name="the count" line="T-minus: a list of instructions, read out by a machine">
+        <blurb>A launch is a list, written down in advance: chill the fuel, pressurise, light, check the numbers, let go of the clamps. A program walks the list, and when a reading is wrong it holds — the hold is not a failure but a pause in the list, a fork taken honestly. Nothing on the pad is done by someone feeling brave. It is instructions, obeyed exactly, in the oldest arrangement there is.</blurb>
+        <door to="x-machine" q="What does following the list mean, exactly?"/>
+        <door to="x-choices" q="Every hold is an honest fork"/>
+      </part>
+      <part icon="stairs" rung="code" name="the guidance" line="steered toward a speed, not a place">
+        <blurb>The aim is not a point in the sky but a sideways speed: the machine is steered, thousands of times a second, toward the fall that misses. The steering is arithmetic on the senses — where am I, which way, how fast — against a plan computed in advance, and the plan walks forward, one small step after another, until the numbers agree. The rocket does not know what an orbit is. It makes the numbers match, and the fall happens.</blurb>
+        <door to="p-routes" q="A path computed in advance and walked step by step"/>
+        <door to="x-os" q="Who runs the steering while the fire is lit?"/>
+        <door to="x-simulate" q="A flight walked on the ground before it is flown — the trail of simulated worlds"/>
+      </part>
+      <part icon="squeeze" rung="machine" name="the engines" line="a fire held steady by plumbing and a clock">
+        <blurb>A rocket pushes against nothing — not the air, only its own exhaust. Throw mass out of the back hard enough and the machine is shoved forward; that is the whole engine, and everything else is plumbing holding the fire steady: pumps drinking rivers, valves that open in order, walls that would melt if the cold fuel did not stream along them. Nine tenths of the machine is fuel; the empty tanks are let go mid-sky, because hauling emptiness is wasted fire.</blurb>
+        <door to="x-machine" q="The machine in every box, at its angriest"/>
+        <door to="p-words" q="A vocabulary small enough for a valve: light, throttle, stop"/>
+        <door to="x-motion" q="A number opens a valve — how does a number push?"/>
+      </part>
+      <part icon="chip" rung="instructions" name="the beat" line="valves on a beat of milliseconds">
+        <blurb>Inside, the fury is a dance on a clock: this valve now, that measurement next, ignition on this beat, throttle on that — a controller walking its round, the same fetch, decode, execute as the phone in your pocket, wearing a fireproof coat. When the shake is worst and the noise is total, what holds the machine together is the oldest thing in it: a list, walked exactly, on time.</blurb>
+        <door to="x-machine" q="The dance — fetch, decode, execute"/>
+        <door to="x-os" q="Who keeps the beat when everything shakes?"/>
+      </part>
+      <part icon="fork" rung="logic" name="the vote" line="three computers, one answer">
+        <blurb>When the stakes are a machine’s whole existence, one yes-or-no is not enough: three computers read the same numbers and vote on every step, and when they disagree the vote decides — or the vote says stop. An abort is not a failure but a fork taken honestly, priced in advance; losing a machine is cheaper than losing everything it was carrying. The whole ascent is a braid of small questions answered together, in time.</blurb>
+        <door to="x-race" q="Three writers, one answer — the honest ways of agreeing"/>
+        <door to="x-choices" q="The vocabulary of yes and no — and of maybe, by voting"/>
+      </part>
+      <part icon="clock" rung="time" name="the window" line="the moment the sky passes over the pad">
+        <blurb>A target orbit is a plane through the planet, and it passes over the launch pad at a calculable instant: miss the window and you wait for the Earth to bring it round again — sometimes a day, sometimes weeks, for the rare roads between planets. The last seconds of the count guard the whole month: one moment is worth everything, and the moment itself was computed, like everything else on the pad, in advance, from numbers.</blurb>
+        <door to="x-satellite" q="The window hands the machine to the sky — the trail of what it does up there"/>
+        <door to="x-network" q="Every number watched from the ground, over the wire"/>
+      </part>
+      <bottom>Senses, lists, arithmetic, fire, forks: the rocket is the whole deck in one afternoon — the world read as numbers, a program walking them, a machine obeying, forks that can say no — all to hand one sealed computer to the sky, where it falls forever and never lands.</bottom>
+      <door to="x-satellite" q="The trail of the machine in the sky"/>
+      <door to="x-machine" q="The trail that ends at a real machine"/>
+    </card>
+    <card id="chat" level="0" title="Talking to a machine" icon="mic" q="Where do its words come from, when nobody wrote them?">
+      <part icon="scissors" rung="sense" name="the words at the door" line="your sentence, cut into pieces and measured">
+        <blurb>You type a sentence, and the machine never sees it. First it cuts the text into pieces — usually shorter than words — and turns each piece into a list of numbers: a point in a space of thousands of dimensions, where words used alike sit close together. “King” and “queen” are neighbours there, and so are “dog” and “puppy”. Everything you wrote is geometry before the machine begins.</blurb>
+        <door to="p-embed" q="How does a word become a place?"/>
+        <door to="p-words" q="How small can a language made for a machine be?"/>
+      </part>
+      <part icon="fork" rung="logic" name="the next word" line="a probability for every word it knows, one picked, then again">
+        <blurb>Everything it ever does is one thing: given the words so far, guess the next one. It scores every word it knows — a probability for “the”, a probability for “tomorrow”, for each of tens of thousands of others — picks one, appends it, and starts again. The paragraph it hands you is a chain of such picks. Nobody wrote the paragraph; it assembled itself, one likely word at a time.</blurb>
+        <door to="x-choices" q="A fork made of probabilities — what is deciding made of?"/>
+        <door to="x-simulate" q="It holds a model of language — what is a model?"/>
+      </part>
+      <part icon="star" rung="app" name="the school" line="guesses scored, every knob nudged toward the better guess">
+        <blurb>Nobody taught it rules of grammar. It was shown oceans of text and corrected: guess the next word, compare with what really came, and let the error flow backwards through the network, nudging billions of internal knobs a hair toward the answer that would have been right. Repeat a trillion times, and the guesses stop being noise and start being language. Nobody wrote the guesses; they were grown.</blurb>
+        <door to="p-learning" q="How a machine improves its guesses"/>
+        <door to="x-written" q="The other way down: software that is written, not learned"/>
+      </part>
+      <part icon="chip" rung="machine" name="the engine" line="immense grids of numbers multiplied, all at once">
+        <blurb>All of it — the geometry, the guessing, the scoring — is arithmetic: enormous grids of numbers multiplied together. A processor does its sums one after another, which would take years. But the chips built to paint games — thousands of small painters working side by side — turn out to be exactly the machine for grids of numbers. The painters were rehired; the engines of guessing are game chips that learned math.</blurb>
+        <door to="p-gpu" q="How a game chip learned math"/>
+        <door to="p-drawing" q="The painting it was born for — the thousand small painters"/>
+      </part>
+      <part icon="buffer" rung="memory" name="the context" line="the conversation so far, held and re-read with every word">
+        <blurb>It seems to remember you. What it holds is the conversation so far — your words and its own, kept in memory and fed back in with every guess. There is a limit to what fits, and when the early words fall out of that held window they are not forgotten the way you forget; they are evicted. The machine that knows your whole history has re-read it all. The machine in this window has not.</blurb>
+        <door to="p-memory" q="How does a circuit hold the words so far?"/>
+        <door to="x-os" q="Who keeps the words and the turns in order?"/>
+      </part>
+      <part icon="server" rung="network" name="the room behind the answer" line="a warehouse of machines, acting as one, at the end of a wire">
+        <blurb>The reply seems to come from nowhere in particular. It comes from a warehouse: racks of machines far away, many machines acting as one, trading your words over the wire. The voice has no single place you could point to — it is a building wearing a conversation, and the wire is the whole of where it lives.</blurb>
+        <door to="x-many" q="How many machines act as one"/>
+        <door to="x-network" q="How the words cross the wire"/>
+      </part>
+      <part icon="match" rung="logic" name="the confident mistake" line="fluency without facts, when the facts were never learned">
+        <blurb>Because its words are guesses, not lookups, it can be wrong in a way no encyclopedia can: fluently, in perfect grammar, citing a paper that does not exist. The fluency is real — the words really do fit together — and the facts are optional. The cure is the oldest one in computing: make the machine look things up instead of guessing. What cannot be cured is the confidence; that is how it was built.</blurb>
+        <door to="x-facts" q="What looking the answer up, instead of guessing it, would look like"/>
+        <door to="p-learning" q="Where the better guesses come from"/>
+      </part>
+      <bottom>Clarke said any sufficiently advanced technology is indistinguishable from magic, and advanced is the operative word: past your understanding, and it reads as magic. The two words are cousins — magic and mechanism trace back to one ancient root that simply meant power. Follow any part of this trail down and the power dissolves into arithmetic, done very fast by very dumb switches. The trails below lead the rest of the way; at their ends, the primers are waiting.</bottom>
+      <door to="p-learning" q="How a machine improves its guesses — the hinge this card turns on"/>
+      <door to="x-simulate" q="The trail of the model — how a world is simulated"/>
+    </card>
+  </cards>
