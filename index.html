@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Everything to bits</title>
 <meta name="description" content="Pick a card — playing games, delivering food, watching movies — and tap the parts down to bits, gates, memory, programs, and the machine itself.">
-<meta name="generator" content="Everything to bits v1.2.0">
+<meta name="generator" content="Everything to bits v1.5.1">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width=%2224%22 height=%2224%22 rx=%225%22 fill='%23fffdf6'/%3E%3Ccircle cx='7.5' cy='12' r='2.9' fill='%23b3002d'/%3E%3Ccircle cx='16.5' cy='12' r='2.9' fill='none' stroke='%23111111' stroke-width='1.7'/%3E%3C/svg%3E">
 <style>
 :root{
@@ -242,56 +242,78 @@ header .overline{font:600 12px var(--sans);letter-spacing:.14em;text-transform:u
    component (shared with the deck's views) and the map itself.
    The build inlines this file into the deck's stylesheet, so the
    reader still receives one self-contained page — and the
-   isolated map build (build.py --only map) loads it whole, so the
-   module is tested in isolation with exactly the styles the deck
-   ships. The root variables are the module's own fallbacks; the
-   deck's stylesheet declares the same values. */
+   isolated map build (build.py --only map) loads it whole, so
+   the module is tested in isolation with exactly the styles the
+   deck ships. The root variables are the module's own fallbacks;
+   the deck's stylesheet declares the same values. */
 :root{--ink:#111111;--paper:#fffdf6;--accent:#b3002d;--hair:#ddd6c4;--faint:#7c7668;--sans:system-ui,-apple-system,"Segoe UI",sans-serif}
-/* the map: labelled bands of circles, one line per door that
-   crosses a band */
-.dag{position:relative;margin:2em 0 1em}
-.dag-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-/* the traced walks ride above the circles, so a long walk stays
-   readable where it passes over dimmed bands */
-.dag-svg-top{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
-.dag-walk{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:3 5}
-.dag-walk-arrowhead{fill:var(--accent)}
-.dag-edge{fill:none;stroke:var(--hair);stroke-width:1.5;transition:opacity .18s}
-.dag-edge.dag-soon{stroke-dasharray:3 4}
-.dag-edge.dag-build{stroke:var(--ink);stroke-width:2.5}
-.dag-arrowhead{fill:var(--ink)}
-#fund-dag .door{transition:opacity .18s}
-#fund-dag.dag-focusing .door{opacity:.22}
-#fund-dag.dag-focusing .door.dag-hi{opacity:1}
-#fund-dag .door.dag-hi .d-ic{border-color:var(--ink);box-shadow:0 0 0 4px rgba(17,17,17,.14)}
-#fund-dag.dag-focusing .dag-band-label{opacity:.2}
-#fund-dag.dag-focusing .dag-edge{opacity:.1}
-#fund-dag.dag-focusing .dag-edge.dag-hi{opacity:1;stroke:var(--ink);stroke-width:2}
-#fund-dag.dag-focusing .dag-edge.dag-build.dag-hi{stroke-width:2.5}
-.dag-row{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 28px;margin:0 0 56px;position:relative;z-index:1}
-.dag-row:last-child{margin-bottom:0}
-/* no band ever wraps: a wrapped band is a tall capsule whose
-   rounded border swings across its own circles — on a phone
-   every storey stays one line, and the map scrolls as one */
-.dag-band{border:1px solid var(--hair);border-radius:999px;gap:6px 14px;margin:0 0 46px;padding:8px 16px 10px;flex-wrap:nowrap}
-.dag-band:last-child{margin-bottom:0}
-.dag-band-label{align-self:center;font-size:.72rem;letter-spacing:.06em;opacity:.6;margin-right:6px;white-space:nowrap}
-/* the fork: once the storeys split, the two sides draw side by
-   side — the machine as thought on the left, the machine as
-   built on the right — with a seam down the middle, and each
-   side ends on its own floor: mathematics beneath the thought,
-   physics beneath the sand. The columns never shrink below the
-   width their bands need, and the map scrolls sideways below
-   it — the drawing keeps its geometry at every window width */
-.dag{overflow-x:auto}
-.dag-fork{display:flex;gap:0;margin:0 0 46px;position:relative;z-index:1}
-.dag-fork::before{content:'';position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed var(--hair)}
-.dag-fork-col{flex:1;min-width:460px;padding:0 24px}
-.dag-fork-col .dag-band{margin-bottom:34px}
-.dag-floor{border-top:1px dashed var(--hair);color:var(--faint);font-size:.78rem;font-style:italic;margin-top:4px;padding-top:14px;text-align:center}
+/* the map: the panorama. The layout engine (inlined beside the
+   module by the build) turns the model and the width the window
+   gives into one geometry, and the canvas below paints it: every
+   storey's frame the same width as its column, its label centred
+   above its doors, its rows centred in the frame, the doors full
+   size at every width. Nothing is scaled and nothing scrolls
+   sideways — a storey too wide wraps into balanced rows the
+   engine itself chooses. The stage is the page's own design
+   width, held in step with it: the map spans the column's full
+   1120px frame on a wide window (the width the deck's .wrap
+   itself carries), and below that the window minus 24px a side,
+   centred on the column either way — the negative margin is
+   what centers a child wider than its parent, which plain
+   margin:auto cannot do. No lines are drawn anywhere: the roads
+   the lines once carried are the tap's */
+.dag{position:relative;margin:2em 0 1em;width:min(1120px,calc(100vw - 48px));margin-left:calc(50% - min(560px,calc(50vw - 24px)))}
+.dag-view{position:relative;width:100%}
+.dag-canvas{position:relative;margin:0 auto}
+/* a storey is one frame placed by the engine's geometry — its
+   rounded rectangle held off its circles by its own padding,
+   never reflowed by the browser at any width */
+.dag-band{position:absolute;border:1px solid var(--hair);border-radius:12px;background:rgba(255,255,255,.55);transition:opacity .18s;z-index:1}
+/* the label, centred above the storey's doors by the engine */
+.dag-band-label{position:absolute;font-size:.72rem;letter-spacing:.06em;opacity:.6;white-space:nowrap;text-align:center;z-index:1}
+/* the tap: the tapped circle and its drawn-road neighbours stay,
+   everything else — doors, labels, frames, floors — fades. The
+   tapped circle wears the accent, so a light of one still shows
+   which circle was chosen */
+.dag-canvas .door{transition:opacity .18s}
+.dag-canvas .door.dag-hi .d-ic{border-color:var(--ink);box-shadow:0 0 0 4px rgba(17,17,17,.14)}
+.dag-canvas .door.dag-tapped .d-ic{border-color:var(--accent);box-shadow:0 0 0 4px rgba(179,0,45,.16)}
+.dag-canvas.dag-focusing .door{opacity:.2}
+.dag-canvas.dag-focusing .door.dag-hi{opacity:1}
+.dag-canvas.dag-focusing .dag-band{opacity:.35}
+.dag-canvas .dag-band.dag-band-hi{opacity:1}
+.dag-canvas.dag-focusing .dag-band-label{opacity:.2}
+.dag-canvas.dag-focusing .dag-floor{opacity:.35}
+/* the panel: the tapped circle's story — its name, its stratum,
+   its one-step roads, and the dive. Sticky at the top of the
+   viewport, so it stays in view while the tall map scrolls under
+   it; the module drops it below the page's own bar when the page
+   wears one (the deck's topbar), so it never sticks behind it */
+.dag-panel{position:sticky;top:8px;z-index:5;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;background:var(--paper);border:1px solid var(--hair);border-radius:10px;box-shadow:0 2px 12px rgba(17,17,17,.07);padding:10px 16px;margin:0 0 14px}
+.dag-panel[hidden]{display:none}
+.dag-who{font:600 13px/1.4 var(--sans);color:var(--ink)}
+.dag-stratum{font:600 10px/1.4 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+.dag-roads{font:italic 12.5px/1.5 Georgia,serif;color:#444}
+.dag-panel .dag-btn{margin-left:auto}
+.dag-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--hair);border-radius:999px;color:var(--faint);cursor:pointer;font:600 10.5px/1 var(--sans);letter-spacing:.03em;padding:6px 12px}
+.dag-btn:hover{border-color:var(--ink);color:var(--ink)}
+.dag-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* the dive is the panel's one loud action: filled with the
+   accent, so the way further down reads before the words do */
+.dag-dive-btn{background:var(--accent);border-color:var(--accent);color:var(--paper);font-size:11.5px;letter-spacing:.05em;padding:9px 18px}
+.dag-dive-btn:hover{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+/* the dive, revealed under the panel: the view's own opening,
+   when there is no view to open */
+.dag-dive{border-left:3px solid var(--hair);color:var(--ink);font:italic 13px/1.6 Georgia,serif;margin:0 0 14px;padding:2px 0 2px 12px}
+.dag-dive[hidden]{display:none}
+/* the two floors, placed by the engine beneath their own
+   column: mathematics beneath the thought, physics beneath the
+   sand */
+.dag-floor{position:absolute;border-top:1px dashed var(--hair);color:var(--faint);font-size:.78rem;font-style:italic;padding-top:14px;text-align:center;transition:opacity .18s;z-index:1}
 /* the door component: a round icon wearing a view's own name.
    Shared by the map's circles and the door rows of the views */
 .door{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:0;cursor:pointer;font:inherit;color:inherit;padding:0;width:86px;position:relative;z-index:1}
+.dag-canvas .door{position:absolute}
 .door .d-ic{width:46px;height:46px;border-radius:50%;background:#fff;border:1px solid #9a927e;display:flex;align-items:center;justify-content:center;color:var(--accent);transition:border-color .12s}
 .door:hover .d-ic{border-color:var(--ink)}
 .door:active .d-ic{transform:translateY(1px)}
@@ -429,6 +451,7 @@ footer{padding-bottom:80px}
   <h1>Everything to bits</h1>
   <p class="subtitle">Something your computers already do, walked all the way down to the sand.</p>
   <p>A computer is a machine that follows instructions — exactly, and at absurd speed. Each card opens on a thing one of your computers already does for you; every part opens a trail that shows, step by step, how the thing is done — and the trails branch, so one question leads to another at your own pace. Follow them as far as curiosity carries you, and step back to the deck whenever you like. There is no order here, and no course — though whatever the thing, every walk has the same shape.</p>
+  <p class="sys-how">This deck is supported by <a href="https://naveo.dev">Naveo</a>, sociotechnical consulting — and the support has a story of its own, close to the deck’s own subject: <a class="dgo" data-go="naveo">why this deck, and why them</a>.</p>
 </header>
 
 <div class="deck" id="deck-cards"></div>
@@ -436,7 +459,7 @@ footer{padding-bottom:80px}
 <section class="fund">
   <h3>Underneath it all</h3>
   <p>Every trail above, followed far enough down, lands on one of these. Each is a self-contained primer; they are not waiting to be read in order, they are waiting to be needed.</p>
-  <p class="sys-how">The territory beneath the stories, drawn from the model, the one structure the whole deck is checked against. The strata run top to bottom, one zoom deeper each storey: what a person sees; the boundary where the world crosses into data and data crosses back; machines together; one machine, at work; the words and numbers inside; the machinery of thought, where the founding argument of computing is walked — then the fork, the machine drawn two ways as two columns that step down together: on the left the tower of abstractions, above the ways of speaking, above the formal machines; on the right the machine as built, above its components, above the bedrock. The columns mirror one another, and each is a construction: hover the circle at the top of either and the whole chain beneath it lights — on the left the formal machines built up into the languages built up into the tower, on the right the gates built up into the parts built up into the processor. Each side ends in its own floor: the machine as thought bottoms in mathematics itself, the machine as built bottoms in physics — a voltage high or low — and nothing is drawn beneath either. One line per road that descends exactly one storey; a road that climbs, runs level, or skips a storey is walked in the views, never drawn here. The stories themselves are the cards above; the grey circles are paths still to come, and every full circle opens its view.</p>
+  <p class="sys-how">The territory beneath the stories, drawn from the model, the one structure the whole deck is checked against. The strata run top to bottom, one zoom deeper each storey: what a person sees; the boundary where the world crosses into data and data crosses back; machines together; one machine, at work; the words and numbers inside; the machinery of thought, where the founding argument of computing is walked — then the fork, the machine drawn two ways as two columns that step down together: on the left the tower of abstractions, above the ways of speaking, above the formal machines; on the right the machine as built, above its components, above the bedrock. Each side ends in its own floor: the machine as thought bottoms in mathematics itself, the machine as built bottoms in physics — a voltage high or low — and nothing is drawn beneath either. Every storey is a frame of one width, its circles centred within it, the same symmetry at every size; the map itself spans the page's own width, centred on the column, so its edges hold the design's edges at every size. Nothing connects them by lines: the relations are the tap's to show. Tap a circle and it lights with its one-step neighbours — the roads that cross exactly one storey, and the built-from links — while the rest of the map fades back; tap another to move the light, tap it again to clear. The panel names what you lit and counts its roads, riding under the page's own bar while the map scrolls, and its accent dive button opens the circle's view: every full circle opens its view, the grey circles are paths still to come.</p>
   <div class="dag" id="fund-dag"></div>
 </section>
 </section>
@@ -953,8 +976,22 @@ The student was enlightened, and returned to his work.
 
 </section>
 
+<!-- ================================================================ naveo -->
+<section class="view hidden primer" id="naveo" data-title="supported by naveo">
+<h2>Supported by Naveo</h2>
+
+<p>This deck is supported by <a href="https://naveo.dev">Naveo</a>, a sociotechnical consulting practice — and the support is not an advertisement that happens to sit here. It grows out of the same observation the deck keeps making: a computer is a machine that follows instructions, exactly. Naveo’s trade is the other half of that observation: an organization, too, runs on instructions — rules, forms, habits, tools, the way things are done here — and almost none of them were written by anyone. They were compiled, slowly, out of what the organization itself did, and what it did next was shaped by them. Naveo compresses that into one line, and this deck’s footer carries it — the sponsor’s words, not the deck’s. Everything below is the deck’s own version, walked the long way round.</p>
+
+<p>Seen that way, the two programs are one subject. The program in the machine is written, read, argued over and changed by people working together — and the shape of their working together ends up in the code: the paths people talk along become the seams the software keeps, and the borrowed rooms of one team fit or fail by the shape of another. The knowing, meanwhile, does not live in the text. A program is a theory its builders hold, and the source is the theory’s residue — which is why a team that has lost its theory can still run its software, and slowly stop being able to change it. Software is social knowledge pressed into an exact shape: the exactness is the machine’s, the knowledge is people’s.</p>
+
+<p>That is the seam sociotechnical work exists to work. The people who live in organizations and the people who write software speak about the same system from different rooms, and most of what goes wrong at the seam goes wrong the way it always does in this deck — two copies of one truth, no agreed order of writes. A practice that consults on that seam has a reason to want the machine’s half of it understood plainly, by the many and not only by the few; this deck exists for the many, and that is why Naveo supports it.</p>
+
+<p class="sys-how">Three grey circles on the map underneath it all carry this perspective as promises of views still to come: how the team shapes the machine, how a program is a theory, and how an organization runs. They stand in the storey of the words and numbers — the storey where software is written — because that is where the two programs touch.</p>
+
+</section>
+
 </div>
-<footer><p class="foot">Everything to bits · v1.2.0 · supported by <a href="https://naveo.dev">Naveo</a>, sociotechnical consulting — <a href="https://naveo.dev">an organization is a program that writes itself</a></p></footer>
+<footer><p class="foot">Everything to bits · v1.5.1 · supported by <a href="https://naveo.dev">Naveo</a>, sociotechnical consulting — <a href="https://naveo.dev">an organization is a program that writes itself</a> · <a class="dgo" data-go="naveo">why this sponsorship</a></p></footer>
 
 <script>
 'use strict';
@@ -3104,6 +3141,14 @@ const DATA = {
             {
               "to": "x-os",
               "q": "Who keeps the rooms, and hands them out"
+            },
+            {
+              "to": "p-conway",
+              "q": "Rooms written by strangers who never meet — what does the shape of the team do to the shape of the code?"
+            },
+            {
+              "to": "p-theory",
+              "q": "Where does a program really live — in the text, or in the team that built it?"
             }
           ]
         },
@@ -3164,6 +3209,10 @@ const DATA = {
             {
               "to": "x-written",
               "q": "The other way: instructions, written by hand — and what changes when you don’t"
+            },
+            {
+              "to": "p-org",
+              "q": "A world of truths and rules, walked to its answers — could an organization be one?"
             }
           ]
         },
@@ -4764,6 +4813,24 @@ const DATA = {
       "icon": "copy",
       "title": "how a machine copies itself",
       "line": "a description that describes the describer: the seed of every living thing"
+    },
+    "p-conway": {
+      "level": 1,
+      "icon": "hands",
+      "title": "how the team shapes the machine",
+      "line": "the paths people talk along, copied into the code"
+    },
+    "p-theory": {
+      "level": 1,
+      "icon": "envelope",
+      "title": "how a program is a theory",
+      "line": "the text is what is left; the knowing lives in the team"
+    },
+    "p-org": {
+      "level": 1,
+      "icon": "pulse",
+      "title": "how an organization runs",
+      "line": "rules nobody wrote, compiled from its own doing"
     }
   },
   "map": [
@@ -4832,7 +4899,10 @@ const DATA = {
         "p-routes",
         "p-memory",
         "p-ledger",
-        "p-store"
+        "p-store",
+        "p-conway",
+        "p-theory",
+        "p-org"
       ]
     },
     {
@@ -6022,6 +6092,16 @@ const DATA = {
       "kind": "cross"
     },
     {
+      "from": "x-written",
+      "to": "p-conway",
+      "kind": "cross"
+    },
+    {
+      "from": "x-written",
+      "to": "p-theory",
+      "kind": "cross"
+    },
+    {
       "from": "x-facts",
       "to": "x-many",
       "kind": "cross"
@@ -6064,6 +6144,11 @@ const DATA = {
     {
       "from": "x-facts",
       "to": "p-store",
+      "kind": "cross"
+    },
+    {
+      "from": "x-facts",
+      "to": "p-org",
       "kind": "cross"
     },
     {
@@ -6441,70 +6526,394 @@ function renderExplainers() {
   });
 }
 /* ---- the map underneath it all: the territory beneath the
-       stories, drawn by the fundamentals map module (fund.js),
-       which the build inlines at the marker below — one source,
-       two builds: the deck ships it inlined, and the isolated
-       map build (build.py --only map) loads the same file to
-       test the map and its hover on their own. */
+       stories. Three sources reach the page here, all inlined
+       by the build at the marker below — the layout engine
+       (engine/layout.js) that gives every storey its symmetric
+       frame, the relations module (engine/relations.js) that
+       gives the tap its one-step set, and the fundamentals map
+       module (fund.js) that paints what they compute — one
+       source, two builds: the deck ships it inlined, and the
+       isolated map build (build.py --only map) loads the same
+       files to test the map and its relations on their own. */
+/* layout.js — the map's layout engine, step 3.
+   A pure function from the model and a width to the map's
+   geometry: every storey's frame, every door's box, the two
+   floors — and nothing else. The connecting lines are gone by
+   design: they were dense, they connected at strange angles,
+   and they carried little the strata themselves and a tap do
+   not carry better. The map is a panorama — how a whole story
+   runs under each trail is read by tapping a circle and
+   watching its full route light while the rest fades, and the
+   dive into the view opens from there.
+
+   The whole drawing is symmetrical at every scale: every
+   storey's frame is the same width, its label centred above
+   its doors, its rows centred in the frame, so the map is a
+   column of equal strata at any width. A storey too wide for
+   the window wraps into balanced rows the engine itself
+   chooses, the doors full size at every width.
+
+   No DOM, no measurement, no Date, no randomness: the same
+   inputs give the same output, so the whole engine is testable
+   in Node, like tests/hover.js. */
+
+var ETBLayout = (function () {
+  'use strict';
+
+  var DEF = {
+    doorW: 86,      /* the door component's fixed width */
+    doorH: 88,      /* the circle, the gap, a two-line name */
+    doorGap: 12,
+    rowGap: 16,     /* between rows inside a wrapped band */
+    bandPadX: 28,
+    bandPadTop: 16,
+    bandPadBottom: 20,
+    bandGap: 56,    /* the gap between consecutive bands */
+    labelLineH: 18, /* the label's own line, centred above the doors */
+    labelGap: 10,   /* between the label's line and the first row */
+    colGap: 72,     /* the seam between the fork's two columns */
+    minColW: 400,   /* the columns stand side by side above this */
+    floorGap: 10,
+    floorH: 44,
+    labelCharW: 6.4  /* the default label width estimate */
+  };
+
+  function merge(cfg) {
+    var c = {}, k;
+    for (k in DEF) c[k] = DEF[k];
+    if (cfg) for (k in cfg) c[k] = cfg[k];
+    return c;
+  }
+
+  /* the label width: measured by the renderer, supplied by the
+     tests, estimated from the text by default */
+  function labelWidth(b, widths, C) {
+    if (widths && widths.labels && widths.labels[b.id] != null)
+      return widths.labels[b.id];
+    return Math.ceil(b.label.length * C.labelCharW) + 10;
+  }
+
+  /* ---- rows: how a band's doors share the width ----------------
+     One line when it fits; below that the engine wraps the
+     storey into balanced rows, the authored order preserved
+     and the break points chosen, not fallen into */
+
+  function rowsFor(n, budget, C) {
+    var per = Math.floor((budget + C.doorGap) / (C.doorW + C.doorGap));
+    if (per < 1) per = 1;
+    if (n <= per) return [n];
+    var r = Math.ceil(n / per);
+    var base = Math.floor(n / r), extra = n % r, rows = [], i;
+    for (i = 0; i < r; i++) rows.push(base + (i < extra ? 1 : 0));
+    return rows;
+  }
+
+  function rowWidth(n, C) {
+    return n * C.doorW + (n - 1) * C.doorGap;
+  }
+
+  /* ---- one band's geometry ------------------------------------
+     Every band's frame is the same width — the budget the map
+     gave this column — and everything inside it is centred */
+
+  function bandGeometry(b, budget, widths, C) {
+    var n = b.views.length;
+    var lw = labelWidth(b, widths, C);
+    var content = budget - C.bandPadX * 2;
+    var counts = n === 0 ? [0]
+      : rowWidth(n, C) <= content ? [n] : rowsFor(n, content, C);
+    var g = {
+      id: b.id, col: b.col || null, views: b.views,
+      rows: [], label: { w: lw },
+      w: budget,
+      h: C.bandPadTop + C.labelLineH + C.labelGap +
+        counts.length * C.doorH +
+        (counts.length - 1) * C.rowGap + C.bandPadBottom,
+      x: 0, y: 0
+    };
+    var i, r, k = 0;
+    for (r = 0; r < counts.length; r++) {
+      var row = [];
+      for (i = 0; i < counts[r]; i++) {
+        row.push({ id: b.views[k++], band: b.id, row: r,
+          w: C.doorW, h: C.doorH });
+      }
+      g.rows.push(row);
+    }
+    return g;
+  }
+
+  function placeBand(g, x, y, C) {
+    g.x = x; g.y = y;
+    /* the label centred above the doors */
+    g.label.x = x + (g.w - g.label.w) / 2;
+    g.label.y = y + C.bandPadTop;
+    var top = y + C.bandPadTop + C.labelLineH + C.labelGap;
+    var doors = {};
+    g.rows.forEach(function (row, r) {
+      var ry = top + r * (C.doorH + C.rowGap);
+      var start = g.x + (g.w - rowWidth(row.length, C)) / 2;
+      row.forEach(function (d, i) {
+        d.x = start + i * (C.doorW + C.doorGap);
+        d.y = ry;
+        d.cx = d.x + C.doorW / 2;
+        doors[d.id] = d;
+      });
+    });
+    g.doors = doors;
+    return g;
+  }
+
+  /* ---- the drawing's geometry ----------------------------------
+     The storeys above the fork, then the fork: two columns
+     stepping down in pairs, each pair's tops level, the
+     columns' floors beneath their own last band. The engine
+     stacks the columns when half the width cannot hold a
+     readable column — a measured decision, not a stylesheet
+     breakpoint */
+
+  function layoutMap(model, widths, avail, cfg) {
+    var C = merge(cfg);
+    var mid = [], left = [], right = [];
+    model.bands.forEach(function (b) {
+      if (b.col === 'left') left.push(b);
+      else if (b.col === 'right') right.push(b);
+      else mid.push(b);
+    });
+
+    /* the natural width: the widest storey on one line — the
+       width at which no band ever wraps (metadata for the
+       renderer; the map itself always fills its avail) */
+    var natW = 0;
+    model.bands.forEach(function (b) {
+      var lw = labelWidth(b, widths, C);
+      natW = Math.max(natW, C.bandPadX * 2 +
+        rowWidth(b.views.length, C));
+    });
+
+    var colW = Math.floor((avail - C.colGap) / 2);
+    var stacked = avail < 2 * C.minColW + C.colGap;
+
+    var geo = {
+      avail: avail, natW: natW,
+      fork: stacked ? 'stacked' : 'side',
+      bands: [], doors: {}, floors: [],
+      width: avail, height: 0,
+      key: Math.floor(avail / 16) * 16 + ':' +
+        (stacked ? 'stacked' : 'side')
+    };
+
+    var y = 0;
+
+    mid.forEach(function (b) {
+      var g = bandGeometry(b, avail, widths, C);
+      placeBand(g, 0, y, C);
+      geo.bands.push(g);
+      y += g.h + C.bandGap;
+    });
+
+    if (!stacked) {
+      var leftGs = left.map(function (b) {
+        return bandGeometry(b, colW, widths, C);
+      });
+      var rightGs = right.map(function (b) {
+        return bandGeometry(b, colW, widths, C);
+      });
+      var rightX = avail - colW;
+      var nPairs = Math.max(leftGs.length, rightGs.length), p;
+      for (p = 0; p < nPairs; p++) {
+        var pairTop = y, pairH = 0;
+        if (leftGs[p]) { placeBand(leftGs[p], 0, pairTop, C); geo.bands.push(leftGs[p]); }
+        if (rightGs[p]) { placeBand(rightGs[p], rightX, pairTop, C); geo.bands.push(rightGs[p]); }
+        pairH = Math.max(leftGs[p] ? leftGs[p].h : 0,
+                         rightGs[p] ? rightGs[p].h : 0);
+        y += pairH + C.bandGap;
+      }
+      if (model.floors) {
+        ['left', 'right'].forEach(function (side) {
+          if (!model.floors[side]) return;
+          var list = side === 'left' ? leftGs : rightGs;
+          if (!list.length) return;
+          var last = list[list.length - 1];
+          geo.floors.push({
+            col: side, text: model.floors[side],
+            x: side === 'left' ? 0 : rightX,
+            y: last.y + last.h + C.floorGap,
+            w: colW, h: C.floorH
+          });
+        });
+      }
+    } else {
+      ['left', 'right'].forEach(function (side) {
+        (side === 'left' ? left : right).forEach(function (b) {
+          var g = bandGeometry(b, avail, widths, C);
+          placeBand(g, 0, y, C);
+          geo.bands.push(g);
+          y += g.h + C.bandGap;
+        });
+        if (model.floors && model.floors[side]) {
+          var gs = geo.bands.filter(function (g) { return g.col === side; });
+          var last = gs[gs.length - 1];
+          geo.floors.push({
+            col: side, text: model.floors[side],
+            x: 0, y: y - C.bandGap + C.floorGap,
+            w: avail, h: C.floorH
+          });
+          y += C.floorH + C.bandGap;
+        }
+      });
+    }
+
+    geo.floors.forEach(function (f) {
+      y = Math.max(y, f.y + f.h);
+    });
+    geo.height = y;
+    geo.bands.forEach(function (g) {
+      var k;
+      for (k in g.doors) geo.doors[k] = g.doors[k];
+    });
+    return geo;
+  }
+
+  return { layoutMap: layoutMap, defaults: DEF };
+})();
+
+if (typeof module !== 'undefined' && module.exports)
+  module.exports = ETBLayout;
+
+/* relations.js — the map's one set of relationships, step 3
+   refined. The deck drew lines for exactly one kind of relation:
+   a road that descends exactly one storey, or a built-from link.
+   Its hover, separately, followed every land road transitively —
+   including roads that skip storeys, which lit distant circles
+   straight down to the machine groupings and said little. With
+   the lines gone, that closure is all the highlight would have
+   had, and it is not informative: the panorama's tap lights the
+   drawn-road neighbours only — one step, up or down, the same
+   set of relationships the lines carried — and the long-distance
+   relations are left behind.
+
+   This module is the pure definition of that set. It must stay
+   pinned to fund.js's fundEdges (the deck's own drawn set):
+   engine/tests/relations.js fails if the two ever drift.
+
+   No DOM, no measurement, no Date, no randomness. */
+
+var ETBRelations = (function () {
+  'use strict';
+
+  /* the storey rows, by the deck's own rule: the mid bands one
+     per row, the fork's two columns stepping down in pairs */
+  function bandRows(bands) {
+    var rows = {}, r = -1, prev = null;
+    bands.forEach(function (b) {
+      var col = b.col || null;
+      if (col === null || col === 'left' || prev !== 'left') r += 1;
+      rows[b.id] = r;
+      prev = col;
+    });
+    return rows;
+  }
+
+  function makeRelations(bands, edges) {
+    var rows = bandRows(bands);
+    var onMap = {}, bandOf = {}, ord = {}, oi = 0;
+    bands.forEach(function (b) {
+      b.views.forEach(function (v) {
+        onMap[v] = 1; bandOf[v] = b.id; ord[v] = oi++;
+      });
+    });
+
+    /* the drawn set, in the deck's own order: the one-storey
+       descending roads first (authored order), then the
+       built-from links (authored order) */
+    var lines = [];
+    edges.forEach(function (e) {
+      if (e.kind === 'build') return;
+      if (onMap[e.from] && onMap[e.to] &&
+          rows[bandOf[e.from]] - rows[bandOf[e.to]] === 1)
+        lines.push([e.from, e.to, false]);
+    });
+    edges.forEach(function (e) {
+      if (e.kind !== 'build') return;
+      if (onMap[e.from] && onMap[e.to])
+        lines.push([e.from, e.to, true]);
+    });
+
+    /* the same relationship, read from either end: the tap lights
+       neighbours, not routes */
+    var adj = {};
+    function link(a, b, build) {
+      (adj[a] = adj[a] || []).push({ id: b, build: build });
+      (adj[b] = adj[b] || []).push({ id: a, build: build });
+    }
+    lines.forEach(function (l) { link(l[0], l[1], l[2]); });
+    Object.keys(adj).forEach(function (k) {
+      adj[k].sort(function (x, y) { return ord[x.id] - ord[y.id]; });
+    });
+
+    function neighborsOf(id) {
+      return (adj[id] || []).map(function (n) {
+        return { id: n.id, build: n.build,
+          below: rows[bandOf[n.id]] > rows[bandOf[id]] };
+      });
+    }
+
+    function focusSet(id) {
+      var s = new Set([id]);
+      (adj[id] || []).forEach(function (n) { s.add(n.id); });
+      return s;
+    }
+
+    return {
+      lines: lines,
+      rows: rows,
+      bandOf: bandOf,
+      neighborsOf: neighborsOf,
+      focusSet: focusSet,
+      degree: function (id) { return (adj[id] || []).length; }
+    };
+  }
+
+  return { makeRelations: makeRelations, bandRows: bandRows };
+})();
+
+if (typeof module !== 'undefined' && module.exports)
+  module.exports = ETBRelations;
+
 /* ================================================================
    fund.js — the fundamentals map module: the territory beneath
-   the stories, drawn as labelled bands of circles with one line
-   per door that crosses a band, and the built-from chain drawn
-   upward through the gaps between the construction storeys.
+   the stories, drawn as the panorama. The build inlines three
+   sources side by side: the layout engine (engine/layout.js),
+   the relations module (engine/relations.js), and this file.
+   The engine turns the model and the width the window gives
+   into one geometry — every storey's frame the same width as
+   its column, its label centred above its doors, its rows
+   centred in the frame, the doors full size at every width —
+   and this module paints that geometry and re-lays it out when
+   the width changes. Nothing is scaled and nothing scrolls
+   sideways: a storey too wide wraps into balanced rows the
+   engine itself chooses.
 
-   One source, two builds: the deck build inlines this file into
-   template.html at its marker, so the reader still receives one
-   self-contained page; the isolated map build (build.py --only
-   map) loads the same file whole, with the same shared helpers
-   and the same data, so the map and its hover are tested alone.
+   No connecting lines are drawn anywhere. The roads the lines
+   once carried are the tap's to show: tap a circle and its
+   drawn-road neighbours light — one step, up or down, never a
+   long distance — while the rest of the map fades; the panel
+   names the circle, its stratum, and its roads, and the dive
+   opens the view itself (a promise reveals its line instead).
+   The one relationship set is the relations module's, pinned to
+   what the old map drew by the engine's own test.
 
-   The module is layered, so the hover can be exercised at the
-   level of logic before it is trusted on a screen:
-
-     the decision — pure functions, no DOM: what a hover of a
-       circle lights (which circles, which drawn lines), and
-       which of its steps the static map does not draw, so they
-       must be traced live instead: the long walks. fundHighlight
-       returns the whole decision as data, and tests/hover.js
-       exercises every circle's decision against the built deck
-       before the wiring below is believed.
-
-     the application — applyHighlight: one decision in, class
-       toggles and traced walks out. No policy of its own.
-
-     the wiring — renderFundDAG: builds the bands, draws the
-       static lines, and lets the mouse ask the decision layer
-       what to show.
-
-   The hover contract, one rule for every circle: hovering lights
-   the full path DOWN from it — the trail's landings (the doors
-   at its bottom, not the crossings inside its steps), and,
-   beneath them, the built-from chain read downward, from the
-   built thing to the ingredient it is made of. Once any part of
-   that construction is reached, the whole web it belongs to
-   lights with it, and no circle above the hovered one is ever
-   added. The lit route is one connected path: the drawn lines
-   between lit circles light up, and every lit step the map
-   leaves undrawn — a walk inside a band, or a landing that skips
-   storeys — is traced live, dashed, only while hovered, so the
-   static map keeps its rule (walked, not drawn) and the hover
-   still shows the whole way down as tracks. A circle with
-   nothing beneath it — a promise, or the bedrock itself — rings
-   alone, without dimming the map. The build checks the contract
-   from the data side: every trail, hovered, must reach at least
-   one primer, and every circle's route must be connected.
-
-   The model (data/model.xml) is the source of truth: its strata
-   are the layers drawn here, and its edges are the roads the
-   territory has — land (a landing, lit on hover), cross (a
-   crossing, drawn only when it descends exactly one storey),
-   build (built-from, drawn upward on purpose). The trails walk
-   the roads; this module draws the strata and the roads that
-   descend, and walks the rest live.
+   The module keeps its old hover layer, pure and unchanged —
+   fundHighlight, fundPaths, applyHighlight — because the deck's
+   official test (tests/hover.js) exercises it against the built
+   page, every circle, every release. The map itself no longer
+   calls it: the tap asks the relations module instead.
 
    Globals used, provided by both builds: $, el, ic, doorMeta
    (the shared helpers), MAP, EDGES, CHAIN (the build derives it
-   from EDGES), EXPLAINERS, PLACEHOLDERS. */
+   from EDGES), EXPLAINERS, PLACEHOLDERS, PRIMER_META, and the
+   two engine globals, ETBLayout and ETBRelations. */
 /* ================================================================*/
 
 /* ---- the decision ------------------------------------------------
@@ -6693,13 +7102,17 @@ function applyHighlight(holder, svg, svgTop, hi) {
   });
   while (svgTop.firstChild) svgTop.removeChild(svgTop.firstChild);
   if (!hi) return;
-  /* the same content space as draw(): the traced walks ignore
-     the sideways scroll of a narrow window */
+  /* the same content space as draw(): the traced walks land in
+     the canvas's own fixed coordinates, where the static lines
+     already are. The canvas may be scaled — the figure fits the
+     window, or sits open full screen — so its live scale is
+     measured and divided out of every rect. With no layout width
+     to measure (a mock, or a view the page has hidden) the scale
+     is one and the rects are taken as they stand */
   const r = holder.getBoundingClientRect();
-  const box = {
-    left: r.left - holder.scrollLeft,
-    top: r.top - holder.scrollTop
-  };
+  if (!r.width) return;
+  const k = holder.offsetWidth ? r.width / holder.offsetWidth : 1;
+  const box = { left: r.left, top: r.top };
   hi.walks.forEach((w) => {
     const a = holder.querySelector('[data-go="' + w[0] + '"]');
     const b = holder.querySelector('[data-go="' + w[1] + '"]');
@@ -6710,11 +7123,14 @@ function applyHighlight(holder, svg, svgTop, hi) {
     // an icon: down from the bottom of the upper circle into the
     // top of the lower one, or up from the top into the bottom
     // when the walk rises, level with itself when it runs level
-    const x1 = ra.left + ra.width / 2 - box.left;
-    const x2 = rb.left + rb.width / 2 - box.left;
-    let y1 = ra.bottom - box.top;
-    let y2 = rb.top - box.top;
-    if (rb.bottom <= ra.top) { y1 = ra.top - box.top; y2 = rb.bottom - box.top; }
+    const x1 = (ra.left + ra.width / 2 - box.left) / k;
+    const x2 = (rb.left + rb.width / 2 - box.left) / k;
+    let y1 = (ra.bottom - box.top) / k;
+    let y2 = (rb.top - box.top) / k;
+    if (rb.bottom <= ra.top) {
+      y1 = (ra.top - box.top) / k;
+      y2 = (rb.bottom - box.top) / k;
+    }
     const mx = (x1 + x2) / 2;
     const d = 'M' + x1 + ' ' + y1 +
       ' C' + mx + ' ' + (y1 + 44) + ', ' + mx + ' ' + (y2 - 44) + ', ' + x2 + ' ' + y2;
@@ -6726,215 +7142,220 @@ function applyHighlight(holder, svg, svgTop, hi) {
   });
 }
 
-/* ---- the wiring ---------------------------------------------------
-   The page: build the bands, draw the static lines, and let the
-   mouse ask the decision layer what to show. */
+/* ---- the wiring (the panorama) ------------------------------------
+   The page asks the engine for the geometry, paints it, and lets
+   a tap ask the relations module what to show. The mouse-hover
+   wiring the old figure carried is gone with the figure: the map
+   is entered by tapping, from anywhere, and the pure hover layer
+   above stays only because the official test exercises it — the
+   map itself never calls it. */
 
-/* a built-from arrow leaves the ingredient by the top of its
-   circle, climbs through the empty gap, slips through the clear
-   channel beside the built thing's name, and hooks into the rim
-   of the circle itself */
-function buildD(a, b, box) {
-  const ga = (a.querySelector('.d-ic') || a).getBoundingClientRect();
-  const gb = (b.querySelector('.d-ic') || b).getBoundingClientRect();
-  const cx1 = ga.left + ga.width / 2 - box.left;
-  const y1 = ga.top - 1 - box.top;
-  const cxb = gb.left + gb.width / 2 - box.left;
-  const cyb = gb.top + gb.height / 2 - box.top;
-  const s = cx1 - cxb > 24 ? 1 : -1;
-  const r = ga.width / 2;
-  const tipX = cxb + s * r * 0.72;
-  const tipY = cyb + r * 0.72;
-  const nmEl = b.querySelector('.d-name');
-  let chX = null;
-  if (nmEl) {
-    const nm = nmEl.getBoundingClientRect();
-    chX = (s > 0 ? nm.right + 8 : nm.left - 8) - box.left;
-    const sib = s > 0 ? b.nextElementSibling : b.previousElementSibling;
-    if (sib && sib.classList.contains('door')) {
-      const sn = sib.querySelector('.d-name');
-      if (sn) {
-        const sr = sn.getBoundingClientRect();
-        chX = s > 0
-          ? Math.min(chX, sr.left - 8 - box.left)
-          : Math.max(chX, sr.right + 8 - box.left);
-      }
-    }
-    if ((s > 0 && chX < nm.right + 3 - box.left) ||
-        (s < 0 && chX > nm.left - 3 - box.left)) chX = null;
-  }
-  if (chX === null) {
-    // no room beside the name: rise straight and touch the rim
-    const ty = gb.bottom + 1 - box.top;
-    return 'M' + cx1 + ' ' + y1 + ' C' + cx1 + ' ' + ty + ', ' +
-      cxb + ' ' + (ty + 14) + ', ' + cxb + ' ' + ty;
-  }
-  const gy = ((a.closest('.dag-band') || a).getBoundingClientRect().top +
-    (b.closest('.dag-band') || b).getBoundingClientRect().bottom) / 2 - box.top;
-  return 'M' + cx1 + ' ' + y1 +
-    ' C' + cx1 + ' ' + gy + ', ' + chX + ' ' + gy + ', ' + chX + ' ' + (gb.bottom + 4 - box.top) +
-    ' C' + chX + ' ' + (tipY + 6) + ', ' + (tipX + s * 9) + ' ' + (tipY + 5) + ', ' + tipX + ' ' + tipY;
-}
-
-/* draw the map: bands of circles, the door lines that cross one
-   band, the built-from chain — and the hover wired on top */
+/* draw the map: the panorama. The engine turns the model and the
+   width the window gives into one geometry, and this function
+   paints it — every storey's frame placed by the engine, its
+   label centred above its doors, every door full size at every
+   width — and lays it out again, from scratch, when the width
+   changes. No lines are drawn anywhere: the roads the lines once
+   carried are the tap's to show, one step each way, and the dive
+   opens the view itself */
 function renderFundDAG() {
   const holder = $('#fund-dag');
   if (!holder) return;
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('class', 'dag-svg');
-  holder.appendChild(svg);
-  // the traced walks ride above the circles, so a long walk
-  // stays readable where it passes over dimmed bands
-  const svgTop = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svgTop.setAttribute('class', 'dag-svg-top');
-  holder.appendChild(svgTop);
-  // the fork: once a band takes a side, the storeys split in two
-  // columns drawn side by side — the machine as thought on the
-  // left, the machine as built on the right — and each side
-  // ends in its own floor: the thought bottoms in mathematics,
-  // the sand bottoms in physics. The floors follow the deepest
-  // band of their column, so they are removed and re-appended as
-  // the columns grow
-  let fork = null;
-  let forkLeft = null;
-  let forkRight = null;
-  let forkFloorLeft = null;
-  let forkFloorRight = null;
-  const makeFloor = (text) => {
-    const floor = el('div', 'dag-floor');
-    floor.textContent = text;
-    return floor;
-  };
+  const view = el('div', 'dag-view');
+  const canvas = el('div', 'dag-canvas');
+  const panel = el('div', 'dag-panel');
+  panel.hidden = true;
+  const dive = el('div', 'dag-dive');
+  dive.hidden = true;
+  view.appendChild(canvas);
+  holder.appendChild(panel);
+  holder.appendChild(dive);
+  holder.appendChild(view);
+  /* the page's own bar, when it wears one: the panel sticks below
+     it, never behind it. The deck pins its topbar at the top of
+     the viewport; a panel that sticks at the CSS default would
+     slide underneath and the tap's story, and the dive with it,
+     would never be seen. The isolated build has no bar, so the
+     default stands there */
+  const bar = document.getElementById('topbar');
+  if (bar) panel.style.top = (bar.offsetHeight + 10) + 'px';
+
+  const REL = ETBRelations.makeRelations(MAP, EDGES);
+  const model = { bands: MAP, floors: {
+    left: 'the floor beneath is mathematics itself — ' +
+      'the machine as thought, all the way down',
+    right: 'the floor beneath is physics itself — ' +
+      'a voltage high or low, all the way down'
+  }};
+
+  const labelOf = {};
+  const bandOf = {};
   MAP.forEach((b) => {
-    const r = el('div', 'dag-row dag-band');
-    r.insertAdjacentHTML('beforeend',
-      '<span class="dag-band-label">' + b.label + '</span>');
-    b.views.forEach((id) => {
-      const ph = PLACEHOLDERS[id];
-      if (ph) {
-        r.insertAdjacentHTML('beforeend',
-          '<span class="door soon" data-go="' + id + '" title="' + ph.line.replace(/"/g, '&quot;') + '">' +
-          '<span class="d-ic">' + ic(ph.icon, 22) + '</span>' +
-          '<span class="d-name">' + ph.title + '</span></span>');
-      } else {
-        const m = doorMeta(id);
-        r.insertAdjacentHTML('beforeend',
-          '<button class="door dgo" data-go="' + id + '">' +
-          '<span class="d-ic">' + ic(m[0], 22) + '</span>' +
-          '<span class="d-name">' + m[1] + '</span></button>');
-      }
-    });
-    if (!b.col) {
-      holder.appendChild(r);
-      return;
-    }
-    if (!fork) {
-      fork = el('div', 'dag-fork');
-      forkLeft = el('div', 'dag-fork-col');
-      forkRight = el('div', 'dag-fork-col');
-      fork.appendChild(forkLeft);
-      fork.appendChild(forkRight);
-      holder.appendChild(fork);
-    }
-    if (b.col === 'left') {
-      forkLeft.appendChild(r);
-      if (forkFloorLeft) forkFloorLeft.remove();
-      forkFloorLeft = makeFloor(
-        'the floor beneath is mathematics itself — ' +
-        'the machine as thought, all the way down');
-      forkLeft.appendChild(forkFloorLeft);
-    } else {
-      forkRight.appendChild(r);
-      if (forkFloorRight) forkFloorRight.remove();
-      forkFloorRight = makeFloor(
-        'the floor beneath is physics itself — ' +
-        'a voltage high or low, all the way down');
-      forkRight.appendChild(forkFloorRight);
-    }
+    labelOf[b.id] = b.label;
+    b.views.forEach((v) => { bandOf[v] = b; });
   });
-  const edges = fundEdges();
-  // the hover: the mouse asks, the decision answers, the
-  // application shows — a bottom rings alone, without dimming
+
+  /* the label widths, measured in the page's own font, so the
+     engine centres the real label, not an estimate */
+  const widths = { labels: {} };
+  const probe = el('span', 'dag-band-label');
+  probe.style.visibility = 'hidden';
+  holder.appendChild(probe);
+  MAP.forEach((b) => {
+    probe.textContent = b.label;
+    widths.labels[b.id] =
+      Math.ceil(probe.getBoundingClientRect().width) + 2;
+  });
+  holder.removeChild(probe);
+
+  let geo = null;
   let focusId = null;
-  const apply = () => {
-    applyHighlight(holder, svg, svgTop,
-      focusId ? fundHighlight(focusId) : null);
+
+  const nameOf = (id) => {
+    const ph = PLACEHOLDERS[id];
+    return ph ? ph.title : doorMeta(id)[1];
   };
-  const draw = () => {
-    /* measure in content space: when the map scrolls sideways
-       (a window too narrow for the fork's fixed columns) the
-       visible rect is not the whole drawing, so the overlay
-       spans the scrollable extent and the coordinates ignore
-       the current scroll — the lines stay glued to the circles
-       at every width and every scroll position */
-    const r = holder.getBoundingClientRect();
-    const w = Math.max(Math.ceil(r.width), holder.scrollWidth);
-    const h = Math.max(Math.ceil(r.height), holder.scrollHeight);
-    const box = {
-      left: r.left - holder.scrollLeft,
-      top: r.top - holder.scrollTop,
-      width: w,
-      height: h
+  /* the one-step story: only the roads the old map drew as
+     lines, named by direction — the long-distance relations the
+     hover used to trace are gone by design */
+  const roadText = (id) => {
+    const nb = REL.neighborsOf(id);
+    const part = (test, label) => {
+      const names = nb.filter(test).map((n) => nameOf(n.id));
+      return names.length ? label + ' ' + names.join(', ') : '';
     };
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
-    while (svgTop.firstChild) svgTop.removeChild(svgTop.firstChild);
-    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    defs.innerHTML = '<marker id="dag-arrow" viewBox="0 0 10 10" refX="10" refY="5" ' +
-      'markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto">' +
-      '<path d="M0 0 L10 5 L0 10 z" class="dag-arrowhead"/></marker>';
-    svg.appendChild(defs);
-    const defsTop = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    defsTop.innerHTML = '<marker id="dag-walk-arrow" viewBox="0 0 10 10" refX="9" refY="5" ' +
-      'markerWidth="7" markerHeight="7" markerUnits="userSpaceOnUse" orient="auto">' +
-      '<path d="M0 0 L10 5 L0 10 z" class="dag-walk-arrowhead"/></marker>';
-    svgTop.appendChild(defsTop);
-    svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
-    svgTop.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
-    svg.style.width = box.width + 'px';
-    svg.style.height = box.height + 'px';
-    svgTop.style.width = box.width + 'px';
-    svgTop.style.height = box.height + 'px';
-    edges.forEach((e) => {
-      const a = holder.querySelector('[data-go="' + e[0] + '"]');
-      const b = holder.querySelector('[data-go="' + e[1] + '"]');
-      if (!a || !b) return;
-      const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
-      const x1 = ra.left + ra.width / 2 - box.left, y1 = ra.top + ra.height / 2 - box.top;
-      const x2 = rb.left + rb.width / 2 - box.left, y2 = rb.top + rb.height / 2 - box.top;
-      const build = !!e[2];
-      let d;
-      if (build) {
-        d = buildD(a, b, box);
-      } else if (Math.abs(y1 - y2) < 8) {
-        const dip = Math.max(y1, y2) + 34;
-        d = 'M' + x1 + ' ' + y1 + ' C' + x1 + ' ' + dip + ', ' + x2 + ' ' + dip + ', ' + x2 + ' ' + y2;
-      } else {
-        const mx = (x1 + x2) / 2;
-        d = 'M' + x1 + ' ' + y1 + ' C' + mx + ' ' + y1 + ', ' + mx + ' ' + y2 + ', ' + x2 + ' ' + y2;
-      }
-      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      p.setAttribute('d', d);
-      p.setAttribute('class', 'dag-edge' + (build ? ' dag-build' : '')
-        + (PLACEHOLDERS[e[1]] ? ' dag-soon' : ''));
-      p.setAttribute('data-a', e[0]);
-      p.setAttribute('data-b', e[1]);
-      if (build) p.setAttribute('marker-end', 'url(#dag-arrow)');
-      svg.appendChild(p);
+    const parts = [
+      part((n) => n.below && !n.build, 'leads down to'),
+      part((n) => n.below && n.build, 'built from'),
+      part((n) => !n.below && !n.build, 'comes from'),
+      part((n) => !n.below && n.build, 'builds into')
+    ].filter(Boolean);
+    return parts.length
+      ? 'one step: ' + parts.join('; ')
+      : 'no drawn roads: it rings alone';
+  };
+  /* what a dive reveals when there is no view to open — a
+     promise's own line, or, in the isolated build, the view's
+     opening, so the harness can still show what diving does */
+  const diveText = (id) => {
+    const ph = PLACEHOLDERS[id];
+    if (EXPLAINERS[id] && EXPLAINERS[id].intro) return EXPLAINERS[id].intro;
+    if (SYSTEMS[id] && SYSTEMS[id].q) return SYSTEMS[id].q;
+    if (ph && ph.line) return ph.line;
+    if (PRIMER_META[id]) return 'the primer: ' + PRIMER_META[id][1];
+    return '';
+  };
+
+  const apply = () => {
+    const set = focusId ? REL.focusSet(focusId) : null;
+    canvas.classList.toggle('dag-focusing', !!focusId);
+    canvas.querySelectorAll('.door[data-go]').forEach((n) => {
+      const id = n.getAttribute('data-go');
+      n.classList.toggle('dag-hi', !!(set && set.has(id)));
+      n.classList.toggle('dag-tapped', !!(focusId && id === focusId));
     });
-    // redraw after resize: restore the current focus, if any
+    canvas.querySelectorAll('.dag-band').forEach((b) => {
+      b.classList.toggle('dag-band-hi',
+        !!(focusId && bandOf[focusId] &&
+          b.getAttribute('data-band') === bandOf[focusId].id));
+    });
+    panel.textContent = '';
+    dive.hidden = true;
+    if (!focusId) { panel.hidden = true; return; }
+    panel.hidden = false;
+    const who = el('span', 'dag-who');
+    who.textContent = nameOf(focusId);
+    const stratum = el('span', 'dag-stratum');
+    stratum.textContent = bandOf[focusId] ? bandOf[focusId].label : '';
+    const roads = el('span', 'dag-roads');
+    roads.textContent = roadText(focusId);
+    const btn = el('button', 'dag-btn dag-dive-btn');
+    btn.type = 'button';
+    btn.textContent = PLACEHOLDERS[focusId] ? 'the promise' : 'dive in';
+    btn.addEventListener('click', () => {
+      /* the deck: the dive opens the view itself, as a door
+         click always did; a promise has no view, and the
+         isolated build has none either — both reveal the
+         view's own opening instead */
+      if (!PLACEHOLDERS[focusId] && typeof go === 'function' &&
+          document.getElementById(focusId)) {
+        go(focusId);
+        return;
+      }
+      dive.textContent = diveText(focusId);
+      dive.hidden = false;
+    });
+    panel.appendChild(who);
+    panel.appendChild(stratum);
+    panel.appendChild(roads);
+    panel.appendChild(btn);
+  };
+
+  const paint = () => {
+    canvas.textContent = '';
+    canvas.style.width = geo.width + 'px';
+    canvas.style.height = geo.height + 'px';
+    geo.bands.forEach((g) => {
+      const f = el('div', 'dag-band');
+      f.setAttribute('data-band', g.id);
+      f.style.left = g.x + 'px';
+      f.style.top = g.y + 'px';
+      f.style.width = g.w + 'px';
+      f.style.height = g.h + 'px';
+      canvas.appendChild(f);
+      const lb = el('span', 'dag-band-label');
+      lb.textContent = labelOf[g.id];
+      lb.style.left = g.label.x + 'px';
+      lb.style.top = g.label.y + 'px';
+      lb.style.width = g.label.w + 'px';
+      canvas.appendChild(lb);
+      g.rows.forEach((row) => row.forEach((d) => {
+        const ph = PLACEHOLDERS[d.id];
+        const door = el(ph ? 'span' : 'button', 'door' + (ph ? ' soon' : ''));
+        if (!ph) door.type = 'button';
+        door.setAttribute('data-go', d.id);
+        if (ph) door.setAttribute('title', ph.line.replace(/"/g, '&quot;'));
+        door.style.left = d.x + 'px';
+        door.style.top = d.y + 'px';
+        door.insertAdjacentHTML('beforeend',
+          '<span class="d-ic">' +
+          ic(ph ? ph.icon : doorMeta(d.id)[0], 22) + '</span>' +
+          '<span class="d-name">' + nameOf(d.id) + '</span>');
+        canvas.appendChild(door);
+      }));
+    });
+    geo.floors.forEach((fl) => {
+      const floor = el('div', 'dag-floor');
+      floor.textContent = fl.text;
+      floor.style.left = fl.x + 'px';
+      floor.style.top = fl.y + 'px';
+      floor.style.width = fl.w + 'px';
+      canvas.appendChild(floor);
+    });
+    /* a repaint rebuilds every door, so the focus, if any,
+       rides along */
     apply();
   };
-  holder.addEventListener('mouseover', (ev) => {
-    const d = ev.target.closest ? ev.target.closest('.door[data-go]') : null;
-    const id = d ? d.getAttribute('data-go') : null;
-    if (id !== focusId) { focusId = id; apply(); }
+
+  const layout = () => {
+    const avail = Math.floor(view.clientWidth);
+    if (!avail || (geo && geo.avail === avail)) return;
+    geo = ETBLayout.layoutMap(model, widths, avail);
+    paint();
+  };
+
+  /* the tap: a door asks for its one-step set, the same door
+     again — or the space around it — clears */
+  canvas.addEventListener('click', (ev) => {
+    const t = ev.target.closest ? ev.target.closest('.door[data-go]') : null;
+    const id = t ? t.getAttribute('data-go') : null;
+    focusId = id ? (id === focusId ? null : id) : null;
+    apply();
   });
-  holder.addEventListener('mouseleave', () => {
-    if (focusId) { focusId = null; apply(); }
-  });
-  draw();
-  window.addEventListener('resize', draw);
+
+  layout();
+  if (window.ResizeObserver) new ResizeObserver(layout).observe(view);
+  else window.addEventListener('resize', layout);
 }
 
 /* the isolated build's report panel: every circle on the map,
@@ -7951,5 +8372,6 @@ document.querySelectorAll('#race-modes .btn').forEach((b) => {
 });
 raceReset();
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="RUhwx9dPz8t6Yd5wirI2lw==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
