@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================
+     data/map.xml — the map: the strata of the territory beneath the
+     stories, drawn top to bottom in authored order, each storey one
+     system seen at a finer grain: what a person sees, the machinery
+     under the hood, the subsystems — then the fork, the machine seen
+     two ways: abstract computers on the left, the machine as built on
+     the right, which opens into its components and ends in the bedrock.
+     The order inside a storey is authored, then tuned against a
+     simulation of the drawing, so the lines the map draws cross as
+     little as the strata allow. A band with col="left" opens the
+     fork; col="right" bands continue down the right side; the left
+     side bottoms in mathematics itself, nothing drawn beneath.
+     Every view beneath the stories is a member of exactly one band.
+     Governed by deck.xsd; the build validates this part
+     alone (build.py with the part option) and all parts
+     assembled (the default build).
+     ================================================================ -->
+  <map>
+    <band id="m-surface" label="what a person sees">
+      <view ref="x-image"/>
+      <view ref="x-audio"/>
+      <view ref="x-camera"/>
+      <view ref="x-measure"/>
+      <view ref="p-drawing"/>
+      <view ref="p-input"/>
+      <view ref="p-embed"/>
+    </band>
+    <band id="m-machinery" label="the machinery under the hood">
+      <view ref="x-os"/>
+      <view ref="x-choices"/>
+      <view ref="x-simulate"/>
+      <view ref="x-machine"/>
+      <view ref="x-race"/>
+      <view ref="x-many"/>
+      <view ref="x-fail"/>
+      <view ref="x-alive"/>
+      <view ref="x-copies"/>
+      <view ref="x-satellite"/>
+      <view ref="x-motion"/>
+      <view ref="x-network"/>
+      <view ref="x-watch"/>
+      <view ref="x-secrets"/>
+      <view ref="x-clock"/>
+      <view ref="p-gpu"/>
+      <view ref="p-universal"/>
+    </band>
+    <band id="m-subsystems" label="the subsystems">
+      <view ref="x-written"/>
+      <view ref="x-facts"/>
+      <view ref="p-learning"/>
+      <view ref="p-routes"/>
+      <view ref="p-memory"/>
+      <view ref="p-words"/>
+      <view ref="p-ledger"/>
+      <view ref="p-store"/>
+    </band>
+    <band id="m-abstract" label="abstract computers" col="left">
+      <view ref="turing"/>
+      <view ref="recursion"/>
+      <view ref="rivers"/>
+      <view ref="relations"/>
+      <view ref="tower"/>
+      <view ref="time"/>
+    </band>
+    <band id="m-machine" label="the machine as built" col="right">
+      <view ref="cpu"/>
+    </band>
+    <band id="m-components" label="the components" col="right">
+      <view ref="adders"/>
+      <view ref="memory"/>
+    </band>
+    <band id="m-bedrock" label="the bedrock" col="right">
+      <view ref="bits"/>
+      <view ref="gates"/>
+    </band>
+  </map>

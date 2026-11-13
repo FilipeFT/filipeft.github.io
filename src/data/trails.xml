@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================
+     data/trails.xml — the trails (level 1): the explainers that ease the way
+     down. Steps carry cross doors; the trail's own doors, at
+     the bottom, are the landing — the way down the map's
+     hover follows.
+     Governed by deck.xsd; the build validates this part
+     alone (build.py with the part option) and all parts
+     assembled (the default build).
+     ================================================================ -->
+  <trails>
+    <trail id="x-audio" level="1" title="How sound happens" crumb="how sound happens" rung="sense" icon="wave">
+      <intro>Sound is pushes in the air. To keep a song, a machine must turn the pushes into numbers it can hold, and to play it, back again. This is the trail of that trick, from ear to number.</intro>
+      <step icon="wave" name="pressure" line="a wave of pushes in the air">
+        <blurb>Sound is pressure. A drum, a voice, a speaker cone pushes the air, the push travels as a wave, and your eardrum is shoved in time with it. A single note is the air swinging back and forth a few hundred times a second; nothing solid ever moves from the singer to you, only the push.</blurb>
+        <door to="x-image" q="Is a picture caught the same way?"/>
+        <door to="x-measure" q="How does a push in the air become a number at all?"/>
+      </step>
+      <step icon="mic" name="the diaphragm" line="a little drum that turns push into voltage">
+        <blurb>A microphone holds a tiny drum, thinner than a hair. Each arriving push bends it, the bending drags a magnet through a coil of wire, and the wire answers with a wobbling voltage: the push, copied as electricity. The wave is still continuous, still in time with the song.</blurb>
+        <door to="p-input" q="Another sheet that turns a push into numbers?"/>
+        <door to="x-image" q="Measured, rounded, numbered — the picture too?"/>
+        <door to="x-camera" q="The ear has its drum; the eye has its wells — light caught the same way"/>
+      </step>
+      <step icon="clock" name="sampling" line="measured 44,100 times every second">
+        <blurb>A machine cannot hold a continuous wobble, so it measures it: 44,100 quick snapshots every second, each one the voltage at that instant. The number is not arbitrary. The ear tops out near twenty thousand waves a second, and measuring at least twice per wave rebuilds every wave the ear can hear; the compact disc chose 44,100, and the number stayed.</blurb>
+        <door to="x-os" q="Who gives the beat?"/>
+        <door to="x-clock" q="Measured 44,100 times every second — who counts a second?"/>
+      </step>
+      <step icon="stairs" name="rounding" line="each measurement, one of 65,536 steps">
+        <blurb>Each snapshot is rounded to the nearest of 65,536 steps and written down as a number. The rounding is honest — the true voltage is almost never exactly on a step — but the steps are so fine that the rebuilt wave is indistinguishable, to an ear, from the original. One rounded number is called a sample.</blurb>
+        <door to="x-image" q="Pictures are caught the same way: measured, rounded, numbered."/>
+        <door to="bits" q="65,536 steps — how is a step spelled?"/>
+      </step>
+      <step icon="save" name="the file" line="a small note, then millions of numbers">
+        <blurb>A WAV file is a small header — 44,100 a second, 16 bits per sample, two ears — followed by millions of samples in order, one per ear per moment. The file is a long column of numbers and a note about how to read it, and nothing else.</blurb>
+        <door to="memory" q="Where do millions of numbers wait?"/>
+        <door to="x-os" q="Who keeps the files?"/>
+      </step>
+      <step icon="app" name="the bytes" line="each number spelled in sixteen binary digits">
+        <blurb>A sample can hold any of 65,536 values, and 65,536 is 2¹⁶, so each sample is spelled in sixteen binary digits, split into two bytes of eight. A three-minute song is some thirty million bytes: an entire performance pressed into a column of numbers, in the alphabet the whole machine speaks.</blurb>
+        <door to="bits" q="Where do the two symbols come from?"/>
+        <door to="memory" q="Where do the numbers park?"/>
+      </step>
+      <bottom>Push to voltage, voltage to number, number to digits: this is how the machine keeps anything at all.</bottom>
+      <door to="bits" q="The Bit — the alphabet of two symbols"/>
+      <door to="memory" q="Memory — where a song waits while it plays"/>
+    </trail>
+    <trail id="x-image" level="1" title="How an image happens" crumb="how an image happens" rung="show" icon="screen">
+      <intro>A picture is a wall of lamps obeying numbers. To draw, the machine must turn light into numbers, numbers into memory, and memory back into light, in time. This is the trail, from lamp to number and back.</intro>
+      <step icon="screen" name="one lamp" line="told how much red, green and blue to be">
+        <blurb>One pixel is three lamps pressed close together: red, green, blue. Each is told, by a number, how brightly to shine, and the three mix in the eye — full of all three is white, none of them is black. That is the whole of colour on every screen you own.</blurb>
+        <door to="x-audio" q="Is sound caught the same way?"/>
+        <door to="x-measure" q="How does brightness become a number at all?"/>
+      </step>
+      <step icon="match" name="three numbers" line="a pixel is a trio, each 0 to 255">
+        <blurb>Each lamp’s brightness is rounded to one of 256 steps, 0 to 255 — one byte each, the same rounding the ear forgave. A pixel is therefore three numbers, and numbers can be written down, copied and sent like any others. To the machine a photograph is not a picture; it is an enormous list.</blurb>
+        <door to="x-audio" q="Sound too is numbers — measured, rounded"/>
+        <door to="x-camera" q="The list is enormous — but how is the light caught to begin with?"/>
+      </step>
+      <step icon="app" name="the grid" line="two million trios, one picture">
+        <blurb>A television frame is 1,920 columns by 1,080 rows of these trios — about two million pixels, six million numbers. There is no image in the machine anywhere, only the list; the screen is where the list is interpreted. Every photograph ever shown on a computer has been this.</blurb>
+        <door to="p-memory" q="Where do two million trios live?"/>
+        <door to="x-network" q="How does a screen’s worth cross the wire?"/>
+      </step>
+      <step icon="ram" name="the frame in memory" line="the picture lives in a block of memory">
+        <blurb>The six million numbers of one frame sit together in one region of memory, the frame buffer, and the screen rereads it wholesale, dozens of times a second. The picture is not in the screen; it is a block of ordinary memory, and the screen is its window.</blurb>
+        <door to="memory" q="How a circuit holds six million numbers against time."/>
+        <door to="x-os" q="Who owns the block of numbers?"/>
+      </step>
+      <step icon="chip" name="drawing is writing" line="to move something, change numbers">
+        <blurb>Every stroke of every game and every film is arithmetic on the buffer: move a character ten pixels right and the machine adds ten across a few hundred thousand numbers, fills in behind, shades the edge. The programmers never touch a lamp. They arrange for numbers to change — and deciding which numbers change is a different, older question.</blurb>
+        <door to="x-choices" q="Who decides, and how? The trail of choices."/>
+        <door to="x-race" q="What if two programs draw at once?"/>
+        <door to="p-drawing" q="Who does this arithmetic by the million? The trail of the thousand painters"/>
+        <door to="p-gpu" q="The painters live on one chip — how a game chip learned math"/>
+      </step>
+      <step icon="clock" name="the beat" line="whatever is in the buffer is what you see">
+        <blurb>A clock beats, and on each beat the screen repaints from the buffer, top to bottom, while the machine races to finish its changes before the next one. A moving image is a list rewritten in time with a clock; miss the beat and the picture tears, win it and everything moves.</blurb>
+        <door to="x-os" q="The switching illusion — who repaints your world?"/>
+        <door to="memory" q="What holds the frame between beats?"/>
+      </step>
+      <bottom>Light rounded to numbers, numbers held in memory, memory repainted in time. At the bottom, each of these numbers is spelled in the machine’s alphabet.</bottom>
+      <door to="bits" q="The Bit — the spelling of every number"/>
+      <door to="x-machine" q="The trail of the machine — what does the painting"/>
+    </trail>
+    <trail id="x-measure" level="1" title="How anything becomes a number" crumb="how anything becomes a number" rung="sense" icon="stairs">
+      <intro>The machine’s world is a column of numbers, but the world itself is not numbers: it is pressure, brightness, heat, position, arriving continuously and never sitting still. This is the trail of the crossing, the same few moves every sensor makes, from the world to one written number.</intro>
+      <step icon="mic" name="the senses" line="the world arrives as a wobble of voltage">
+        <blurb>Nothing in the world arrives as a number. A sound is a shove in the air; light is a rain of small packets; heat is a jostling. Each has a go-between built for it — a diaphragm, a tiny well, a strip of metal that resists more as it warms — and every go-between answers the same way: with a voltage that rises and falls as the world does. The voltage is still the world, still continuous, still refusing to hold still. Numbers have not entered yet.</blurb>
+        <door to="x-audio" q="The diaphragm — sound’s own go-between"/>
+        <door to="x-image" q="Brightness caught as voltage — the same trick"/>
+        <door to="x-camera" q="A lattice of tiny wells, one for each point of light"/>
+      </step>
+      <step icon="buffer" name="the hold" line="one instant, frozen while it is read">
+        <blurb>A voltage that never stops moving cannot be read, so the machine cheats fairly: for an instant it opens a switch and lets a small cup of charge hold the voltage still — the value at this exact moment, frozen — then reads the frozen copy at leisure, and opens the switch again for the next moment. Thousands of times a second, sometimes millions, the world is caught, held, and let go. The frozen instant is the only thing the machine ever measures; the rest of the world flows past unread.</blurb>
+        <door to="x-clock" q="Who says when to freeze — the beat, counted"/>
+        <door to="p-memory" q="A charge held still while it is read — how does a machine remember at all?"/>
+      </step>
+      <step icon="match" name="the ruler" line="a ladder of known values, and one question">
+        <blurb>To read a frozen voltage, the machine compares it against values it knows how to make. It builds a ladder of rungs, each rung a number turned back into a voltage, and climbs by asking one question, over and over: is the world above this rung, or below? The cleverness is in the asking — not counting rung by rung from the bottom, but halving. Twelve honest questions place a value among 4,096 rungs; sixteen place it among 65,536. Finding a number is a game of yes-or-no, and the machine is very good at yes-or-no.</blurb>
+        <door to="x-choices" q="Every halving is a fork — the yes-or-no game in full"/>
+        <door to="x-motion" q="The ladder, walked the other way: numbers become voltages"/>
+      </step>
+      <step icon="stairs" name="the staircase" line="the true value, landed on the nearest rung">
+        <blurb>The world’s value is almost never exactly on a rung, so it is landed on the nearest one and written down as that rung’s number. This is rounding, and it is honest — the gap between rungs is a small standing error, paid on every measurement — but the staircase can be made as fine as anyone can afford: the compact disc’s staircase has 65,536 steps, and no ear has ever found one. Every number the machine holds about the world stands on some staircase like this, one rung chosen from a ladder.</blurb>
+        <door to="x-audio" q="65,536 steps — the song’s own staircase"/>
+        <door to="x-simulate" q="The rounded row becomes a world — what simulations eat"/>
+      </step>
+      <step icon="ram" name="the row" line="one number written down, then another, then another">
+        <blurb>One measurement is one number; the world is the row that follows. Sample by sample the numbers are written in order — 44,100 of them for each second of song, a whole lattice of them for each frame of film — and the row is the world as the machine will ever know it: parked in memory, poured down a wire, argued over by programs. Nothing upstream checks whether the row is true. Whatever the rungs said, the row now is.</blurb>
+        <door to="p-store" q="Where the row parks, and how it is found again"/>
+        <door to="x-network" q="The row poured out — a stream is a message too"/>
+      </step>
+      <bottom>Sense, freeze, halve, land, write: five moves, and the world is a column of numbers. Every trail in this deck begins where this one ends.</bottom>
+      <door to="bits" q="The Bit — the alphabet every rung is spelled in"/>
+      <door to="gates" q="The gate — the small etched judge that answers above or below"/>
+    </trail>
+    <trail id="x-network" level="1" title="How a message travels" crumb="how a message travels" rung="network" icon="envelope">
+      <intro>No wire runs from your phone to the restaurant. Your order crosses in small numbered pieces, handed from machine to machine, and is rebuilt at the far end. This is the trail of a message.</intro>
+      <step icon="scissors" name="chopping" line="a long message becomes small packets">
+        <blurb>A wire can carry only so much at once, and a long message would jam every machine along its road. So the sender chops it: the order becomes a handful of small packets — at most 1,500 bytes on the wires that carry most of the internet — sent separately across a road many strangers share. Small is also survival arithmetic: a wire flips a bit perhaps once in ten thousand, and a 1,000-bit packet therefore crosses intact about nine times in ten, while a 20,000-bit packet survives barely one trip in seven and must be sent again and again. The packet is sized so that most packets do not meet an error at all. Nothing crosses whole; everything crosses in pieces, cut to the rate of the road and the noise on it.</blurb>
+        <door to="x-machine" q="Numbers all the way down — what carries them?"/>
+        <door to="p-words" q="A long story chopped into small words — how small can a language get?"/>
+      </step>
+      <step icon="envelope" name="the envelope" line="every packet labelled with numbers">
+        <blurb>Each piece is wrapped in an envelope — where from, where to, which piece of the whole this is — and every machine on the network has a number of its own, four bytes such as 142.250.72.14. The envelope also carries a proof of itself: a few extra bits, folded from the packet’s own numbers, that let the far end check the packet arrived unscrambled and throw it away otherwise. A packet spoiled by a cosmic ray or a neighbour’s noisy motor is discarded exactly like a packet that never came. The envelope is written in the same numbers as the message. No router can read your order; every router can read the envelope.</blurb>
+        <door to="x-machine" q="What is inside the machines doing the handing?"/>
+        <door to="p-store" q="An address finds one machine among millions — how are places found again?"/>
+        <door to="x-secrets" q="No router can read the order — how is a message made unreadable?"/>
+      </step>
+      <step icon="wifi" name="hop to hop" line="no road goes all the way">
+        <blurb>At each crossroads a router reads the address and hands the packet down the best next wire; no router holds the whole road, and each is responsible only for the next hop. The tables are built by many machines, none seeing the whole, and they can disagree — a disagreement that can send a packet in a circle until it eats the very road it rides. So every envelope carries a countdown: one byte, set to about sixty-four by the sender, ticked down by every router, the packet dropped at zero — the looping packet must die so the rest keep moving. The route can change mid-message, and the pieces of one order may travel different roads. The internet is not a web of wires to places. It is a crowd of small machines, each deciding the next hop — cooperating without a king, at the price of a countdown in every envelope.</blurb>
+        <door to="x-machine" q="What stands at each hop?"/>
+        <door to="x-race" q="Many packets, one wire — who goes first?"/>
+        <door to="x-satellite" q="Some hops hang in the sky — the machines that carry them"/>
+      </step>
+      <step icon="hands" name="reassembly" line="the pieces arrive out of order and are rebuilt">
+        <blurb>The pieces may arrive out of order — they may travel different roads, and each hop reads a packet whole before it sends it on, so every machine on the road adds its own reading delay — but each envelope says which piece it is, so the receiver rebuilds the whole before anyone reads it. The building is pure bookkeeping: nothing is decoded along the way, only numbered, held briefly, and re-sequenced at the far end. The number on the envelope is what makes confetti a message. Lose the numbering and no wire, however fast, can deliver an order.</blurb>
+        <door to="memory" q="Where do the pieces wait?"/>
+        <door to="x-machine" q="Who does the rebuilding?"/>
+      </step>
+      <step icon="save" name="keep until received" line="a copy held until the far end answers">
+        <blurb>A packet can vanish in a crowd — dropped at a crossroads, spoiled by noise — so the sender numbers each piece, keeps a copy, and starts a clock: if the far end has not said received when the clock runs out, the piece is sent again. The rule is old and has a name — retransmit on timeout — and its naive version, one piece in flight at a time, is safe but slow, so the sender keeps a whole window of numbered pieces in the air at once, and each answer that comes back slides the window forward. The reliability lives at the two ends, not in the wires. That one small rule lets ten thousand strangers share one planet of wires without losing their words — and it is the same rule that keeps two riders off one order.</blurb>
+        <door to="time" q="Two hands, one order book: the oldest bug, and the cure."/>
+        <door to="memory" q="A copy held — held where?"/>
+        <door to="p-ledger" q="A copy held until the far end answers — the rule money runs on"/>
+      </step>
+      <bottom>Chopped, numbered, handed onward, rebuilt: everything you have ever sent travelled as numbers in envelopes.</bottom>
+      <door to="bits" q="The Bit — envelopes and addresses are numbers"/>
+      <door to="x-machine" q="The trail of the machine — what a router is"/>
+    </trail>
+    <trail id="x-secrets" level="1" title="How a secret crosses" crumb="how a secret crosses" rung="network" icon="shield">
+      <intro>The wire was built to survive, not to hide: every envelope is readable by every machine that hands it on. Yet your card number crosses it every day. This is the trail of how — the goals a secret must state, the one key both ends must share, the strangers’ trick that builds a shared secret in the open, the two keys that let anyone lock, and the traitor the whole scheme exists to catch.</intro>
+      <step icon="wifi" name="the open wire" line="the road was built to survive, not to hide">
+        <blurb>The internet’s design goal was survival, not secrecy: the wires were made to keep working when parts of the network were destroyed, and nothing in the design hides what they carry. Any stranger on the road can keep a copy of every envelope that passes him. So everything private must state its goals exactly, and there are three: the eavesdropper must not be able to read the message (confidentiality), the receiver must be able to prove it arrived exactly as sent (integrity), and the receiver must be able to verify who sent it (authentication). The wire cannot be made private. The message can — with numbers, travelling the same open road as everything else.</blurb>
+        <door to="x-network" q="the message it rides — chopped, numbered, handed onward, rebuilt"/>
+        <door to="x-fail" q="the listener is not an accident — the failure this whole trail designs against"/>
+      </step>
+      <step icon="box" name="the shared key" line="one key locks and unlocks, and it must arrive somehow">
+        <blurb>The workhorse of secrecy is the shared key: a number, 128 to 256 bits long, known to the two ends and to no one else, used to scramble what leaves and unscramble what arrives. Fast — orders of magnitude faster than the public arithmetic two steps down — and strong: against a good cipher there is no known shortcut, only the trying of every key, and a 256-bit search is beyond any effort that fits in a universe. But the key itself must arrive somehow, and the wire is public: the courier with the briefcase, the old answer, has no descendant here. This is the chicken-and-egg at the heart of secrecy — how to share a secret over a line on which every listener sits.</blurb>
+        <door to="x-machine" q="the scrambling is arithmetic — the machine’s own numbers, rearranged"/>
+        <door to="p-store" q="the key, kept — how a machine holds what it must find again and never lose"/>
+      </step>
+      <step icon="stairs" name="the strangers’ mixing" line="a shared secret built in the open">
+        <blurb>Two strangers who have never met can build a shared secret in public. They agree, out loud, on a large prime — several hundred digits — and a small generator. Alice picks a secret exponent and posts the generator raised to it; Bob does the same with his own secret. Each then raises the other’s public number to their own private power, and both arrive at the same value — a shared key, manufactured out loud from pieces the whole world heard. An eavesdropper holding every piece faces the discrete logarithm: recovering the hidden exponent from the public result is believed all but impossible when the prime is large enough. The arithmetic runs one way — easy forward, intractable backwards, like water downhill.</blurb>
+        <door to="x-measure" q="the staircase walked backwards — the value given, the rung asked for"/>
+        <door to="x-many" q="the meeting in the open — two strangers agreeing without a private room"/>
+      </step>
+      <step icon="copy" name="the two keys" line="a lock anyone can snap shut, one key that opens">
+        <blurb>The other answer splits the key in two. One half — the public key — is published to the world: anyone may use it to lock a message for its owner; only the private half, kept by the owner alone, opens what the public one has locked. RSA builds the pair from two large primes: the public key is their product, with locking instructions; the private key needs the factors back, and multiplying is quick while factoring is a search whose cost grows explosively with every added digit. Run the pair backwards and it becomes a signature: a digest sealed with the private key, verifiable by anyone holding the public one — proof that the owner, and no one else, sealed it. The lock is free to all; only one hand can open; and reversed, it is a voice no one can forge.</blurb>
+        <door to="x-copies" q="one published key, millions of strangers — the lock everyone can use together"/>
+        <door to="p-ledger" q="the signature — a sealed claim any stranger can verify: the rule money runs on"/>
+      </step>
+      <step icon="warn" name="the traitor in the middle" line="the stranger who answers in Bob’s name">
+        <blurb>The arithmetic is not the weak point; the meeting is. In the middle of the exchange a traitor can answer in Bob’s name: Alice locks her message with Mallory’s key believing it is Bob’s; Mallory reads it, and re-locks it with the real Bob’s. The cipher never breaks — the trust does. The cure is vouching, not mathematics: Bob’s key, signed by someone Alice already trusts, dated to expire because trust erodes — at the small scale, keys signed at parties into a web of trust; at the large scale, certificate authorities the browser already trusts, the strange inherited confidence behind the padlock in the address bar. And the newest handshakes seal each letter with a key thrown away after the reading, so that a key broken tomorrow cannot unseal what was said yesterday.</blurb>
+        <door to="x-watch" q="the certificate — checked, pinned, expired on time: the watched trust"/>
+        <door to="x-alive" q="the trusted parts fail too — revocation and expiry, a trust that must outlive its members"/>
+      </step>
+      <bottom>A public wire, a shared key, a trick of mixing, a lock the world can close, and the vouching that catches the traitor: this is how a secret crosses. Underneath, it is the numbers themselves — every key and every cipher is arithmetic — and the order that keeps an old answer from working twice.</bottom>
+      <door to="bits" q="The Bit — the spelling of every key: secrets are numbers, scrambled by arithmetic"/>
+      <door to="time" q="Time — the primer of order: the fresh answer, and the old one that must not count"/>
+    </trail>
+    <trail id="x-os" level="1" title="Who runs the machine" crumb="who runs the machine" rung="os" icon="shield">
+      <intro>Your phone seems to do twenty things at once. It does one at a time, very fast, with a manager. This is the trail of the manager.</intro>
+      <step icon="chip" name="one at a time" line="the processor does one thing per instant">
+        <blurb>However much seems to be happening, the processor executes one instruction at a time, one per beat. Two programs cannot share a moment. Every claim of simultaneity on your phone is an arrangement built on that single fact, and the arrangement has a name.</blurb>
+        <door to="x-machine" q="What is the one thing?"/>
+        <door to="x-choices" q="Who decides what the one thing is?"/>
+      </step>
+      <step icon="app" name="the illusion" line="switching so fast it looks like everything at once">
+        <blurb>The trick is switching: a sliver of one program, then a sliver of the next, thousands of times a second, with each one’s whereabouts kept in memory between its turns. None of them notices the gaps. The twenty simultaneous programs are a stage illusion, run very well and very fast.</blurb>
+        <door to="x-machine" q="The dance, billions of times a second"/>
+        <door to="x-choices" q="The switching is a decision"/>
+      </step>
+      <step icon="clock" name="the scheduler" line="a program that decides who goes next">
+        <blurb>Who goes next is decided by a program, the scheduler — the one program allowed to stop the others and start them again, thousands of times a second. It is a program like any other, running on the same machine by the same rules: a shepherd that is also a sheep, merely trusted.</blurb>
+        <door to="x-choices" q="How does a machine decide anything at all?"/>
+        <door to="x-race" q="Two programs, one instant — what keeps them apart?"/>
+      </step>
+      <step icon="save" name="files" line="named blocks of numbers on a disk">
+        <blurb>A program not running is a file: a named block of bytes on a disk, beside your photographs and your orders. The file is not the program, only its frozen numbers, read back into memory and continued when called. A disk is memory that does not mind waiting.</blurb>
+        <door to="memory" q="How a circuit holds anything at all."/>
+        <door to="x-machine" q="A disk is what, exactly?"/>
+        <door to="x-written" q="A file is a program’s frozen numbers — translated from what?"/>
+      </step>
+      <step icon="shield" name="the gatekeeper" line="one program allowed to touch everything">
+        <blurb>Memory, disks, the wire, the screen: every program wants them, and only one program is allowed to hand them out — the operating system. Your apps never touch the hardware; they ask, and the manager grants or refuses. That is why one crashing app does not take the phone down with it: the failure stops at the door.</blurb>
+        <door to="memory" q="What may the one program touch?"/>
+        <door to="x-race" q="Who stops two hands on one cell?"/>
+      </step>
+      <bottom>The manager, the scheduler, the files: all of it is programs, and all programs are instructions stored and obeyed. Under the manager stands the machine itself.</bottom>
+      <door to="x-machine" q="The trail of the machine — what the manager runs"/>
+      <door to="time" q="Time — when two hands meet one cell"/>
+    </trail>
+    <trail id="x-machine" level="1" title="The machine itself" crumb="the machine itself" rung="machine" icon="chip">
+      <intro>Every trail on this deck ends in a program being obeyed. This is what obeying means: the stored program, from a 1945 sketch to the phone in your hand.</intro>
+      <step icon="save" name="the radical idea" line="store the instructions with the data, in advance">
+        <blurb>Before 1945 a machine was rewired for each new job; the program was the wiring. The idea that ended that: keep the instructions in the same memory as the data, written down in advance, and let one machine run any job by reading them. The machine no longer changes for the work. The work is a list, and the list is numbers.</blurb>
+        <door to="x-os" q="The manager is stored too"/>
+        <door to="p-universal" q="Instructions stored like data — how one machine can be any machine"/>
+      </step>
+      <step icon="ram" name="a number that means a command" line="the cell decides by position which it is">
+        <blurb>In memory a program looks like nothing at all: numbers in cells, indistinguishable from data. The number 108 in one cell is an instruction — load — and the same 108 elsewhere is a piece of data. The difference is not in the cell; it is where the machine is looking. Code is data, and attention makes it code.</blurb>
+        <door to="p-words" q="A vocabulary of a few dozen words — the one-word tradition"/>
+        <door to="x-choices" q="Load is one of a few dozen words"/>
+        <door to="x-written" q="Programs are written in words — who turns the words into numbers?"/>
+      </step>
+      <step icon="chip" name="the dance" line="fetch, decode, execute — billions of times a second">
+        <blurb>The machine runs one round forever: fetch the next instruction, decode what its number means — add, load, jump — execute it, move on. Billions of rounds a second, on the beat of a clock. Nothing else is happening inside the phone, the console, the router or the television; every one of them runs this one dance.</blurb>
+        <door to="x-os" q="Who shares one machine among many programs?"/>
+        <door to="cpu" q="The dance, step by step"/>
+      </step>
+      <step icon="console" name="the one design" line="in every box on every trail">
+        <blurb>The console, the courier’s phone, the warehouse server, the router, the player in the television: one design, scaled and costumed, in every box this deck has walked. Von Neumann’s group sketched it in 1945; the world has built it in the billions since, and nothing has replaced it.</blurb>
+        <door to="cpu" q="The whole machine, small enough to step through"/>
+        <door to="turing" q="Is there anything it cannot do?"/>
+      </step>
+      <bottom>One dance, in every machine you own. The whole machine, small enough to step through by hand, is a primer — and so is the question of what it can never do.</bottom>
+      <door to="cpu" q="A real machine — the dance, step by step, for your hands"/>
+      <door to="turing" q="The Turing machine — what such a machine can never do"/>
+    </trail>
+    <trail id="x-motion" level="1" title="How a number moves a thing" crumb="how a number moves a thing" rung="show" icon="motor">
+      <intro>Every trail in this deck ends with the machine holding a number. The valve opens, the cone shoves the air, the wheel turns: this is the trail of the last step, where a number stops being arithmetic and starts being a push.</intro>
+      <step icon="chip" name="the number at the edge" line="the dance ends holding a number">
+        <blurb>The dance — fetch, decode, execute — ends the same way every time: a number sits in a register, and nothing in the world has moved yet. The number might be a loudness, a position, an opening, a thrust; to the machine it is only bits, waiting. The last mile of every computation is not arithmetic at all. It is matter, and it must be told.</blurb>
+        <door to="x-machine" q="The dance that ends holding the number"/>
+        <door to="p-words" q="The vocabulary of commands — light, throttle, stop"/>
+      </step>
+      <step icon="fork" name="the valve" line="a voltage that opens and closes a road">
+        <blurb>The telling is done by the smallest valve there is: a strip of treated sand with a road for current through it and a third wire hung above. Voltage on the third wire and the road opens; voltage off and it closes — a number, arrived as a voltage, steering a current that can be far larger than itself, one switch letting a small signal command a big river. A billion of these valves open and close inside the phone in your pocket, millions of times a second, and the same valve, made fatter, opens a rocket engine’s throttle.</blurb>
+        <door to="x-choices" q="Open or closed — the one yes-or-no underneath"/>
+        <door to="x-satellite" q="Where the trick works hardest: a sealed machine in the sky, its thrusters told by number"/>
+      </step>
+      <step icon="motor" name="the push" line="a current through a coil, and the world shoves back">
+        <blurb>A current moving through a wire sits in a magnetic field, and the field shoves sideways: current becomes force. Coil the wire and the shove becomes a push along the line — a speaker cone shoved in time with the song’s numbers, a motor turned by wishing it so many steps, a valve rammed open against fire. The microphone’s diaphragm is the speaker walked backwards: there a push became a voltage, here a voltage becomes a push. Every output the machine owns ends in this one crossing.</blurb>
+        <door to="x-audio" q="The speaker — the microphone’s trick, walked backwards"/>
+        <door to="gates" q="The valve itself — a gate, etched in sand"/>
+      </step>
+      <step icon="turn" name="the loop" line="shove, read, correct, shove again">
+        <blurb>One shove is never trusted. The machine reads back what its push did — the tilt it caused, the temperature it moved, the speed it changed — compares the reading against the number it wanted, and shoves again, corrected, thousands of times a second. The reading is another trail entirely; the comparison is arithmetic; the correction is another push. Hold a drone level, a rocket on its lean, an oven at its heat: the same wheel, turning.</blurb>
+        <door to="x-measure" q="How the world is read back — the other half of the boundary"/>
+        <door to="x-simulate" q="The plan, computed in advance and walked against the world"/>
+      </step>
+      <step icon="clock" name="the deadline" line="not fast, but on time">
+        <blurb>When the shove is holding a car in its lane or a rocket on its lean, late is as bad as wrong: the push must arrive on the beat, every beat, or the correction that needed it becomes the accident it feared. This is why most processors are not the computers we think of as computers — they live inside things, and their work has a deadline. The manager in there is a different creature from a laptop’s: it does not share fairly, it guarantees. The valve does not get the processor when convenient. It gets it now.</blurb>
+        <door to="x-os" q="The manager who guarantees a beat, not shares one"/>
+        <door to="x-clock" q="What a clock is, that a beat can be promised"/>
+      </step>
+      <bottom>Register, valve, coil, loop, deadline: this is how the machine’s numbers leave the machine. The dance above ends in arithmetic; the world below begins in matter.</bottom>
+      <door to="gates" q="The gate — the valve, etched smallest"/>
+      <door to="cpu" q="The dance — the number’s side of the crossing"/>
+    </trail>
+    <trail id="x-choices" level="1" title="How a machine decides" crumb="how a machine decides" rung="logic" icon="fork">
+      <intro>Jump if the button is pressed and the feet are on the ground. Send again if the answer never came. Grant the next slice to whoever has waited longest. Every decision a program makes is a fork, and the forks themselves are wired.</intro>
+      <step icon="fork" name="one question" line="every decision is yes or no">
+        <blurb>A program decides by asking: is the button pressed? is the count zero? is this address mine? Each question has two answers, and the program takes one road or the other. All the branching richness of software — menus, autopilots, this deck — is a braid of two-answer forks.</blurb>
+        <door to="x-facts" q="Is the answer found by walking rules? — how it finds the answer"/>
+        <door to="p-learning" q="Or guessed from what came before — how a machine improves its guesses"/>
+      </step>
+      <step icon="match" name="and, or, not" line="the everyday words are the wiring diagram">
+        <blurb>Jump if pressed AND on the ground. Fire if either button is pressed: OR. Move unless paused: NOT. The words that combine questions in daily speech are the exact ones the machine needs, and each is a small circuit of switches that answers the combined question electrically, in an instant, with nobody home.</blurb>
+        <door to="p-words" q="Three words for every decision — how small can a language get?"/>
+        <door to="x-written" q="Programs are made of these words — who checks them?"/>
+      </step>
+      <step icon="chip" name="the gate" line="a question etched in sand">
+        <blurb>That circuit is called a logic gate: a few pieces of carefully poisoned sand that turn voltages into an answer. AND, OR, NOT, and three or four cousins are the complete vocabulary of decision — the smallest parts of the machine that can be said to know anything.</blurb>
+        <door to="gates" q="The whole vocabulary, for your hands"/>
+        <door to="adders" q="What are gates good for?"/>
+      </step>
+      <step icon="clock" name="billions of forks" line="the day’s work of a processor">
+        <blurb>Sixty times a second the game asks a few million of these questions; the scheduler asks who has waited longest; the router asks which wire is best. Every if in every program, unwound far enough, lands on gates — questions etched in sand, answered billions of times a second, honestly, because honestly is all a gate can be.</blurb>
+        <door to="x-machine" q="Where the forks are taken"/>
+        <door to="gates" q="How fast is a decision?"/>
+      </step>
+      <bottom>Decision, wired. The whole vocabulary — six gates, one picture, every truth table — is a primer, and it is the piece the rest of the machine is made from.</bottom>
+      <door to="gates" q="Gates — the whole vocabulary, for your hands"/>
+      <door to="bits" q="The Bit — what the gates are made of"/>
+    </trail>
+    <trail id="x-satellite" level="1" title="How a satellite works" crumb="how a satellite works" rung="network" icon="satellite">
+      <intro>A satellite is a computer in a sealed box, hung where no one can reach it, told what to do by radio, and pouring numbers down without pause. The weather model and the blue dot both begin in that stream. This is the trail of the machine: how it is run, what it senses, and how its numbers arrive.</intro>
+      <step icon="chip" name="the machine aboard" line="a computer no one can repair">
+        <blurb>A satellite is the same machine as the phone in your pocket, sealed in a box nobody will ever open. There is no air to carry the heat away — the sunlit face and the shadow face swing two hundred degrees apart — no hand to press reset, and the sky is full of particles that flip a number in memory now and then. So the machine is built to notice and to be forgiven: it checks its own arithmetic, reports its own voltages and temperatures, restarts itself when a number goes strange — and when a part cannot be forgiven, its work is moved aside, to a reserve aboard or a twin already in orbit, drifted into place. Nothing aboard is ever repaired; everything aboard is built to be forgiven.</blurb>
+        <door to="x-machine" q="The one design, in every box — even this one"/>
+        <door to="p-memory" q="A particle can flip a number — how a circuit holds numbers against the sky"/>
+      </step>
+      <step icon="camera" name="the senses" line="the Earth, read from above into numbers">
+        <blurb>The machine is up there to sense: cameras for the clouds, infrared for the heat of fields and fires, microwave ears for the wetness of the air. Every instrument does what every instrument in this deck does — measure, round to a number, hand the number on — and the weather model’s first numbers arrive this way, a whole sky every few minutes. The reading half of the forecast starts here, before any arithmetic is walked.</blurb>
+        <door to="x-camera" q="The eye’s wells, catching the light"/>
+        <door to="x-audio" q="Measured, rounded, numbered — the world read like a song"/>
+      </step>
+      <step icon="remote" name="the commanded word" line="ordered by radio, one word at a time">
+        <blurb>No hand reaches the machine, so everything it does is told to it: a command list uploaded on the radio, checked, and obeyed — spin up, take the picture, hold, sleep. The vocabulary is small, exact, and counted when the machine is built: every command it will ever be allowed to hear is listed years before launch, and the machine never improvises; that is the point. A satellite is not operated so much as it is recited to, and it answers in numbers — its own health, poured back on the same small channel — the telling and the telling-what-to-do riding together, one link up, one link down.</blurb>
+        <door to="p-words" q="A language small enough for a sky"/>
+        <door to="x-choices" q="Every command a yes-or-no fork"/>
+        <door to="x-motion" q="The word that fires a thruster — how does a word push?"/>
+      </step>
+      <step icon="wifi" name="the stream home" line="the numbers poured down without being asked">
+        <blurb>The talk home never stops: pictures, readings, and the machine’s own numbers — voltages, temperatures, the state of its wheels — poured down continuously, chopped and wrapped and numbered like any message, kept until the ground says received. It is a few watts of whisper, thinned by tens of thousands of kilometres, and it still arrives, because the wire’s rules do not care how far the wire is. And the same sealed box, hired out as a relay, does even less: a bent pipe, translating the frequency and passing everything on untouched, noise included — one design, two jobs, pouring its own numbers home or faithfully repeating others’. The weather model drinks this stream; so does the blue dot.</blurb>
+        <door to="x-network" q="Chopped, numbered, kept until received — the trail of a message"/>
+        <door to="bits" q="What the stream is spelled in"/>
+      </step>
+      <step icon="server" name="the ground beneath" line="the control room, the machine’s other half">
+        <blurb>Half the satellite is on the ground: a room of machines watching the stream, walking the machine’s numbers forward, composing the next command list and reading it up. The rooms sit where the sky is widest — near the equator, the whole arc in view, two antennas so that one is always spare — and the loss of the whole machine is priced before it happens: capacity drawn from reserve, a spare drifted into place, the service interrupted for minutes rather than years. When a number goes strange, the ground decides whether to care; when a burn is needed, the ground prices it. The box in the sky and the room on the ground are one system, and neither half is in charge alone — the manager is the pair of them.</blurb>
+        <door to="x-os" q="Who runs a machine you cannot touch?"/>
+        <door to="p-store" q="Where a day of sky parks until the model needs it"/>
+      </step>
+      <step icon="clock" name="the clock in the sky" line="the same stream, carrying here-and-now">
+        <blurb>The positioning machines stream too, but what they pour is not pictures; it is a sentence — I am here, and my clock says now — repeated forever, on a timetable promised to the millionth of a second. The same sealed box, the same commanded word, the same whisper home; only the payload differs. And the clock aboard is the most tended clock there is: an atom swinging billions of times a second, disciplined from the ground, its corrections stitched into the very stream — for the blue dot is arithmetic on this stream, and so are the telephone networks below, taking their beat from the sky’s.</blurb>
+        <door to="x-clock" q="What a clock is, that its ticks can be counted on"/>
+        <door to="x-network" q="Here-and-now, poured like any message"/>
+      </step>
+      <bottom>Control, sense, stream: the machine is the same one that plays your games, in the hardest room there is, and half of it lives on the ground. The primers below are what it is made of; the cards above are what it is for.</bottom>
+      <door to="cpu" q="A real machine — the dance, step by step, unattended"/>
+      <door to="bits" q="The Bit — the spelling of every whisper"/>
+    </trail>
+    <trail id="x-written" level="1" title="How software is written" crumb="how software is written" rung="code" icon="console">
+      <intro>No machine has ever read a word, yet every program begins as words, written by a person. This is the trail between the two: how the written list is shaped, checked, and translated into the numbers a machine will obey.</intro>
+      <step icon="remote" name="the words" line="a language small enough to check">
+        <blurb>English is too loose for a machine: “put the thing near the other thing” could mean anything. So programs are written in languages built the other way round — a few dozen exact words, sentences of a shape agreed in advance, no idiom, no irony, no “you know what I mean”. The smallness is not poverty. It is the price of being understood exactly, every time, by something that has no idea what you mean.</blurb>
+        <door to="p-words" q="The one-word tradition — a language small enough for a keypad"/>
+        <door to="p-learning" q="The other way to make a machine behave — guessed, not written"/>
+      </step>
+      <step icon="fork" name="the shape" line="every sentence checked against the agreed form">
+        <blurb>Each sentence must match a shape agreed in advance — this word first, that kind of name second — and before the program ever runs, another walk of it matches sentence after sentence against the shape. Anything crooked is refused at the desk, the line and the word named. The refusal feels like scolding. It is the machine’s equivalent of a friend reading your letter back to you before you send it: every mistake caught here is one that never reaches the sky, the warehouse, or the hospital.</blurb>
+        <door to="x-choices" q="Match or refuse — a yes-or-no question"/>
+        <door to="x-facts" q="Checked against the agreed rules — how the rules are walked"/>
+      </step>
+      <step icon="console" name="the translation" line="a program that writes programs">
+        <blurb>The checked list is still words, and the machine still reads none of them. So another program — the translator — walks the list and emits the machine’s own numbers: this exact sentence becomes those few, that one becomes these. The translator is itself a program, written once and borrowed by everyone, and there are two traditions for its timing: translate everything in advance and hand over pure numbers, or read and obey one sentence at a time as it arrives. Either way, what reaches the machine is not words.</blurb>
+        <door to="x-machine" q="A number that means a command — what the numbers mean"/>
+        <door to="bits" q="The numbers themselves — spelled in two symbols"/>
+        <door to="relations" q="Matching a sentence against a shape — the matching craft"/>
+      </step>
+      <step icon="box" name="the rooms" line="borrowed instructions, written once">
+        <blurb>Nobody writes the whole list. Programs are assembled from rooms of instructions written by other people — take a picture, open a wire, sort this column — borrowed by the sentence and linked in by the translator, reused for decades by strangers who never meet. Rooms borrow rooms: the sort borrows the compare, the compare borrows the subtract. Most of any program was written by someone else, and that is not laziness. It is the whole craft: composition, exactly as in this deck.</blurb>
+        <door to="recursion" q="A room that borrows itself — recursion at ground level"/>
+        <door to="x-os" q="Who keeps the rooms, and hands them out"/>
+      </step>
+      <step icon="tower" name="the tower" line="each language standing on another">
+        <blurb>Stack the rooms and the languages and you get the tower: a language for pages standing on a language for pictures, standing on a language for machines, standing on the one alphabet. The person writes at the top; the machine obeys at the bottom; the translator is the staircase between floors. No floor understands the one above it — each floor trusts the one below, blindly, exactly. Every app you have ever tapped stood on this tower, and no one who built the top has ever needed to see the bottom.</blurb>
+        <door to="tower" q="The tower primer — how to build well inside it"/>
+        <door to="memory" q="Where all the floors live while the program runs"/>
+        <door to="rivers" q="Two whole languages built from words this small"/>
+      </step>
+      <bottom>Words, shapes, translation, borrowed rooms, a tower with a machine in the basement: this is how anything at all gets written for a machine that reads nothing. The primers below are the basement and the craft; the trails above are what has been built on it.</bottom>
+      <door to="cpu" q="The machine in the basement — the dance, step by step"/>
+      <door to="tower" q="The tower — how to build well inside it"/>
+    </trail>
+    <trail id="x-facts" level="1" title="How it finds the answer" crumb="how it finds the answer" rung="app" icon="match">
+      <intro>Some questions are not computed but looked up: the machine is told only what is true — facts, and rules that build new truths from old — and finds the answer by walking. This is the trail of that trick, from the pond of facts to every road at once.</intro>
+      <step icon="save" name="only the facts" line="told what is true, never how to look">
+        <blurb>Tell the machine no instructions at all. State the facts: this road meets that road; this evening was watched by this household; this order carries these meals. The machine is never told how to find anything — it is told only what is — and every answer it will ever give is already lying in the facts, waiting to be walked. This is programming turned inside out: not a recipe for every question, but a world of truths and questions thrown at it.</blurb>
+        <door to="p-store" q="Where the facts park — tables, and the shortcuts that find them"/>
+        <door to="x-written" q="The other way: instructions, written by hand — and what changes when you don’t"/>
+      </step>
+      <step icon="match" name="the fit" line="a question with holes, tried against every truth">
+        <blurb>A question is a pattern with holes in it: who begets whom, which road leads where. The machine takes the pattern to the pond and tries it against the facts, one at a time, and each trial is one small yes-or-no: this fact and these holes can be made to agree, or they cannot. Nothing is approximated and nothing is guessed; agreement is a kind of arithmetic — two shapes made equal, or rejected — and the machine does it the way it does everything: exactly.</blurb>
+        <door to="x-choices" q="Every trial a yes-or-no — the fork underneath"/>
+        <door to="x-simulate" q="The same question, asked everywhere at once"/>
+      </step>
+      <step icon="map" name="the walk" line="dead ends backed up, untaken roads remembered">
+        <blurb>A rule’s answer needs other rules’ answers first, so the walk forks: take the first road, and if it dead-ends, back up to the last untaken fork and try the next — that is all backtracking is, the newest untaken road remembered. And the walk contains a copy of itself — answering a rule means walking rules — which is why a search this simple can answer questions nobody wrote a procedure for. The person asks. The machine wanders, exactly, until the wandering is an answer.</blurb>
+        <door to="recursion" q="The walk contains a copy of itself — the primer"/>
+        <door to="p-routes" q="A recipe that contains itself — the walk, as steps of steps"/>
+      </step>
+      <step icon="fork" name="all the roads at once" line="every branch given its own small machine">
+        <blurb>The tree of maybes can be walked one road at a time, or it can be staffed: every branch handed to its own small machine, all walking at once, the first answer home declared the winner. The cost is honest and paid in advance — many branches would have been backed out of anyway, so their machines’ work is thrown away — but throwing work away is what machines are for, and the answer that took the short road arrives while the lone walker is still backing up. Speed, here, is a rummaging made wide instead of deep.</blurb>
+        <door to="x-race" q="A thousand hands in one pond — who touches what, and who wins"/>
+        <door to="x-many" q="The warehouse that staffs the branches"/>
+      </step>
+      <step icon="remote" name="which answers" line="the first answer, or all of them, said out loud">
+        <blurb>Some questions have one answer, some have thousands, and the machine does not know which until asked — so the asking says it: the first answer home, or all of them gathered, every answer once. And once the roads run in parallel, the order of the answers is no longer promised: whichever branch wins, wins, and a program that meant one answer must say so out loud, or learn to love whichever arrives. The discipline is small and it is everything: know which question you asked.</blurb>
+        <door to="p-learning" q="The other way of answering: guesses scored, not facts walked"/>
+        <door to="p-words" q="The query — a language small enough for one line"/>
+      </step>
+      <bottom>Facts, a fit, a walk, every road at once, and the answers said plainly: this is how the machine finds what it was never told. Underneath, it is agreement — shapes that fit — and a walk that contains itself.</bottom>
+      <door to="relations" q="The pond itself — the primer of facts and rules"/>
+      <door to="recursion" q="Recursion — the walk that contains the walk"/>
+    </trail>
+    <trail id="x-simulate" level="1" title="How a world is simulated" crumb="how a world is simulated" rung="app" icon="box">
+      <intro>To compute a world — tomorrow’s sky, tonight’s flight, the city’s traffic — the machine does one thing: holds the world as numbers, applies a small rule everywhere at once, and repeats on a beat. This is the trail of that pattern, from the state to the rule to the walk.</intro>
+      <step icon="ram" name="the state" line="the whole world, held as a block of numbers">
+        <blurb>First the world must be reduced: the sky to a lattice of cells, the city to corners and edges, the game to positions and scores — everything that matters, rounded into numbers and parked side by side in memory. This is the world as far as the machine will ever know it; there is no other copy, and no oracle to consult. Change the numbers and the world changes. That is all the machine holds of a world, and it is enough.</blurb>
+        <door to="p-memory" q="How a block of numbers is held against the off switch"/>
+        <door to="x-image" q="The frame buffer — a world of numbers, painted"/>
+      </step>
+      <step icon="match" name="the rule" line="what happens next, written small">
+        <blurb>What happens next is not consulted; it is written, by a person, in advance, small: each cell asks only its neighbours, the same question everywhere, and the answer decides what the cell becomes. No cell glances out of the model; no special case hides in a corner. Smallness is what makes the rule checkable — a person can read it, argue with it, improve it — and it is what makes the future computable at all.</blurb>
+        <door to="x-choices" q="The rule, unwound — yes-or-no forks"/>
+        <door to="x-facts" q="Facts and rules — what a rule is made of"/>
+      </step>
+      <step icon="clock" name="the beat" line="nothing moves until the beat says next">
+        <blurb>The rule cannot update the world in place, or each cell would half-see the future of its neighbours. So the machine keeps two worlds — the old one it reads, the new one it writes — and on each beat swaps them wholesale: tick becomes tock, tock becomes tick. The whole trick of the beat is that no world is ever written into while it is being read from, an old lesson this deck teaches twice because it bites twice.</blurb>
+        <door to="x-race" q="Two worlds, one beat — the honest order"/>
+        <door to="x-os" q="Who gives the beat"/>
+      </step>
+      <step icon="stairs" name="the walk" line="from a start, forward, one beat at a time">
+        <blurb>Once the state, the rule and the beat agree, the future is a walk: apply, swap, apply, swap — each step computed entirely from the last, on and on until tomorrow exists. The launch is flown on the ground the day before it is lit; the forecast is the same walk with weather as its world; the game you play is the same walk, sixty times a second, waiting for your thumb. Nothing in the walk knows which world it is walking. That is why one pattern serves them all.</blurb>
+        <door to="p-routes" q="A task that contains a copy of itself — steps of steps"/>
+        <door to="x-machine" q="The arithmetic of the walk, and what obeys it"/>
+      </step>
+      <step icon="star" name="the many tries" line="uncertain beginnings, many worlds">
+        <blurb>When the beginning is honest about being uncertain — a breeze missed here, a degree missed there — one walk is not the truth. So the machine walks many: forty skies from forty slightly different mornings, a hundred flights from a hundred weathers, and the answers agree at first, then slowly fan out. Confidence, in a computed world, is a count: of all the walks tried, how many brought the rain. It is not a mood, and it is not a guess. It is arithmetic, patiently repeated.</blurb>
+        <door to="p-learning" q="When the guesses are scored and kept — the learning promise"/>
+        <door to="x-many" q="Many walks at once — the trail of many machines as one"/>
+      </step>
+      <bottom>A world as numbers, a rule small enough to read, a beat to keep the copies honest, and a walk that never asks which world it is walking: this is how the machine holds tomorrow. Underneath, it is the one machine, walking arithmetic, holding numbers.</bottom>
+      <door to="memory" q="Where the world waits between beats"/>
+      <door to="bits" q="The spelling of every number in the world"/>
+    </trail>
+    <trail id="x-many" level="1" title="How many machines act as one" crumb="how many machines act as one" rung="os" icon="server">
+      <intro>One machine walks one instruction at a time, yet tomorrow’s weather is computed in an afternoon and a warehouse answers ten thousand strangers at once. This is the trail of that trick: the job cut to pieces, the pieces handed out, and the pieces made to wait for each other.</intro>
+      <step icon="scissors" name="the split" line="one job, cut into pieces that do not touch">
+        <blurb>The job must first be cut: the sky into regions, the evening’s orders one by one, the film into blocks of frames — pieces as separate as possible, because pieces that touch must talk. The cutting is the whole art: cut well and the machines barely speak; cut badly and they spend the afternoon waiting for each other’s numbers. A good cut looks obvious afterwards, the way all good arrangements do.</blurb>
+        <door to="x-network" q="Chopped, numbered, handed on — the trail of pieces"/>
+        <door to="x-os" q="Who does the cutting — the manager’s oldest move"/>
+      </step>
+      <step icon="remote" name="the handout" line="the manager walks the room with the pieces">
+        <blurb>A manager — a program, on a machine, like every manager in this deck — walks the room with the basket: an idle box gets a piece, a fast box gets two, a struggling box is passed over without ceremony. No box is asked its opinion, and no box knows the shape of the whole job. Ten thousand strangers’ orders leave a warehouse this way, every evening, and none of the boxes doing it understands dinner.</blurb>
+        <door to="x-os" q="The scheduler, at warehouse scale"/>
+        <door to="x-race" q="Two hands, one basket — the honest order"/>
+      </step>
+      <step icon="rivers" name="the shared edges" line="the pieces trade their borders, every beat">
+        <blurb>The pieces are never perfectly apart: my region of sky borders yours, and my next minute depends on your edge cells. So on every beat the machines trade their borders — one row of numbers across the wire, chopped, enveloped, kept until received like any message. The machines are neighbours in two senses: side by side in the room, and side by side in the world they are computing.</blurb>
+        <door to="x-network" q="The borders cross the wire — the trail of a message"/>
+        <door to="memory" q="Where the traded border parks between beats"/>
+      </step>
+      <step icon="clock" name="the barrier" line="no box may run ahead of the slowest">
+        <blurb>At the end of each beat there is a gate: no box begins the next piece until every box has finished the last, because a fast box racing ahead would compute a future from a missing past. The whole room waits for its slowest member — maddening, and unavoidable: acting as one means being no faster than the slowest agreement. Every world walked on many machines pays this toll, every beat, all afternoon.</blurb>
+        <door to="x-race" q="The wait is the agreement — one cell, two writers, one order"/>
+        <door to="x-choices" q="Step or wait: a fork at every beat"/>
+      </step>
+      <step icon="server" name="the one machine, wearing a warehouse" line="to the program, a strange-shaped machine">
+        <blurb>To the person writing the program, the warehouse is one machine with a strange shape: a thousand processors, a wire inside, a manager in the middle. To the weather it is tomorrow arriving on time. To each box it is nothing at all — alone in the room, running its dance, holding its numbers, waiting at the gate. Nothing exotic was added to make many act as one. The one design was multiplied, and then taught to wait for itself.</blurb>
+        <door to="x-machine" q="The one design, in every box"/>
+        <door to="cpu" q="The dance each box runs, step by step"/>
+      </step>
+      <bottom>Cut, handed out, traded at the borders, held at the gate: many machines act as one by pretending to be one machine, slowly and by agreement. Each box is the machine the other trails explain; the wire between them is a trail of its own.</bottom>
+      <door to="x-network" q="The wire between the boxes — the trail of a message"/>
+      <door to="cpu" q="A real machine — the box every piece runs on"/>
+    </trail>
+    <trail id="x-race" level="1" title="When two hands meet" crumb="when two hands meet" rung="os" icon="hands">
+      <intro>Parallel means many things done at once, for speed; concurrent means many things that must meet, whatever the clock does with them. This is the trail of the meeting: one cell, two writers, and every arrangement a machine can make so the two never spoil each other’s work.</intro>
+      <step icon="ram" name="the meeting" line="two writers, one cell, no promised order">
+        <blurb>Two workers share one cell, and each runs the same three lines: read it, add one, write it back. Alone, each is honest; together, in the unlucky order — both read before either writes — two increments become one, the sum silently loses, and the test that passed yesterday fails at three in the morning, under load, when no one is watching. The bug is not in either worker. It is in the gap between a read and a write, which the cell promised no one would ever stand in.</blurb>
+        <door to="p-memory" q="The cell itself — how a number is held against everyone"/>
+        <door to="x-machine" q="One instruction at a time, order for free — the world this trail leaves"/>
+      </step>
+      <step icon="shield" name="the doorman" line="one in the room, the others at the door">
+        <blurb>The oldest cure is a door with one key: a worker takes the key, does all three lines, returns the key, and only then does the next worker enter. It works — it has carried fifty years of correct systems — but it is a discipline kept by hand: the key must be asked for in a settled order, held briefly, returned on every path, even the paths that fail. One forgotten return and the room locks forever; one impatient order and two keys wait on each other, a circle no one can leave. The doorman is a promise, and promises are kept by the tired.</blurb>
+        <door to="x-os" q="The manager as doorman — who runs the door"/>
+        <door to="x-many" q="The warehouse: many machines, one agreed room"/>
+      </step>
+      <step icon="envelope" name="the mail" line="don’t share the cell: post to its owner">
+        <blurb>The other road takes the sharing away. The workers never touch the cell: each drops a small note — add one — into a pipe, and the pipe has an owner whose whole job is taking the notes one at a time, in whatever order they arrive, and doing the work alone. Nothing is lost, nothing locks, and no arrival order changes the answer, because one hand holds the cell at every instant, and two stories cannot disagree where there is never a second story. The pipe is not a faster lock. It is the end of sharing, and the notes are messages, exactly like the wire’s — only shorter.</blurb>
+        <door to="x-network" q="A message, chopped, kept until received — now inside one machine"/>
+        <door to="memory" q="The primer of the cell: one latch, one hand"/>
+      </step>
+      <step icon="hands" name="the single hand" line="written once, read forever, or not yet">
+        <blurb>The deepest cure is written into the language itself: a cell that may be written once, by one writer, and never overwritten. Any eye that looks before the writing does not get a wrong answer — it waits. The wait is the agreement: the reader hangs mid-thought until the writer settles the value, then resumes as if nothing had happened. No locks, no keys, no doormen; the meeting’s order no longer matters because nothing is ever revised, only completed. A whole family of languages is built on this one arrangement, and their programs have no races for the same reason the sand has no weather: the storms were made unsayable.</blurb>
+        <door to="x-simulate" q="Never write while reading — the two worlds, swapped wholesale"/>
+        <door to="relations" q="The primer of agreement — facts that fit or wait"/>
+      </step>
+      <step icon="clock" name="the honest orders" line="any meeting allowed, one answer required">
+        <blurb>Once hands can meet in any order, honesty gets a stricter meaning: the program must land the same answer whatever the scheduler does, and the programmer confesses, up front, that the order is not promised. A machine sealed in the sky cannot be debugged at three in the morning; a car’s hundred little machines cannot be stepped through one meeting at a time. So correctness is designed for every interleaving at once — tested on one, then two, then eight — and where any winner will do, the program says so out loud, and takes the first answer home.</blurb>
+        <door to="x-facts" q="All roads at once, any winner honest — the search run in parallel"/>
+        <door to="x-satellite" q="The sealed machine: no one comes to debug, so every order must already agree"/>
+      </step>
+      <bottom>A meeting, a doorman, a mailbox, a single hand, an honest answer: this is how many acts share one world without spoiling it. Underneath, it is time — the order things happen in — and the memory they happen to.</bottom>
+      <door to="time" q="Time — the primer of order itself"/>
+      <door to="memory" q="Memory — the cell, the latch, and the warning in it"/>
+    </trail>
+    <trail id="x-fail" level="1" title="How everything fails" crumb="how everything fails" rung="machine" icon="warn">
+      <intro>Nothing built works perfectly, and the bigger the thing, the truer that is. This is the trail of failure itself: the infinite ways a system can break, the safeguards that break by protecting, and the one law that separates the systems that work from the systems that are merely designed.</intro>
+      <step icon="warn" name="the law of failure" line="a system can fail in an infinite number of ways">
+        <blurb>A system can fail in an infinite number of ways — that is the fundamental theorem, and its corollary is crueler: the mode of failure cannot be read from the structure. The diagram says what the system does when it works; the failure arrives from outside the diagram — a storm, a typo, a late supplier, a tired operator at three in the morning. Two systems built alike fail unalike, and the crucial variable is discovered by accident, years in, at the worst moment. So the honest designer starts from the law: whatever is built will break, and not where the drawing says it will.</blurb>
+        <door to="x-race" q="the bug that needs two workers and one unlucky order — a failure born between the parts, invisible to them"/>
+        <door to="x-clock" q="the drift that breaks a working system from the inside"/>
+      </step>
+      <step icon="box" name="the hidden rot" line="broken, and working anyway">
+        <blurb>The second theorem is worse: any large system is operating most of the time in failure mode — degraded, partial, limping — and the malfunction may not be detectable for long periods, if ever. The user does not see it because the system does not stop; the operator does not see it because the dials watch what the system was designed to do, not what it has quietly stopped doing. And a large system is beyond anyone’s capacity to evaluate: no one holds the whole machine in mind, so no one can certify it whole. Failure is not an exception that arrives one day; it is the weather the system already lives in.</blurb>
+        <door to="x-os" q="the manager — the one room meant to see the whole machine"/>
+        <door to="x-watch" q="the promise of dials that watch what the system has stopped doing"/>
+      </step>
+      <step icon="shield" name="the safeguard that fails" line="the protection becomes the hazard">
+        <blurb>The most dangerous part of a system is the part added to make it safe. When a fail-safe fails, it fails by failing to fail safe: the load-shedding device sheds so eagerly that the rest of the grid is oversupplied and the great generators shut down; the anti-meltdown device causes the very melt it was built for; the reactor’s automatic shutdown cannot even say where the trouble is. Every protection is more system, and more system is more ways to fail — the cure is a patient too. So a safeguard earns double respect: it must work, and its own failure must itself be survivable.</blurb>
+        <door to="x-many" q="the barrier — an agreement that, when it fails, fails by stopping everything at once"/>
+        <door to="x-machine" q="the one design every safeguard borrows — and the thing that must also fail"/>
+      </step>
+      <step icon="bit" name="the simple that works" line="grown from a working simple thing">
+        <blurb>Yet some complex systems work, and the law of their success is older than computers: a complex system that works is invariably found to have evolved from a simple system that worked. The one designed from scratch, whole and perfect, never works and cannot be patched — it must be started over, beginning with a working simple thing. This is not modesty; it is the only road that arrives, because every working part was already working before it was assembled. The sand obeys the law twice over: the universal machine, the simplest complete system there is, and the tower of languages grown on top of it, one working layer at a time.</blurb>
+        <door to="tower" q="the primer of the tower — language grown on language, none of it designed whole"/>
+        <door to="x-written" q="rooms borrowing rooms — the tower, climbed by a real trail"/>
+      </step>
+      <step icon="turn" name="the fallback" line="when it cannot do everything, it does something">
+        <blurb>The working answer is a hierarchy of tasks. The top task is the whole service; each task below it is a smaller promise, easier to keep — reduced, but still worth having. When an error cannot be corrected, the system does not limp on half-broken: it abandons the top task and performs the simpler one. The satellite drops to its safe mode; the phone still sends texts when the map app dies; the airliner keeps flying on what remains. Failure is not the end of the design — it is one of the designed behaviours, met with a smaller promise, kept.</blurb>
+        <door to="x-satellite" q="the sealed machine — the safe mode that must work with no one aboard"/>
+        <door to="x-alive" q="the trail of the walls and the watchers — how the fallback is built"/>
+      </step>
+      <bottom>An infinite number of ways to fail, a safeguard that is one of them, a simplicity that survives, and a smaller promise to keep: this is how systems meet their own failure. Underneath, it is the universal machine — the working simple thing — and the tower grown from it.</bottom>
+      <door to="turing" q="the Turing machine — the working simple system everything else evolved from"/>
+      <door to="tower" q="the tower — the complex, grown one language at a time"/>
+    </trail>
+    <trail id="x-alive" level="1" title="How the whole survives" crumb="how the whole survives" rung="os" icon="pulse">
+      <intro>Every large program contains errors, however carefully it was tested. The honest question is not how to write a perfect program but how to build a whole that keeps its promise while its parts misbehave: walls between the parts, watchers over the workers, and the strange result — a system of parts that all fail, running for years without ever being down.</intro>
+      <step icon="chip" name="the walls" line="one part breaks, only that part breaks">
+        <blurb>The essential problem of fault tolerance is isolation: different programmers write different modules, some correct and some not, and an error in one must not spoil the others. The cure is the oldest boundary in computing — the process, a small walled room with its own memory and no shared keys, where nothing passes the wall except copies, handed across like notes. One room may burn while the others keep working, because they never shared a floor. And the wall must live in the language itself, built before the first bug, not raised after the first fire.</blurb>
+        <door to="x-race" q="share nothing — the mail road, taken to its end"/>
+        <door to="x-os" q="the manager — the rooms, assigned and cleaned up"/>
+      </step>
+      <step icon="envelope" name="the crash as message" line="the failure travels, and is answered elsewhere">
+        <blurb>When a room burns, the others hear of it, because the burn itself is turned into a message: a note saying who died and why, delivered to whoever was set to care. A machine’s death is dressed in the same envelope as a crashed program’s — one uniform way to learn of loss, near or far — so the system never needs two kinds of sorry. And the error is handled not where it happened but somewhere else, by someone else: a strange idea inside one program, and the only idea that survives distribution. Failure, underneath, has become data.</blurb>
+        <door to="x-network" q="a message, chopped, kept until received — even the news of a death"/>
+        <door to="x-facts" q="the answer found by walking facts — and a crash is one of the facts"/>
+      </step>
+      <step icon="scissors" name="let it crash" line="if you cannot do what you wanted, die">
+        <blurb>The slogans sound like surrender and are the opposite: let some other process fix the error; if you cannot do what you wanted, die; do not program defensively. The worker’s code stays clean — no nets, no guessing at recovery, no branch written blind for a failure its author cannot reproduce — because the worker is allowed to fail and someone else is paid to care. Defensive code is the bug’s best hiding place: it swallows the error and limps, corrupting quietly for weeks. The honest program tries, and when it cannot, it stops — loudly, leaving a note — and the recovery lives in another room, written by another hand.</blurb>
+        <door to="x-simulate" q="never written while reading — the world a crash cannot corrupt"/>
+        <door to="x-watch" q="the alarm that knows what rang it — the crash, made visible"/>
+      </step>
+      <step icon="shield" name="the watcher" line="one does the work, another watches it fail">
+        <blurb>So the system is built from two kinds of rooms: workers, which do the job, and supervisors, which watch workers. A supervisor answers no requests and holds no pencils; it waits for the notes that say a worker died, and answers each with a policy — start it again, wait a moment and start it again, start it five times and then give up and report upward. The watchers are watched in turn, a tree of them, small above big, so no failure is ever orphaned, all the way to the root, where the last watcher replaces a whole branch and the phone call is never made. The code that fails and the code that recovers live in different bodies, and neither clutters the other.</blurb>
+        <door to="x-os" q="the manager — keeping the machine busy, and starting it again"/>
+        <door to="recursion" q="the primer of the tree — a watcher of watchers is recursion"/>
+      </step>
+      <step icon="server" name="the unreliable parts" line="every part fails; the whole does not">
+        <blurb>The last wall is geography: a whole computer will die, so the work must live in two. Pairs of processes watch each other the way pairs of computers do, each prepared to take the other’s calls; the warehouse answers from several identical machines so that no machine is ever the only one. The parts are not made reliable — that is the discovery — the parts are assumed unreliable and arranged so their failures cancel. A telephone switch with a million lines of code is run this way, and its downtime is seconds a year: not because nothing failed, but because everything that failed was expected, noticed, and answered by its twin.</blurb>
+        <door to="x-many" q="the barrier and the handout — the warehouse this trail relies on"/>
+        <door to="p-ledger" q="no one in charge — the copies that must agree without a boss"/>
+      </step>
+      <bottom>Walls, a crash that travels, a watcher for every worker, and a twin for every whole: this is how a system keeps its promise while its parts break. Underneath, it is the machine that starts again — one instruction at a time — and the tree the watchers grow.</bottom>
+      <door to="cpu" q="a real machine — the fetch, the decode, and the restart"/>
+      <door to="recursion" q="recursion — the watcher of watchers, all the way down"/>
+    </trail>
+    <trail id="x-copies" level="1" title="How the copies stay one" crumb="how the copies stay one" rung="network" icon="copy">
+      <intro>Almost every service worth using is now many machines wearing one name. This is the trail of that arrangement: the copies that make failure ordinary, the asks that are safe to repeat, the shards that cut the world into owned pieces, and the election that decides, among equals, who decides.</intro>
+      <step icon="cloud" name="the study of failure" line="the design begins with the way things fail">
+        <blurb>Designing a distributed system is, in one author’s phrase, the study of how systems fail: the design begins at the failure and works backwards. The failure arrives from everywhere at once — the request crosses a wire that loses things, lands on a machine that restarts, is answered by a program replaced mid-flight. The answer is not to make each part perfect; it is to arrange ordinary failing parts so the service does not inherit their failures: enough copies that one is always alive, asks that are safe to repeat, and an owner that can be replaced while the work goes on. Nothing in the design is exotic — every piece is a small plain idea, arranged.</blurb>
+        <door to="x-fail" q="the general law — every system fails in more ways than it has parts"/>
+        <door to="x-many" q="the warehouse — split, handout, barrier — the shape being kept alive"/>
+      </step>
+      <step icon="copy" name="the copies" line="one name, many machines behind it">
+        <blurb>The first arrangement is the oldest: several identical workers behind one front door. The door spreads the work across them, and none is indispensable — a machine may die mid-shift and the door never mentions it; new copies are wheeled in while the queue drains. What makes it work is that a copy holds nothing the others lack: any copy can answer any request, because the memory of the conversation lives in a shared store, not inside the worker. A worker that remembers nothing private can be replaced in a heartbeat — and a worker that can be replaced can be allowed to fail.</blurb>
+        <door to="p-store" q="the promise of the shared memory all the copies borrow"/>
+        <door to="x-network" q="one name that must find one live machine — the wire’s oldest promise"/>
+      </step>
+      <step icon="turn" name="the safe repeat" line="asked once or asked again, the same answer">
+        <blurb>A wire that loses things must be allowed to try again, and a retry is only safe if the ask is idempotent: performed once or performed five times, the same answer. Setting a value is safe — the register is five, however many times it is said; counting is not — add one, and a retry buys a second one. So the ask is redesigned until it is safe to repeat: the delivery is at-least-once, and the receiver makes the extra arrivals harmless, remembering which asks it has already answered. The whole system rests on a small stubborn habit — when in doubt, ask again — and the habit is made honest by design, not by luck.</blurb>
+        <door to="x-race" q="two increments become one — the bug that makes counting unsafe to repeat"/>
+        <door to="x-facts" q="the same walk, the same answer — a question that may be asked again for free"/>
+      </step>
+      <step icon="scissors" name="the shards" line="cut the world into pieces, each piece owned">
+        <blurb>When no set of copies can hold the whole world, the world is cut instead: each machine owns one slice of the data — a range of names, a region of the map, a band of accounts — and every ask is routed first to its owner, then answered from memory the owner really has. And when no single slice can answer — a search across everything, a question about all the cells at once — the ask is fanned out to all the shards at once and the answers race home: the first good one is accepted, the stragglers discarded. The cut is chosen with care, for a bad cut makes pieces that talk too much; the fan-out is a search run wide, and any honest winner will do.</blurb>
+        <door to="x-simulate" q="the grid — the sky cut into a lattice of numbered cells, a cut chosen with the same care"/>
+        <door to="p-routes" q="the promise of the route — how an ask finds its owner among the pieces"/>
+      </step>
+      <step icon="clock" name="the elected leader" line="whoever is alive and noticed, leads">
+        <blurb>Some work must be done by exactly one machine at a time: the copy that writes the file, the node that hands out addresses, the process that sets the order. Appointing one is fatal — the appointed dies and takes the office with it — so the system elects instead, and the election has no ballots and no authority: the lease. A leader is simply the copy whose ticket has not yet expired, and the others follow it because they can all see the clock; when it dies, the ticket lapses, and whoever is alive and noticed takes the office. Establishing ownership this way is the hardest part of a reliable distributed system — deciding who decides, without anyone in charge of the deciding.</blurb>
+        <door to="p-ledger" q="one ledger, no double spend — election made unforgeable"/>
+        <door to="time" q="the primer of order — the lease is a timeout with an office attached"/>
+      </step>
+      <bottom>Copies that may fail, asks that may be repeated, shards that may be owned, a leader that may be replaced: this is how one name is worn by many machines. Underneath, it is the memory the copies must agree on — and the time by which they take turns.</bottom>
+      <door to="memory" q="memory — the state the copies keep identical, or agree to split"/>
+      <door to="time" q="time — which copy wrote first, and whose lease has lapsed"/>
+    </trail>
+    <trail id="x-camera" level="1" title="How a camera sees" crumb="how a camera sees" rung="sense" icon="camera">
+      <intro>The image trail ends where the numbers are shown, lamp by lamp; this is the trail of where the numbers come from. Light is caught in a lattice of tiny wells, emptied and measured one row at a time, until the world in front of the lens has become a grid of numbers. The ear has its drum and the eye has its wells: this is the eye’s half of the story, the picture’s missing half.</intro>
+      <step icon="box" name="the well" line="a tiny bucket that light fills">
+        <blurb>A camera’s smallest part is a bucket for light. A well of silicon, struck by a photon, loses an electron to the strike; the electron is held in the well, and the well keeps every one it catches. Brighter light, more strikes, a fuller bucket: the well does not see, it collects, and it holds what it collects as charge, silently, until someone comes to empty it and ask how much. This is the same two-step as the ear’s drum — the world arrives, is caught, and waits to be measured — with light standing in for pressure and silicon standing in for air.</blurb>
+        <door to="x-measure" q="the trick in general — anything caught, held, and read into a number"/>
+        <door to="x-audio" q="pressure, then number — the ear’s two steps, the eye’s two steps"/>
+      </step>
+      <step icon="screen" name="the lattice" line="millions of wells, one per point">
+        <blurb>One well catches one point; a picture needs all of them at once. So the wells are laid out in a strict grid, millions deep, and a lens is set in front to bend the world onto it: every point of the scene falls on its own well, the whole view divided before a single number exists. The two-million-pixel grid of the image trail is this lattice seen from the other side — there it wears lamps, here it wears wells — and the satellite’s whole sky is read the same way, well by well, a picture of the Earth arriving as a page of charges.</blurb>
+        <door to="x-image" q="the same grid, wearing lamps — the half that shows"/>
+        <door to="x-satellite" q="the senses of the sealed machine — a whole sky, read well by well"/>
+      </step>
+      <step icon="stairs" name="the readout" line="emptied and measured, row by row">
+        <blurb>Then the buckets are emptied, in strict order: a row is tipped out, each charge counted and rounded to a number, then the next row. The counting is the measure trail’s ladder in silicon — the charge compared against rungs of known value, landed on the nearest, written down — and the whole grid, millions of wells, is read in a few hundredths of a second, one well at a time, while the next frame gathers. A grid of charges becomes a page of numbers, parked, ready to be shown, stored, or poured down to the ground.</blurb>
+        <door to="x-os" q="millions of wells read one at a time — the switching illusion"/>
+        <door to="p-store" q="where the frame parks until it is needed"/>
+      </step>
+      <step icon="play" name="the colours" line="one filter per well, three numbers per point">
+        <blurb>A well is blind to colour: it counts light, not its shade. So a mosaic of tiny filters is laid over the lattice — red, green, blue, one per well, in a pattern that favours green, because the eye itself favours it. Each well then reports not light but its colour of light, and the missing two of the three at every point are guessed from next door, the neighbours’ numbers averaged in. The eye is flattered twice: once by the green-heavy pattern, once by the honest guess — and the three numbers per point that the image trail lights lamp by lamp are born here, guessed in part, and true enough.</blurb>
+        <door to="p-learning" q="the missing values guessed from their neighbours — the promise of guesses scored and kept"/>
+        <door to="p-drawing" q="the pipeline that turns these numbers back into a picture — the trail of the painting"/>
+      </step>
+      <step icon="camera" name="the honest eye" line="it does not see; it measures">
+        <blurb>The confession: a camera does not see. It measures — and every measure rounds, every well leaks a little, every grid has wells that lie (a stuck pixel, a hot pixel, a mote of dust), and heat adds its own false light to every frame. So the craft is honest about its instrument: dark frames are taken with the lens closed, to learn the heat’s own signature; flat fields are taken of nothing, to learn each well’s private bias; and the camera’s numbers are corrected against the camera before anyone believes them. The most watched sensor in the deck is the satellite’s, whose every frame arrives with its own confession attached.</blurb>
+        <door to="x-fail" q="the sensor as a system: it drifts, it lies a little — failure designed for, frame by frame"/>
+        <door to="x-watch" q="the dark frame, the calibration numbers — the sensor reporting on itself"/>
+      </step>
+      <bottom>A well for light, a lattice of them, a readout one row at a time, a guess for the colours, and a confession: this is how the world becomes the numbers a picture is. Underneath, it is the number each well is emptied into — and the frame of numbers, held.</bottom>
+      <door to="bits" q="the Bit — the spelling of every number the wells give up"/>
+      <door to="memory" q="memory — the frame, held while the next is caught"/>
+    </trail>
+    <trail id="x-clock" level="1" title="How a clock keeps time" crumb="how a clock keeps time" rung="time" icon="clock">
+      <intro>Nothing in a machine knows what a second is. The machine is told, by a thing that swings: a crystal squeezed, ringing like a bell, its swings counted one by one. This is the trail of the telling — the swing, the count, the correction every swing needs, the many beats of one machine, and the treaty that lets the whole world agree on now.</intro>
+      <step icon="wave" name="the swing" line="a thing that repeats without tiring">
+        <blurb>Time enters a machine the way sound enters the ear: as a thing that repeats. A pendulum repeats; a balance wheel repeats; and in every machine made, the repeating thing is a sliver of quartz. Squeezed, it answers with a spark — the piezoelectric effect, a charge that comes and goes with the squeeze — and struck once, it rings like a bell at a pace fixed by its cut: a few million times a second in a computer, 32,768 times in a watch. The swing is chosen because it does not tire and barely drifts: the most regular thing a few cents can buy.</blurb>
+        <door to="x-measure" q="who says when to freeze — the beat every freeze waits on"/>
+        <door to="x-motion" q="the deadline: not fast, but on time — the promise the swing keeps"/>
+      </step>
+      <step icon="clock" name="the count" line="the swings, counted into a second">
+        <blurb>A swing alone is not time; it is only a repeating thing. Time begins when the swings are counted: a small machine of toggling flip-flops divides the ringing, and every 32,768th swing of a watch’s crystal becomes one tick — the second, made rather than found. The clock is thus two devices in one: the swing, which is physics, and the counting, which is a machine — state kept from tick to tick, one flip-flop per step of the count — and neither is a clock without the other. The beat every other trail borrows is manufactured here, in a corner of silicon too small to see.</blurb>
+        <door to="x-choices" q="each swing a yes-or-no — did it arrive? — the fork at the bottom of the count"/>
+        <door to="x-machine" q="the counter is a small machine: state kept from tick to tick"/>
+      </step>
+      <step icon="turn" name="the correction" line="no swing is perfect; the counting is corrected">
+        <blurb>The swing, so regular, is not perfect: heat stretches the crystal, age tires it, and the seconds it makes drift by minutes over weeks. So the counting is corrected from above: the clock is set against a better clock. Internet machines ask a time server; the time servers ask better clocks still; at the top sit atomic standards — and the sky keeps the best of them, the positioning constellation broadcasting a time disciplined to the millionth of a second, from which whole telephone networks take their beat. The correction is a chain of asking, each layer a little truer, ending at an atom that does not tire at all.</blurb>
+        <door to="x-satellite" q="the clock in the sky — the correction the constellation broadcasts"/>
+        <door to="x-network" q="the correction travels like any message: chopped, numbered, kept until received"/>
+      </step>
+      <step icon="chip" name="the many beats" line="one swing, multiplied into every speed">
+        <blurb>One crystal serves a thousand speeds. A few megahertz of ringing are multiplied up — phase-locked loops, each an oscillator chasing an integer multiple of the crystal’s pace — so the core runs at billions of ticks while memory and the ports run slower, all of it divided down from the one swing, none of it free-running. And the parts do not merely share a speed; they share an instant: the beat hands each part its inputs and collects its outputs, tick by tick, so that a machine of a billion transistors can act, between two ticks, as one settled thing. Synchrony is not a mood; it is manufactured.</blurb>
+        <door to="x-os" q="the time slice, counted out by the beat"/>
+        <door to="x-copies" q="the lease — leadership renewed by the clock, lapsed by it"/>
+      </step>
+      <step icon="star" name="the one clock" line="the second is a treaty, and it is kept">
+        <blurb>And why do all machines agree? Because the second itself is a treaty: so many swings of a caesium atom, voted into law, kept by laboratories that lend the world the time, with leap seconds stitched in when the Earth — a worse clock than an atom — disagrees. Every clock in this deck, from the wrist to the most tended clock in the sky, is disciplined toward that one count; the agreement is not found in nature, it is kept, continuously, by correction — and the whole of computing, the beats and the meetings and the timestamp on every log line, leans on the keeping.</blurb>
+        <door to="x-fail" q="the drift that breaks a working system from the inside — met here, at the source"/>
+        <door to="x-watch" q="the timestamp — how a log knows what happened before what"/>
+      </step>
+      <bottom>A swing, a count, a correction, a beat for every part, and a treaty the world keeps: this is how a machine knows what now is. Underneath, it is the gate that remembers a bit — the counter’s smallest step — and the order the ticks were for.</bottom>
+      <door to="gates" q="Gates — the flip-flop: a loop that remembers one bit, and toggles"/>
+      <door to="time" q="Time — the primer of order, which the ticks make sayable"/>
+    </trail>
+    <trail id="x-watch" level="1" title="How it is watched" crumb="how it is watched" rung="os" icon="gauge">
+      <intro>A sealed machine cannot be debugged in person, and a busy one cannot be paused; both must tell on themselves, watched from outside while they run. This is the trail of the telling: dials that report the insides, a log that remembers the order, an alarm that knows what rang it, and the trace that follows one request through many rooms — because to be reliable is to notice the trouble before the customer does.</intro>
+      <step icon="gauge" name="the dials" line="the system reports its own insides">
+        <blurb>The watching begins with confession on a schedule: the system measures its own insides — voltages, temperatures, queue depths, the counts of things done and failed — and sends the numbers home, unprompted, whether or not anyone is looking. The satellite does this across a hundred thousand kilometres: its telemetry points are chosen when it is built, the machine’s whole life judged in advance by how many ways it will have to tell on itself, because no one will ever open the box to look. A dial is the measure trail turned inward: the system as its own phenomenon, read into numbers continuously.</blurb>
+        <door to="x-satellite" q="the ground room drinks the machine’s own numbers — a day of sky, poured home"/>
+        <door to="x-measure" q="measured, rounded, reported — the trick turned inward"/>
+      </step>
+      <step icon="console" name="the log" line="events remembered in order, stamped">
+        <blurb>The dials say how much; the log says what happened, and in what order. Events are appended — never rewritten — each stamped with the time and tagged with whose request it was, so that among thousands of identical lines the one that matters can be found. The volume is tamed by honesty about need: quiet when all is well, verbose only while someone is asking, the levels named — for the chatter of a healthy system is noise, and a logging library is a librarian. At three in the morning, with the system broken and no one able to step through it, the log is the only witness there is.</blurb>
+        <door to="p-store" q="where the day’s log parks until the question is asked"/>
+        <door to="p-ledger" q="a log and a ledger are cousins: append-only, and trusted for it"/>
+      </step>
+      <step icon="warn" name="the alarm" line="a number crosses a line, and someone is told">
+        <blurb>A dial that crosses its line rings: a threshold on a number, an alert with a name, a page sent to a human who may be asleep. The alarm earns its keep by knowing what rang it — the threshold says the symptom, the log says the story — and by its own honesty: an alarm that cries wolf is worse than none, training everyone to ignore the night, so the lines are drawn to be crossed rarely, and meant. This is the doorman’s craft turned to the whole system: watching the door, saying who came, waking the house only when the house needs waking.</blurb>
+        <door to="x-alive" q="the watcher’s other sense — the crash is a message, and the page is its echo"/>
+        <door to="x-os" q="the manager’s escalation — someone is told, and the telling is designed"/>
+      </step>
+      <step icon="map" name="the trace" line="one request, followed through many rooms">
+        <blurb>One click crosses twenty machines before it answers, and the three-in-the-morning question is: which of them was slow? The trace answers: the request is stamped at every hop — a span begun here, ended there — and the spans are stitched into a journey, one line of story crossing the whole fleet. The trace rides the same rails as any message, and what it reports is the message’s own biography; the dials said how the many were doing on average, but the customer was never an average, and the trace is how the system stops debugging a crowd and starts debugging the one walk that failed.</blurb>
+        <door to="x-network" q="hop to hop — the trace rides the same rails as the message"/>
+        <door to="x-copies" q="the fleet of copies: which of the many was the slow one — the trace answers for the fleet"/>
+      </step>
+      <step icon="shield" name="the watched watch" line="the watcher is a system too">
+        <blurb>The last honesty is inward again: the watch is itself a system. Its dials are dials — the monitor is monitored, the log about logging is a log — and the watching burns the same cycles and holds the same memory as the work it watches, failing in all the same ways. And the dials have a blind spot the failure trail names: they watch what the system was designed to do, not what it has quietly stopped doing, so the watchers are redesigned in their turn. The ground room watches the satellite; something watches the ground room; the recursion has no bottom, and the honest design says so out loud.</blurb>
+        <door to="x-fail" q="the hidden rot — the dials miss what the system stopped doing, and the rot watches back"/>
+        <door to="x-machine" q="the watching is a machine too: it burns cycles, holds memory, fails like any other"/>
+      </step>
+      <bottom>Dials, a log, an alarm that knows what rang it, a trace through the many rooms, and the watching of the watcher: this is how a system tells on itself so that it can be saved. Underneath, it is the memory that keeps the log — and the numbers every dial is made of.</bottom>
+      <door to="memory" q="Memory — the log: a memory that only appends"/>
+      <door to="bits" q="the Bit — the spelling of every dial"/>
+    </trail>
+  </trails>

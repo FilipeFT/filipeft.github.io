@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================
+     data/primers.xml — the primers (level 2): the fundamentals. Each has its
+     section in the template and its view in a map band.
+     Governed by deck.xsd; the build validates this part
+     alone (build.py with the part option) and all parts
+     assembled (the default build).
+     ================================================================ -->
+  <primers>
+    <primer id="bits" level="2" icon="bit" label="the bit"/>
+    <primer id="gates" level="2" icon="fork" label="gates"/>
+    <primer id="adders" level="2" icon="squeeze" label="arithmetic"/>
+    <primer id="memory" level="2" icon="ram" label="memory"/>
+    <primer id="turing" level="2" icon="turn" label="the Turing machine"/>
+    <primer id="cpu" level="2" icon="clock" label="a real machine"/>
+    <primer id="recursion" level="2" icon="box" label="recursion"/>
+    <primer id="rivers" level="2" icon="rivers" label="two rivers"/>
+    <primer id="relations" level="2" icon="match" label="relations"/>
+    <primer id="time" level="2" icon="clock" label="time"/>
+    <primer id="tower" level="2" icon="tower" label="the tower"/>
+  </primers>

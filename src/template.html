@@ -1,0 +1,2021 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Everything to bits</title>
+<meta name="description" content="Pick a card — playing games, delivering food, watching movies — and tap the parts down to bits, gates, memory, programs, and the machine itself.">
+<style>
+:root{
+  --ink:#111111;
+  --paper:#fffdf6;
+  --accent:#b3002d;
+  --hair:#ddd6c4;
+  --faint:#7c7668;
+  --code-bg:#f5f2e8;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;color:var(--ink);background:var(--paper);
+  font:400 20px/1.6 Georgia,"Iowan Old Style","Times New Roman",serif;
+  -webkit-font-smoothing:antialiased;
+}
+/* ---------- layout ---------- */
+.wrap{max-width:1120px;margin:0 auto;padding:0 5vw}
+h1{font-size:52px;line-height:1.08;font-weight:400;margin:0 0 .2em}
+h2{font-size:33px;font-weight:400;line-height:1.15;margin:2.8em 0 .4em}
+p{margin:0 0 1.2em}
+ul{padding-left:1.35em}
+li{margin:.35em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--hair);margin:3em 0}
+/* ---------- margin notes (the Tufte nod) ---------- */
+.sidenote{font-size:14.5px;line-height:1.5;color:#4c473c}
+.sidenote .sn{
+  display:inline-block;color:var(--accent);font:700 12px var(--sans);
+  vertical-align:super;margin-right:4px;
+}
+sup.snref{color:var(--accent);font:700 11px var(--sans)}
+@media (min-width:1200px){
+  .sidenote{
+    float:right;clear:right;width:250px;margin-right:-330px;margin-top:.15em;
+  }
+}
+@media (max-width:1199px){
+  .sidenote{
+    display:block;margin:1.1em 0;padding:.55em .95em;
+    border-left:2px solid var(--hair);background:var(--code-bg);border-radius:0 6px 6px 0;
+  }
+}
+/* ---------- code ---------- */
+pre{
+  background:var(--code-bg);border:1px solid var(--hair);border-radius:8px;
+  padding:14px 18px;overflow-x:auto;margin:1.2em 0;
+  font:15px/1.55 var(--mono);
+}
+code{font-family:var(--mono);font-size:.8em;background:var(--code-bg);padding:.08em .35em;border-radius:4px}
+pre code{background:none;padding:0}
+#rec-code .hl{background:#f3d9dc;border-radius:3px;transition:background .25s}
+#rec-code .hl.active{background:var(--accent);color:#fff}
+/* ---------- figures & controls ---------- */
+figure.demo{
+  border:1px solid var(--hair);border-radius:8px;background:#ffffff;
+  padding:20px 22px 16px;margin:2em 0;box-shadow:0 1px 4px rgba(60,50,20,.05);
+}
+figure.demo figcaption{
+  font:400 14px/1.5 var(--sans);color:var(--faint);margin-top:14px;
+  border-top:1px solid var(--hair);padding-top:10px;
+}
+.btn{
+  font:600 13px var(--sans);letter-spacing:.02em;color:var(--ink);
+  background:#fff;border:1px solid #9a927e;border-radius:999px;
+  padding:6px 16px;cursor:pointer;margin:0 4px 6px 0;transition:all .12s;
+}
+.btn:hover{border-color:var(--ink)}
+.btn:active{transform:translateY(1px)}
+.chip{border-radius:999px}
+.chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.controls{margin:14px 0 2px}
+/* ---------- the transport: play / step / stop ---------- */
+.transport{display:inline-flex;margin:14px 0 2px}
+#race-controls .transport{margin:0 0 6px 8px}
+.tbtn{display:inline-flex;align-items:center;gap:7px;font:600 13px var(--sans);letter-spacing:.02em;color:var(--ink);background:#fff;border:1px solid #9a927e;padding:6px 16px;cursor:pointer;margin:0;transition:all .12s}
+.transport .tbtn+.tbtn{margin-left:-1px}
+.transport .tbtn:first-child{border-radius:999px 0 0 999px}
+.transport .tbtn:last-child{border-radius:0 999px 999px 0}
+.tbtn:hover{border-color:var(--ink)}
+.tbtn:active{transform:translateY(1px)}
+.tbtn.running{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tbtn .ti{display:inline-flex}
+.tbtn svg{display:block;fill:currentColor}
+.decodeline{
+  font:13.5px/1.5 var(--mono);color:#4c473c;background:var(--code-bg);
+  border-radius:6px;padding:9px 13px;margin-top:12px;min-height:2.4em;
+}
+/* ---------- gates ---------- */
+svg text{font:12px var(--sans);fill:#4c473c}
+.gbody{fill:#fff;stroke:var(--ink);stroke-width:2}
+.garc{fill:none;stroke:var(--ink);stroke-width:2}
+.gbubble{fill:#fff;stroke:var(--ink);stroke-width:2}
+.w0{stroke:#b9b2a0;stroke-width:2.5}
+.w1{stroke:var(--accent);stroke-width:3}
+.pad{fill:#fff;stroke:#9a927e;stroke-width:1.5;cursor:pointer}
+.pad:hover{stroke:var(--ink)}
+.pad.on{fill:var(--accent);stroke:var(--accent)}
+.pad text{fill:#4c473c}
+.pad.on text{fill:#fff}
+.lamp{fill:#fff;stroke:#b9b2a0;stroke-width:2}
+.lamp.on{fill:var(--accent);stroke:var(--accent)}
+table.tt{border-collapse:collapse;margin:8px 0 0;font:14px/1.4 var(--mono)}
+table.tt th{font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:4px 12px;border-bottom:1px solid var(--hair)}
+table.tt td{padding:4px 12px;text-align:center;border-bottom:1px solid #efe9da}
+table.tt tr.cur td{background:#f3d9dc}
+table.tt td.hot{color:var(--accent);font-weight:700}
+.mini-tbls{display:flex;flex-wrap:wrap;gap:26px}
+.mini-tbls h4{font:600 13px var(--mono);margin:0 0 2px;color:#4c473c}
+/* ---------- binary widget ---------- */
+.bin-row{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.bin-out{font-size:42px;line-height:1;margin:14px 4px 2px}
+.bin-exp{font:14px var(--mono);color:var(--faint)}
+.bitcell{
+  width:46px;height:46px;border:1px solid #9a927e;border-radius:8px;background:#fff;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font:700 18px var(--mono);padding:0;transition:all .12s;
+}
+.bitcell:hover{border-color:var(--ink)}
+.bitcell.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.bitlabel{font:600 11px var(--sans);color:var(--faint);text-align:center;margin-top:3px}
+/* ---------- adder ---------- */
+.adder{display:grid;grid-template-columns:repeat(4,58px 32px) 60px;gap:6px 0;justify-content:center;align-items:center;margin-top:6px}
+.adder .place{font:600 11px var(--sans);color:var(--faint);text-align:center;align-self:end;padding-bottom:2px}
+.adder .blank{}
+.adder .rowtag{font:600 13px var(--mono);color:var(--faint);text-align:center;padding-left:6px}
+.fa-box{
+  border:1px solid var(--ink);border-radius:8px;text-align:center;padding:4px 0 6px;background:#fff;
+}
+.fa-box .fa-name{font:600 9px var(--sans);letter-spacing:.1em;color:var(--faint)}
+.fa-box .fa-sum{font:700 22px var(--mono);line-height:1.1}
+.fa-box .fa-tiny{font:11px var(--mono);color:#4c473c}
+.carry-chip{
+  width:24px;height:24px;border-radius:50%;margin:0 auto;
+  display:flex;align-items:center;justify-content:center;
+  font:700 12px var(--mono);border:1px solid #b9b2a0;background:#fff;color:#b9b2a0;
+}
+.carry-chip.one{background:var(--accent);border-color:var(--accent);color:#fff}
+#adder-eq{font:15px var(--mono);text-align:center;margin-top:16px;color:#4c473c}
+/* ---------- latch ---------- */
+#latch-note{font:14px var(--mono);color:#4c473c;margin-top:10px;min-height:1.5em}
+/* ---------- turing machine ---------- */
+.tape{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.tcell{
+  width:38px;height:44px;border:1px solid #9a927e;border-radius:6px;background:#fff;
+  display:flex;align-items:center;justify-content:center;font:700 20px var(--mono);position:relative;
+}
+.tcell.blank{color:#b9b2a0}
+.tcell.current{border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(179,0,45,.12)}
+.tcell.current::before{content:"▼";position:absolute;top:-20px;left:11px;color:var(--accent);font-size:13px}
+.tm-state{
+  display:inline-block;font:700 13px var(--mono);border:1px solid var(--ink);border-radius:6px;
+  padding:3px 10px;background:#fff;margin-right:10px;
+}
+.tm-state.halted{background:var(--accent);color:#fff;border-color:var(--accent)}
+table.rules{border-collapse:collapse;font:13px/1.4 var(--mono);margin-top:12px}
+table.rules th{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);padding:4px 10px;border-bottom:1px solid var(--hair)}
+table.rules td{padding:4px 10px;text-align:center;border-bottom:1px solid #efe9da}
+table.rules tr.cur td{background:#f3d9dc}
+/* ---------- cpu ---------- */
+.cpu-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:760px){.cpu-grid{grid-template-columns:1.25fr 1fr}}
+.cpu-grid > div{overflow-x:auto}
+table.listing{border-collapse:collapse;font:13.5px/1.5 var(--mono);width:100%}
+table.listing th{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);padding:4px 8px;border-bottom:1px solid var(--hair);text-align:left}
+table.listing td{padding:4px 8px;border-bottom:1px solid #efe9da;white-space:nowrap}
+table.listing tr.cur td{background:#f3d9dc}
+table.listing td.num{text-align:right;font-weight:700}
+table.listing td.cmt{color:var(--faint);font-size:12px}
+table.listing td.data, table.listing span.data{color:#1c6e3c}
+.regs{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+.reg{border:1px solid var(--hair);border-radius:8px;padding:6px 14px;background:#fff}
+.reg .rn{font:600 10px var(--sans);letter-spacing:.08em;color:var(--faint);text-transform:uppercase}
+.reg .rv{font:700 22px var(--mono);line-height:1.1}
+.outbox{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;min-height:34px;align-items:center}
+.outchip{border:1px solid var(--accent);color:var(--accent);border-radius:6px;font:700 16px var(--mono);padding:2px 10px}
+.outlabel{font:600 10px var(--sans);letter-spacing:.08em;color:var(--faint);text-transform:uppercase;margin-right:4px}
+/* ---------- recursion ---------- */
+.rec-grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media (min-width:820px){.rec-grid{grid-template-columns:1fr 1fr}}
+.rec-stack-label{font:600 10px var(--sans);letter-spacing:.08em;color:var(--faint);text-transform:uppercase;margin-bottom:6px}
+.rec-stack{display:flex;flex-direction:column;gap:6px;min-height:280px;justify-content:flex-start}
+.frame{
+  border:1px solid var(--ink);border-radius:8px;background:#fff;padding:7px 13px;
+  display:flex;justify-content:space-between;gap:12px;font:14px var(--mono);
+}
+.frame .fn{font-weight:700}
+.frame .fw{color:var(--faint);font-size:12.5px}
+.frame.bedrock{border-style:dashed;border-color:var(--accent)}
+.frame.new{animation:pop .25s ease-out}
+@keyframes pop{from{transform:translateY(-8px);opacity:0}to{transform:none;opacity:1}}
+.ribbon{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;min-height:34px;align-items:center}
+.valchip{border:1px solid #1c6e3c;color:#1c6e3c;border-radius:6px;font:700 15px var(--mono);padding:2px 10px}
+/* ---------- views: deck, systems, primers ---------- */
+.hidden{display:none}
+.view.primer,.view.system{max-width:680px;margin:0 auto}
+#topbar{
+  position:sticky;top:0;z-index:40;background:rgba(255,253,246,.94);
+  border-bottom:1px solid var(--hair);backdrop-filter:blur(4px);
+}
+#topbar .inner{
+  max-width:1120px;margin:0 auto;padding:9px 5vw;display:flex;align-items:center;gap:16px;
+  font:600 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
+}
+#back-btn{font:600 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:#fff;border:1px solid #9a927e;border-radius:999px;padding:7px 14px;cursor:pointer}
+#back-btn:hover{border-color:var(--ink)}
+#crumb{flex:1;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#home-link{color:var(--accent);text-decoration:none;cursor:pointer}
+#home-link:hover{color:var(--ink)}
+/* ---------- the deck ---------- */
+header .overline{font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:3.2em 0 0}
+.subtitle{font-size:22px;font-style:italic;color:var(--faint);margin:0 0 1.6em}
+.deck{display:grid;grid-template-columns:1fr;gap:16px;margin:2em 0 0}
+@media (min-width:760px){.deck{grid-template-columns:repeat(3,1fr)}}
+.card{
+  display:block;text-align:left;border:1px solid #9a927e;border-radius:12px;background:#fff;
+  padding:24px 22px 20px;cursor:pointer;font:inherit;color:inherit;
+  transition:border-color .12s, box-shadow .12s;
+}
+.card:hover{border-color:var(--ink);box-shadow:0 3px 14px rgba(60,50,20,.12)}
+.card:active{transform:translateY(1px)}
+.card .c-ic{display:block;color:var(--accent);margin-bottom:14px}
+.card .c-name{font:700 13px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.card .c-q{display:block;font:400 20px/1.35 Georgia,serif;margin-top:8px}
+.card .c-hint{display:block;font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:16px}
+/* ---------- the fundamentals ---------- */
+.fund{margin-top:3.2em;border-top:1px solid var(--hair);padding-top:1.6em}
+.fund h3{font-size:24px;font-weight:400;margin:0 0 .2em}
+/* the map's own styles live in fund.css, inlined here by the build
+   (the same module source the isolated map build loads) */
+/*__FUND_CSS__*/
+/* ---------- the systems: a spine of parts ---------- */
+.system h2,.explainer h2{margin-top:1.4em}
+.sys-how{font:15px/1.5 var(--sans);color:var(--faint)}
+.spine{position:relative;margin:1.8em 0;max-width:600px}
+.spine::before{content:"";position:absolute;left:27px;top:31px;bottom:31px;border-left:2px solid var(--hair)}
+.spart{position:relative;margin:0 0 8px}
+.sp-head{display:flex;align-items:center;gap:15px;width:100%;text-align:left;background:none;border:0;padding:4px 0;cursor:pointer;font:inherit;color:inherit}
+.sp-ic{flex:0 0 54px;height:54px;border-radius:50%;background:#fff;border:1px solid #9a927e;display:flex;align-items:center;justify-content:center;color:var(--ink);position:relative;z-index:1;transition:border-color .12s}
+.sp-head:hover .sp-ic{border-color:var(--ink)}
+.sp-txt{min-width:0}
+.sp-name{display:block;font:700 14px var(--sans);letter-spacing:.03em;color:var(--ink)}
+.sp-line{display:block;font:400 13.5px/1.4 var(--sans);color:var(--faint);margin-top:2px}
+.sp-tw{margin-left:auto;color:var(--faint);font:13px var(--sans);transition:transform .15s}
+.spart.open .sp-tw{transform:rotate(180deg)}
+.rung{display:inline-block;font:700 9.5px var(--sans);letter-spacing:.15em;text-transform:uppercase;color:#a29370;border:1px solid var(--hair);border-radius:999px;padding:2px 8px;margin:0 8px 4px 0;vertical-align:1px}
+h2 .rung{margin-right:10px}
+.sp-body{display:none;margin:2px 0 8px 69px;padding-bottom:6px}
+.spart.open .sp-body{display:block}
+.sp-body p{font-size:16px;line-height:1.55;margin:0 0 .8em}
+.doors{display:flex;flex-wrap:wrap;gap:4px 18px;margin:14px 0 2px}
+/* the door component's styles live in fund.css with the map, its
+   other home — inlined above by the build */
+.sys-bottom{margin:1.8em 0 0;padding:16px 20px;border:1px dashed #b9b2a0;border-radius:10px;max-width:600px}
+.sys-bottom p{font-size:16px;line-height:1.55;margin:0 0 .9em}
+@media(max-width:600px){
+  h1{font-size:38px}h2{font-size:27px}.subtitle{font-size:19px}
+  .card .c-q{font-size:18px}
+}
+/* ---------- two rivers ---------- */
+blockquote.koan{
+  margin:1.6em 0;padding:.4em 0 .4em 1.2em;border-left:3px solid var(--accent);
+  font-style:italic;font-size:19px;color:#4c473c;
+}
+blockquote.koan .src{display:block;margin-top:.6em;font:400 13px var(--sans);font-style:normal;color:var(--faint)}
+table.mirror{border-collapse:collapse;width:100%;margin:1.2em 0;font-size:15.5px}
+table.mirror th{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);padding:5px 10px;border-bottom:1px solid var(--hair);text-align:left}
+table.mirror td{padding:8px 10px;border-bottom:1px solid #efe9da;vertical-align:top;line-height:1.5}
+table.mirror td.l, table.mirror td.f{font:13.5px var(--mono)}
+table.mirror td.s{font-style:italic;color:#4c473c}
+.forth-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:760px){.forth-grid{grid-template-columns:180px 1fr}}
+.forth-stack{display:flex;flex-direction:column;gap:4px;min-height:150px;border:1px dashed #b9b2a0;border-radius:8px;padding:8px;align-items:center}
+.fchip{border:1px solid var(--ink);border-radius:6px;font:700 15px var(--mono);padding:2px 14px;background:#fff}
+/* the FORTH keypad: calculator-shaped, dictionary on top */
+.fwords{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0}
+.fwords .btn{margin:0}
+.fkeys{display:grid;grid-template-columns:repeat(4,minmax(58px,68px));gap:6px;margin-top:10px}
+.fkeys .btn{margin:0;padding:6px 4px;height:46px;font-size:15px}
+.fkeys .btn.op{color:var(--accent);border-color:#c98b97}
+.fkeys .btn.eq{background:var(--accent);border-color:var(--accent);color:#fffdf6}
+.fkeys .btn.zero{grid-column:span 2}
+.dict-line{font:13px var(--mono);background:var(--code-bg);padding:6px 10px;border-radius:6px;margin-top:10px}
+.cons{display:flex;flex-wrap:wrap;gap:0;align-items:center;margin-top:10px;min-height:56px}
+.ccell{display:flex;border:1px solid var(--ink);border-radius:6px;overflow:hidden;background:#fff}
+.ccell .car{padding:7px 13px;min-width:88px;text-align:center;font:600 15px var(--mono)}
+.ccell .cdr{padding:7px 11px;border-left:1px solid var(--ink);color:#b9b2a0;font:15px var(--mono)}
+.carrow{font:17px var(--mono);color:var(--faint);padding:0 7px}
+.cnil{font:15px var(--mono);color:var(--faint);padding:7px 2px}
+/* ---------- relations (the third way) ---------- */
+.qlabel{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-right:10px}
+.pl-board{border:1px solid var(--hair);border-radius:10px;background:#fff;overflow:hidden;margin:14px 0 0}
+.pl-zone{padding:13px 18px 11px}
+.pl-zone+.pl-zone{border-top:1px solid var(--hair)}
+.pl-zlabel{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+.pl-kb{font:13px/1.9 var(--mono);color:#4c473c;overflow-x:auto}
+.pl-kb .kb-cols{columns:2 170px}
+.pl-kb div{padding:0 8px;border-radius:5px;white-space:nowrap}
+.pl-kb div.cur{background:#f3d9dc}
+.pl-kb .kbhead{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:5px 0 2px;padding-left:0}
+.pl-trail{background:var(--code-bg);border-radius:8px;padding:10px 12px;min-height:170px;max-height:250px;overflow-y:auto;font:12.5px/1.8 var(--mono);color:#4c473c}
+.pl-trail .ln{white-space:normal;overflow-wrap:break-word}
+.pl-trail .ln.ok{color:#1c6e3c}
+.pl-trail .ln.ok .as{color:var(--faint)}
+.pl-trail .ln.no{color:#b9b2a0}
+.pl-trail .ln.back{color:var(--faint);font-style:italic}
+.pl-trail .ln.sol{color:var(--accent);font-weight:700}
+.pl-trail .ln.end{color:#4c473c;font-weight:600}
+.pl-trail .hint{font-style:italic;color:var(--faint)}
+.pl-answers{display:flex;gap:8px;flex-wrap:wrap;align-items:center;min-height:46px}
+.pl-answers .ans{border:1px solid var(--accent);color:var(--accent);border-radius:6px;font:700 15px var(--mono);padding:3px 12px}
+.pl-answers .pl-none{font:12.5px var(--mono);color:var(--faint);font-style:italic}
+.pl-answers .pl-count{font:600 12px var(--sans);color:var(--faint);margin-left:auto}
+.pl-runbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:12px 0 2px}
+.pl-runbar .transport{margin:0}
+.pl-status{flex:1 1 240px;font:13px/1.5 var(--mono);color:#4c473c;min-height:1.4em}
+#pl-queries .btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+/* ---------- time (concurrency) ---------- */
+.race-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:760px){.race-grid{grid-template-columns:1fr 1.15fr 1fr}}
+.race-col,.race-mid{border:1px solid var(--hair);border-radius:8px;padding:10px 14px;background:#fff;min-height:150px}
+.rc-label{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.race-prog{font:13px/1.9 var(--mono);color:#4c473c}
+.race-prog div{padding:0 8px;border-radius:5px;white-space:nowrap}
+.race-prog div.cur{background:#f3d9dc}
+.race-prog div.did{color:#1c6e3c}
+.regrow{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.regrow .rl{font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.race-cell{font:700 46px/1.1 var(--mono);color:#4c473c;text-align:center;margin-top:18px}
+.pipe{display:flex;gap:6px;min-height:44px;align-items:center;justify-content:center;flex-wrap:wrap;border:1px dashed #b9b2a0;border-radius:8px;padding:6px}
+.pipe .msg{border:1px solid var(--accent);color:var(--accent);border-radius:6px;font:700 14px var(--mono);padding:2px 10px}
+.pipe .pipe-empty{font:12.5px var(--mono);color:var(--faint);font-style:italic}
+.ownerbox{border:1px solid var(--ink);border-radius:8px;padding:10px 14px;margin-top:12px}
+.ownerbox .race-cell{margin-top:10px}
+#race-controls .btn[disabled]{opacity:.4;cursor:default}
+/* ---------- tower ---------- */
+.tower-svg{width:100%;height:auto;max-width:680px;display:block;margin:1.5em auto}
+/* ---------- colophon ---------- */
+.colophon{font-size:15px;color:#4c473c;font-style:italic;border-top:1px solid var(--hair);margin-top:4em;padding-top:1em}
+footer{padding-bottom:80px}
+</style>
+</head>
+<body>
+<nav id="topbar"><div class="inner">
+  <button id="back-btn" class="hidden">← back</button>
+  <span id="crumb">the deck</span>
+  <a id="home-link" role="button" tabindex="0">⌂ deck</a>
+</div></nav>
+
+<div class="wrap">
+
+<section class="view" id="deck" data-title="the deck">
+<header>
+  <p class="overline">A deck of doors into the machine</p>
+  <h1>Everything to bits</h1>
+  <p class="subtitle">Something your computers already do, walked all the way down to the sand.</p>
+  <p>A computer is a machine that follows instructions — exactly, and at absurd speed. Each card opens on a thing one of your computers already does for you; every part opens a trail that shows, step by step, how the thing is done — and the trails branch, so one question leads to another at your own pace. Follow them as far as curiosity carries you, and step back to the deck whenever you like. There is no order here, and no course — though whatever the thing, every walk has the same shape.</p>
+</header>
+
+<div class="deck" id="deck-cards"></div>
+
+<section class="fund">
+  <h3>Underneath it all</h3>
+  <p>Every trail above, followed far enough down, lands on one of these. Each is a self-contained primer; they are not waiting to be read in order, they are waiting to be needed.</p>
+  <p class="sys-how">The territory beneath the stories, drawn from the model, the one structure the whole deck is checked against. The strata run top to bottom, one zoom deeper each storey: what a person sees; the boundary where the world crosses into data and data crosses back; machines together; one machine, at work; the words and numbers inside — then the fork: the abstract computers on the left, the machine as built on the right, opening into its components and ending in the bedrock, while the left side bottoms in mathematics itself, nothing drawn beneath it. One line per road that descends exactly one storey; a road that climbs, runs level, or skips a storey is walked in the views, never drawn here. The stories themselves are the cards above; the grey circles are paths still to come, and every full circle opens its view.</p>
+  <div class="dag" id="fund-dag"></div>
+</section>
+</section>
+
+<section class="view hidden system" id="games" data-title="playing games">
+  <h2>Playing games</h2>
+  <p>You press a button, and the world on the screen answers — sixty times a second, wherever you steer it. Nothing about that is magic, and every part of the trail has a name. This is the walk, from your thumb to the screen.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
+  <div class="spine" id="games-parts"></div>
+</section>
+
+<section class="view hidden system" id="food" data-title="delivering food">
+  <h2>Delivering food</h2>
+  <p>A few taps on a phone, and half an hour later a meal arrives at the door. A surprising amount of computing lives in between those two moments. This is the trail, from your finger to the doorbell.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
+  <div class="spine" id="food-parts"></div>
+</section>
+
+<section class="view hidden system" id="movies" data-title="watching movies">
+  <h2>Watching movies</h2>
+  <p>The film is not inside your television. It arrives continuously, as numbers, and the television paints it — sixty times a second, wherever you sit. This is the trail, from the studio to your living room.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
+  <div class="spine" id="movies-parts"></div>
+</section>
+
+<section class="view hidden system" id="weather" data-title="forecasting the weather">
+  <h2>Forecasting the weather</h2>
+  <p>You ask your phone about tomorrow, and a little sun answers. That sun was computed, hours before, from millions of measurements of the air and a warehouse-sized machine walking arithmetic. This is the trail, from the whole sky to the icon in your pocket.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
+  <div class="spine" id="weather-parts"></div>
+</section>
+
+<section class="view hidden system" id="gps" data-title="finding where you are">
+  <h2>Finding where you are</h2>
+  <p>You ask your phone where it is, and a blue dot answers on a map. The dot is computed, from whispers sent down by machines falling around the Earth, and it is arithmetic all the way. This is the trail, from the sky to the dot.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
+  <div class="spine" id="gps-parts"></div>
+</section>
+
+<section class="view hidden system" id="launches" data-title="getting to orbit">
+  <h2>Getting to orbit</h2>
+  <p>A rocket is lit, and minutes later a sealed machine is falling around the Earth, staying up by never landing. The launch is the bridge between the two, and it is the whole deck in one afternoon: senses, lists, arithmetic, fire, and forks that can say no. This is the trail, from the pad to the fall.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
+  <div class="spine" id="launches-parts"></div>
+</section>
+
+<section class="view hidden system" id="chat" data-title="talking to a machine">
+  <h2>Talking to a machine</h2>
+  <p>You ask it a question, and it answers in sentences — with no one, anywhere, having written the answer. Nothing about that is magic, and every part of the trail has a name. This is the walk, from your words to the arithmetic underneath.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
+  <div class="spine" id="chat-parts"></div>
+</section>
+
+<!-- ================================================================ bits -->
+<section class="view hidden primer" id="bits" data-title="the bit">
+<h2>The Bit</h2>
+
+<p>A computer is a machine of two states. A voltage is high or it is low. A switch is closed or it is open. A magnet points north or it points south. The two states are written <strong>0</strong> and <strong>1</strong>, and each such digit is called a <em>bit</em>. That is the entire alphabet. Everything else, numbers, music, this sentence, is arrangement. The machines you own — the phone, the console, the television — are built of nothing else.</p>
+
+<p>Below, five switches. Click them and count.</p>
+
+<figure class="demo">
+  <div class="bin-row" id="bin-row"></div>
+  <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end">
+    <div>
+      <div class="bin-out" id="bin-out">0</div>
+      <div class="bin-exp" id="bin-exp"></div>
+    </div>
+    <div class="bin-exp" style="max-width:300px">each switch is worth twice its neighbour, because the first thing a second bit buys you is <em>another copy of everything you already had</em></div>
+  </div>
+  <figcaption>Fig. 1 — Five bits. With n bits you can name 2ⁿ different things; five get you 32. A modern machine does the same with a few billion.</figcaption>
+</figure>
+
+<p>The places are worth 1, 2, 4, 8, 16, each twice the one to its right. The numeral <code>10101</code> is not a mystical string; it is 16&nbsp;+&nbsp;4&nbsp;+&nbsp;1&nbsp;=&nbsp;21 written in the only alphabet the machine has.<sup class="snref">1</sup></p>
+<span class="sidenote"><span class="sn">1</span>Binary numerals are older than computers by a comfortable margin: Leibniz worked the arithmetic out in 1679 and admired how neatly it expressed creation — everything out of nothing, one sufficing.</span>
+
+<p>One bit says little. Two bits can be related: both are 1, at least one is 1, they disagree. A device that answers such questions about its inputs is a <em>logic gate</em>, and it has a primer of its own.</p>
+
+</section>
+
+<!-- ================================================================ gates -->
+<section class="view hidden primer" id="gates" data-title="gates">
+<h2>Gates: the whole vocabulary</h2>
+
+<p>A gate is a few pieces of carefully poisoned sand, a transistor or four, that answers one question about its input bits. Six kinds are worth knowing. The wire below turns red when it carries a 1; the pads take clicks, and so do the buttons.</p>
+
+<figure class="demo">
+  <div class="controls" id="gate-chips"></div>
+  <div id="gate-svg"></div>
+  <div class="controls" id="gate-inputs"></div>
+  <table class="tt" id="gate-table"></table>
+  <figcaption>Fig. 2 — The gate playground. Six gates, one picture, one truth table: the complete behavioural vocabulary of Boolean logic. Everything else in this page is made of these.</figcaption>
+</figure>
+
+<p><strong>XOR</strong> answers <em>exactly one of you?</em> — addition with the carrying withheld, 1&nbsp;+&nbsp;1 leaves 0 and a debt. <strong>NAND</strong>, <em>not both</em>, is the gate physics likes best; it goes to work in the adder primer.<sup class="snref">2</sup></p>
+<span class="sidenote"><span class="sn">2</span>De Morgan’s laws are the working hand’s pocket knife: invert and swap AND↔OR — <code>not (a and b)</code> is <code>(not a) or (not b)</code>. This is why one gate can impersonate all the others, and why you only ever need to stock one part in the parts bin.</span>
+
+<p>Real gates are not instant. Signals take picoseconds to cross, and the sand runs warm. The latch, the clock, the ripple of the adder further on: all of it engineering <em>with</em> that sloppiness rather than against it. From here on, though, ideal gates — honest, immediate, tireless.</p>
+
+</section>
+
+<!-- ================================================================ adders -->
+<section class="view hidden primer" id="adders" data-title="arithmetic">
+<h2>One gate to rule them all — and then, arithmetic</h2>
+
+<p>The gate primer’s toolbox is overstocked: one gate is enough. NAND alone can impersonate all the others. Tie its two inputs together and it becomes NOT. Feed a NAND’s output to both inputs of a second NAND and you get AND. By De Morgan’s rules, three NANDs make an OR. The tables below are computed live by the same gate definitions that draw Fig.&nbsp;2:</p>
+
+<figure class="demo">
+  <div class="mini-tbls" id="nand-tbls"></div>
+  <figcaption>Fig. 3 — Three impostures. Each table on the right is produced by the recipe above it, using nothing but NAND. In real chips NAND is also the cheapest gate to etch — four transistors — which is why it became the brick of the digital world.</figcaption>
+</figure>
+
+<p>Now arithmetic. Add two bits <code>a</code> and <code>b</code>: the answer’s ones-column is <code>XOR(a,b)</code>, and the carry is <code>AND(a,b)</code>. That two-gate gadget is called a <em>half adder</em> — half, because it can only add two bits; it has no place to receive the carry arriving from the next-lower column. The <em>full adder</em> repairs the omission: it adds three one-bit numbers at a time (<code>a</code>, <code>b</code>, and the incoming carry), which takes two half adders glued together by an OR gate.</p>
+
+<p>Chain four full adders, feeding each carry into the next, and you can add any two numbers from 0 to 15. The carry <em>ripples</em> from the 1s column to the 8s, exactly like the little 1s you carry when adding by hand:</p>
+
+<figure class="demo">
+  <div class="adder" id="adder"></div>
+  <div id="adder-eq"></div>
+  <figcaption>Fig. 4 — A 4-bit ripple-carry adder. Click the A and B bits. Each box adds three one-bit numbers (a, b, and the carry arriving from the left) and produces a sum bit plus a carry. The round chips between boxes are the carries, flowing toward the more significant side. The exit chip on the far right is the fifth bit of the answer; it lights up when 15 + 15 = 30 outgrows four bits.</figcaption>
+</figure>
+
+<p>Somewhere inside the processor in front of you, a wider and faster cousin of this pattern is adding numbers billions of times a second. Arithmetic did not grow more mysterious as it grew real; it grew more <em>parallel</em>.</p>
+
+</section>
+
+<!-- ================================================================ memory -->
+<section class="view hidden primer" id="memory" data-title="memory">
+<h2>A loop of wire that remembers</h2>
+
+<p>Everything so far has a flaw: it is <em>stateless</em>. Change the inputs and the output follows; nothing persists. A machine that holds no state cannot count, cannot iterate, has no before and no after. The remedy is a loop: <strong>feed a gate’s output back into its own input</strong>, and time enters the circuit.</p>
+
+<p>Cross-couple two NOR gates, each watching the other’s output, and you have the <em>SR latch</em>:</p>
+
+<figure class="demo">
+  <div id="latch-holder"></div>
+  <div class="controls">
+    <button class="btn" id="latch-s"></button>
+    <button class="btn" id="latch-r"></button>
+  </div>
+  <div id="latch-note"></div>
+  <figcaption>Fig. 5 — The SR latch, the atom of memory. <strong>S</strong>et the latch: pulse S to 1 and Q lights up. <strong>R</strong>eset: pulse R. Now do <em>nothing</em>: with S = R = 0 the gates endlessly re-confirm each other’s story, and Q holds its value forever — a single bit of memory made of eight hunks of sand, arguing in a closed loop. (Pushing both at once drives both outputs to 0, the forbidden state; release order decides who wins.)</figcaption>
+</figure>
+
+<p>While S and R are both 0, ask the latch “why is Q 1?” and it answers: “because Q̄ is 0. Why is Q̄ 0? Because Q is 1.” The state is a loop of mutual justification — a tiny strange loop.<sup class="snref">3</sup> Add a gate in front to decide <em>when</em> the latch may listen, and a <em>clock</em> — a steady pulse, billions of beats per second — to do the deciding, and you have a flip-flop: memory that changes only on the beat. Put 64 of them side by side and you have a register. This is all “memory” ever was: loops with a doorman.</p>
+<span class="sidenote"><span class="sn">3</span>Douglas Hofstadter would want the phrase back: <em>Strange Loops</em> is his, and the latch is the smallest hardware instance of the phenomenon — a system whose output, chased far enough, circles back to become its own premise.</span>
+
+<p>Gates compute and latches remember. What is missing is <em>purpose</em> — a machine that carries out a plan — and the Turing primer holds the plan in its purest form.</p>
+
+</section>
+
+<!-- ================================================================ turing -->
+<section class="view hidden primer" id="turing" data-title="the Turing machine">
+<h2>The Turing machine: purpose, distilled</h2>
+
+<p>In 1936, before any electronic computer existed, Alan Turing asked what “mechanical procedure” could possibly mean, and distilled it to almost nothing:<sup class="snref">4</sup></p>
+<span class="sidenote"><span class="sn">4</span>The same paper introduces the halting problem: some programs run forever, and <em>no algorithm at all</em> can examine a program and reliably tell you which kind it is. The impossibility proofs of computing descend from this one.</span>
+
+<ul>
+  <li>an endless <strong>tape</strong> of cells, each holding one symbol;</li>
+  <li>a <strong>head</strong> that reads and writes one cell at a time, and moves left or right;</li>
+  <li>a finite <strong>state</strong> of mind, and a fixed table of rules: <em>“if I am in state q and I see symbol s, write t, move, and switch to state q′.”</em></li>
+</ul>
+
+<p>That is the entire machine. No numbers, no arithmetic, no addresses. Given tape and time it computes anything any computer can compute — <em>anything at all</em>: a phone and a supercomputer are, in Turing’s sense, the same object.</p>
+
+<p>Here is a Turing machine that adds one to a binary number. Its plan: sweep right to the end of the digits, then walk back flipping trailing 1s to 0s until the first 0, which becomes 1. Say the answer aloud before running it — <code>1011</code> becomes what? — then press play, or step slowly and read one lit rule at a time:</p>
+
+<figure class="demo">
+  <div class="transport" id="tm-transport"></div>
+  <div style="margin-top:12px"><span class="tm-state" id="tm-state">scan</span><span style="font:14px var(--mono);color:var(--faint)" id="tm-note"></span></div>
+  <div class="tape" id="tm-tape"></div>
+  <table class="rules" id="tm-rules"></table>
+  <figcaption>Fig. 6 — Binary increment: <code>1011</code> (eleven) becomes <code>1100</code> (twelve). The highlighted row of the rule table is the machine’s current thought; the ▼ marks the head. State <code>scan</code> runs right until the first blank (<code>_</code>), then state <code>carry</code> does the binary carrying you did by hand in the bit primer — flip 1s until you meet a 0. Six rules, and it will add one to a number a million digits long.</figcaption>
+</figure>
+
+<p>The program is that table, six lines. And the table is <em>data</em>: a rule and a number on the tape are the same kind of thing, and one machine can read a table and obey it. That observation, in the machine primer, is the computer.</p>
+
+</section>
+
+<!-- ================================================================ cpu -->
+<section class="view hidden primer" id="cpu" data-title="a real machine">
+<h2>A real machine: the von Neumann computer</h2>
+
+<p>Turing gave the concept; von Neumann’s 1945 architecture gives the shape every processor still wears. The idea is nearly a joke: take the Turing machine and <em>fix the tape in place</em> — call it <strong>memory</strong>, a row of numbered cells holding numbers — and hard-wire the rule-following into a circuit called the <strong>processor</strong>. Two registers are exposed to the programmer: a <strong>program counter</strong> (PC) holding the address of the next cell to obey, and an <strong>accumulator</strong> (ACC) to compute in. A third, the <strong>instruction register</strong> (IR), is the machine’s hand: it holds the number most recently fetched while the decoding gates stare at it.</p>
+
+<p>The processor knows one dance, the <em>fetch–decode–execute cycle</em>:</p>
+
+<pre><code>repeat forever:
+  fetch    IR ← memory[PC]        <span style="color:#7c7668">-- copy the next cell into the instruction register</span>
+  decode   "what does this number mean?"  <span style="color:#7c7668">-- 1xx = load, 2xx = add, …</span>
+  execute  do it                   <span style="color:#7c7668">-- and usually PC ← PC + 1</span></code></pre>
+
+<p>The radical part: the cell holding <code>108</code> is an instruction <em>only because PC pointed at it</em>. The very same memory holds the data. Code is numbers. Below, a complete little computer with ten cells of memory and eight instructions; it counts down from five, printing each value. Step it slowly:</p>
+
+<figure class="demo">
+  <div class="transport" id="cpu-transport"></div>
+  <div class="cpu-grid">
+    <div><table class="listing" id="cpu-table"></table></div>
+    <div>
+      <div class="regs">
+        <div class="reg"><div class="rn">PC</div><div class="rv" id="cpu-pc">0</div></div>
+        <div class="reg"><div class="rn">IR</div><div class="rv" id="cpu-ir">—</div></div>
+        <div class="reg"><div class="rn">ACC</div><div class="rv" id="cpu-acc">0</div></div>
+      </div>
+      <div class="outbox"><span class="outlabel">Output</span><span id="cpu-out"></span></div>
+      <div class="decodeline" id="cpu-decode">Press step to begin the cycle.</div>
+    </div>
+  </div>
+  <figcaption>Fig. 7 — Ten numbers that mean two things. The left table is the same memory shown twice: as the programmer wrote it (mnemonics and comments) and as the machine holds it (right column, three-digit numbers). <code>JZ</code> (jump if the accumulator is zero) at address 4 waits for the countdown to reach zero before letting the machine fall through to <code>HLT</code>; that one instruction is all the “if” a language compiles down to. Cells holding data are green, and the count at address 8 shrinks as the program rewrites it. The machine halts with output 5, 4, 3, 2, 1.</figcaption>
+</figure>
+
+<p>Everything here descends from earlier figures: the ACC is Fig.&nbsp;4’s adder with a latch on its output; the PC a row of Fig.&nbsp;5’s loops; the decoding circuit Fig.&nbsp;2’s gates staring at <code>IR</code>’s digits.<sup class="snref">5</sup> Scaled up, pipelined, predicted, it is the machine on which you are reading this page.</p>
+<span class="sidenote"><span class="sn">5</span>This teaching computer is the “Little Man Computer” of Stuart Madnick (1965), slightly dialectal. Real instruction sets number in the hundreds, but every one of them is this table with more clothes on; real machines also cheat the cycle, fetching instruction n+1 while n executes, but the dance remains the score.</span>
+
+<p>Where did the program keep the countdown? In a <em>memory cell</em>. Where did <code>STA 8</code> put the new value? In a <em>memory cell</em>. The machine state — the “where was I” of any running program — is always, at bottom, cells. Every primer that follows stands on this.</p>
+
+</section>
+
+<!-- ================================================================ recursion -->
+<section class="view hidden primer" id="recursion" data-title="recursion">
+<h2>Recursion, at ground level</h2>
+
+<p>The primers behind were preparation for one meeting: mathematics that seems to float free of the world, and the machine of sand that must run it. Recursion is where they recognise each other, because in a high-level language it looks perfectly abstract — a function defined in terms of itself, as if the machine did not exist:</p>
+
+<pre id="rec-code"><code>(define (fact n)
+  (if <span id="hl-cond">(= n 0)</span>
+      <span id="hl-base" class="hl">1</span>
+      <span id="hl-mul" class="hl">(* n <span id="hl-call" class="hl">(fact (- n 1))</span>)</span>))</code></pre>
+
+<p>Read it aloud: <em>the factorial of n is 1 when n is 0; otherwise n times the factorial of n&nbsp;−&nbsp;1.</em> True, elegant — and, if you have never met a processor, magical. Where does <code>(fact 3)</code> <em>live</em> while <code>(fact 2)</code> is being computed? Who remembers that the outer call still owes a multiplication?</p>
+
+<p>But you have met a processor, and know the answer: <strong>frames on a stack</strong>. Each call gets a few memory cells — the frame — holding its own <code>n</code> and its place in the multiplication. A register, sibling of the PC, points to the top frame; calls push, returns pop. Below, <code>(fact 4)</code> becomes 24, the highlighted expression moving as it does:</p>
+
+<figure class="demo">
+  <div class="transport" id="rec-transport"></div>
+  <div class="rec-grid">
+    <div>
+      <div class="rec-stack-label">The stack — newest frame on top</div>
+      <div class="rec-stack" id="rec-stack"></div>
+    </div>
+    <div>
+      <div class="rec-stack-label">Values returned so far</div>
+      <div class="ribbon" id="rec-ribbon"></div>
+      <div class="decodeline" id="rec-note">Press step.</div>
+    </div>
+  </div>
+  <figcaption>Fig. 8 — <code>(fact 4)</code>, stepped. Each dashed bedrock frame is the base case, which returns 1 without asking anyone further. Then the multiplications that were “owed” — the <code>(* n …)</code> half-finished in each waiting frame — get paid, one per pop. Recursion is not a metaphor: it is a stack pointer walking through ordinary memory, the very memory of the machine primer.</figcaption>
+</figure>
+
+<p>The magic dissolves into particulars. “The call remembers its context” — some cells do. “The base case stops it” — the stack has a bottom. “Infinite recursion crashes” — the cells run out, and there is nothing mystical under <code>stack overflow</code>.<sup class="snref">6</sup> Scheme itself is the <em>fetch–decode–execute</em> loop of Fig.&nbsp;7 with two more instructions: <em>call</em>, push a frame and jump; <em>return</em>, pop it and jump back.</p>
+<span class="sidenote"><span class="sn">6</span>Lisp (1958, John McCarthy) is the second-oldest language still in use, after Fortran. Its genius was to notice that programs are lists — data — and so programs could build programs. Turing’s blurring of code and data keeps reappearing at every level of the tower.</span>
+
+</section>
+
+<!-- ================================================================ rivers -->
+<section class="view hidden primer" id="rivers" data-title="two rivers">
+<h2>Two rivers, one sky: the minority view</h2>
+
+<p>The road most travelled runs through one machine, many layers, a tower of abstraction with a program at the top. It is the majority view, and it built the industry. A minority tradition, patient and mostly ignored, holds that a language need not be an empire, and that the two most honest languages ever designed are also the two smallest, mirroring one another as the sky mirrors the earth. They appeared a decade apart and face in opposite directions. LISP (1958) turned toward mathematics, meaning, the pattern behind things. FORTH (1968) turned toward the machine, the act, the cost of the act.</p>
+
+<h3>FORTH — the word that acts</h3>
+
+<p>In the 1960s, Charles H. Moore programmed computers for astronomy, and the trade became, in his hands, a decade-long act of subtraction. Every tool struck him as heavier than the work; every language, as a bureaucratic tax on thought. His answer was to make the language disappear almost entirely. By the time he was steering radio telescopes for the National Radio Astronomy Observatory, his system — he called it FORTH — was little more than the stack you met in the recursion primer, a dictionary of <em>words</em>, and a colon for teaching the machine new words from old ones.<sup class="snref">7</sup></p>
+<span class="sidenote"><span class="sn">7</span>The name was a pun: Moore meant “FOURTH,” as in fourth-generation language; the IBM 1130 he used permitted five-character names. The system had been distilling privately since the late 1950s and reached its essential form pointing at the radio sky — the 36-foot telescope at Kitt Peak among its first chores.</span>
+
+<p>Numbers go onto the stack; words consume what they need and leave what they made; <code>: SQUARE DUP * ;</code> teaches a new word, indistinguishable thereafter from a built-in. That is most of the specification. The whole language, on one desk:</p>
+
+<figure class="demo">
+  <div class="controls" id="forth-controls">
+    <div class="fwords">
+      <button class="btn" data-op="SQUARE">SQUARE</button>
+      <button class="btn" data-op="DUP">DUP</button>
+      <button class="btn" data-op="DROP">DROP</button>
+    </div>
+    <div class="fkeys">
+      <button class="btn" data-op="7">7</button>
+      <button class="btn" data-op="8">8</button>
+      <button class="btn" data-op="9">9</button>
+      <button class="btn op" data-op="+">+</button>
+      <button class="btn" data-op="4">4</button>
+      <button class="btn" data-op="5">5</button>
+      <button class="btn" data-op="6">6</button>
+      <button class="btn op" data-op="-">−</button>
+      <button class="btn" data-op="1">1</button>
+      <button class="btn" data-op="2">2</button>
+      <button class="btn" data-op="3">3</button>
+      <button class="btn op" data-op="*">*</button>
+      <button class="btn zero" data-op="0">0</button>
+      <button class="btn" data-op="RESET">clear</button>
+      <button class="btn eq" data-op="DOT">.</button>
+    </div>
+  </div>
+  <div class="forth-grid">
+    <div>
+      <div class="rec-stack-label">The stack — top on top</div>
+      <div class="forth-stack" id="forth-stack"></div>
+    </div>
+    <div>
+      <div class="outbox"><span class="outlabel">Printed</span><span id="forth-out"></span></div>
+      <div class="dict-line">: SQUARE &nbsp;DUP * ;</div>
+      <div class="decodeline" id="forth-note"></div>
+    </div>
+  </div>
+  <figcaption>Fig. 9 — The entire language, on one desk. FORTH has no operator precedence and no parentheses because it needs neither: a word simply takes what is on top of the stack — push 3, push 5, press +, press <code>.</code>, and you have printed 8. <code>: SQUARE DUP * ;</code> teaches rather than repeats — one new word, usable forever, the way a scribe’s numeral condenses a long tally into a few marks. The word <code>.</code> is the same print you watched as <code>OUT</code> in the countdown program; the dictionary is kept exactly like the memory of the machine primer — one definition standing on another. Moore steered telescopes with a dictionary of a few dozen words — fewer than this caption has.</figcaption>
+</figure>
+
+<p>Absent are variables, syntax trees, precedence rules, any border between the language and your program. The program is the dictionary, and the dictionary is the machine growing a vocabulary. Postfix order — the numbers first, the word last — is how the machine itself lives: <em>fetch, fetch, act</em>. FORTH is the machine primer without the apology.</p>
+
+<h3>LISP — the meaning that recurs</h3>
+
+<p>Five years earlier, pointed the opposite way, John McCarthy wanted a language in which a machine could reason about its own thoughts, and found that almost nothing is needed. The core he reached for was pure mathematics, Church’s lambda calculus, in which computation is nothing but functions calling functions — no machine, no storage, only substitution.<sup class="snref">8</sup> From it LISP takes one data structure, the list; one way to build it, the pair or <em>cons cell</em>; a few primitives to take it apart; and the rule that a program is itself a list. Not like a list — <em>is</em> one: the catalogue and the catalogue’s reading instructions have the same shape.</p>
+<span class="sidenote"><span class="sn">8</span>Lambda calculus — Alonzo Church, 1930s — was invented as pure mathematics, decades before anyone had built a machine to run it on. McCarthy’s 1960 paper already defines Lisp in terms of Lisp; an interpreter for Lisp, written in Lisp, famously fits on a single page — a language watching itself, the way the latch of the memory primer is a circuit watching itself.</span>
+
+<p>A list is a chain of pairs: each cell holds one thing and a pointer to the rest; the last pointer points at nothing — <em>nil</em>. Three words are the hands for this material: <code>(cons x …)</code> attaches a new first thing; <code>(car …)</code> takes the first thing; <code>(cdr …)</code> takes the rest. The sky’s catalogue, for your hands:</p>
+
+<figure class="demo">
+  <div class="controls" id="lisp-controls">
+    <button class="btn" data-op="car">(car x)</button>
+    <button class="btn" data-op="cdr">(cdr x)</button>
+    <button class="btn" data-op="cons">(cons ’discovery x)</button>
+    <button class="btn" data-op="RESET">restore</button>
+  </div>
+  <div class="cons" id="lisp-cells"></div>
+  <div class="decodeline" id="lisp-note"></div>
+  <figcaption>Fig. 10 — A catalogue of the sky, the way LISP sees everything: pairs pointing forward, ending in nil (the ∅). <code>car</code> takes the first entry; <code>cdr</code> keeps the rest; <code>cons</code> attaches a new discovery at the front — a list growing one cell at a time. Code has exactly this shape too, which is why Lisp programs can read, write, and be written by other Lisp programs — the recursion primer, turned sideways.</figcaption>
+</figure>
+
+<p>Seen from both ends, the factorial of the recursion primer reads two ways: FORTH makes the stack speak, LISP makes the sentence compute. The stack machine and the lambda calculus are the two minimal answers to Turing’s question, <em>what is computation</em>, and history has mostly chosen to build very large things atop each while visiting neither.</p>
+
+<h3>The mirror</h3>
+
+<table class="mirror">
+  <tr><th>LISP, facing the sky</th><th>FORTH, facing the earth</th><th>what both know</th></tr>
+  <tr><td class="l">the list</td><td class="f">the stack</td><td class="s">one humble structure suffices for data and control alike</td></tr>
+  <tr><td class="l">lambda calculus — a page of substitution rules</td><td class="f">the stack machine — a handful of acts</td><td class="s">a tiny formal core is enough; everything else is vocabulary</td></tr>
+  <tr><td class="l">recursion — frames grown unseen by the call</td><td class="f">the stack — tended by hand, in plain sight</td><td class="s">both are continuations: what-to-do-next made into data</td></tr>
+  <tr><td class="l">the program is a list</td><td class="f">the program is the dictionary</td><td class="s">code is data; the language can speak about itself</td></tr>
+  <tr><td class="l">macros: new meanings from old</td><td class="f">: definitions: new words from old</td><td class="s">you extend the language; you never leave it</td></tr>
+  <tr><td class="l">read — eval — print</td><td class="f">push — act — print</td><td class="s">conversation with the machine, face to face</td></tr>
+</table>
+
+<p>The columns are complements, not rivals, and an old Daoist shape appears between them. LISP is the language of the sky: pattern, recurrence, meaning growing by self-reference — recursion is celestial grammar, each cycle owing its shape to the cycle below it. FORTH is the language of the earth: the immediate word, the minimal gesture, direct contact with the stone — no representation standing between the intent and the act. The sky teaches what things <em>are</em>; the earth teaches what things <em>cost</em>. Neither is whole alone: a programmer who knows only meaning builds castles that cannot stand, and a programmer who knows only cost builds floors with nothing above them.</p>
+
+<blockquote class="koan">
+A student came to the master and said: “I have read that LISP is the most powerful of languages, and that FORTH is the most simple. Which should I learn?”<br><br>
+The master replied: “When you look at the sky, do you see power, or do you see simplicity?”<br><br>
+The student was enlightened, and returned to his work.
+<span class="src">— a koan, after the manner of Master Foo<sup class="snref">9</sup></span>
+</blockquote>
+<span class="sidenote"><span class="sn">9</span>The Master Foo discourses are Eric S. Raymond’s <em>Rootless Root</em> — Unix-age sutras in the classical manner. The koan above is an homage of this primer, not a quotation; if it misleads, blame the student, not the tradition.</span>
+
+<h3>The secret identity</h3>
+
+<p>The recursion primer kept the proof in its pocket. To run recursion, the machine grew a stack of frames, each frame a note of what the suspended call still owed. FORTH is that stack promoted to an entire language; LISP is that recursion promoted to an entire language. Strip the notation and they are one machine: any program written in one can be rewritten, mechanically, as a program in the other — the sentence flattens into pushes and acts, and the pushes and acts, read again, curl back into a sentence. The middle of that translation has a name, the <em>continuation</em> — the meaning of “what to do next” made into a thing a program can hold — and the recursion primer was building continuations all along. The sky and the earth differ in posture, not in substance.<sup class="snref">10</sup></p>
+<span class="sidenote"><span class="sn">10</span>The rewriting is no parable; it is the first road of compiler construction. Plotkin (1975) gave continuations their calculus; Danvy (2003) showed the classic SECD machine of 1964 to be a continuation interpreter in disguise; Ghuloum (2006) showed how to grow such a compiler in small verified steps, each kept honest by tests. A reader who wants to watch the two rivers meet can follow that trail downhill, from sentence to stack.</span>
+
+<h3>The oldest computation</h3>
+
+<p>A telescope controller is the right place to meet all this, because the loop it closes is ten thousand years old. Astronomy was humanity’s first science, mathematics, and computation in one: people looked up, saw that the sky is the one place where the changing masks the unchanging, and discerned cycles — of days, of seasons, of years, of the slow recurrence of planets and the shock of a predicted eclipse.<sup class="snref">11</sup> Recording the cycles forced the invention of number and of notation; predicting them was the first program execution.</p>
+<span class="sidenote"><span class="sn">11</span>Babylonian base-60, a counting system inherited from Sumer and made immortal by the sky, outlived both: it survives in the degrees on a telescope mount and the minutes on your clock — thirty centuries old and still in daily use.</span>
+
+<p>The second act of the same play: the earliest writing of Sumer and Egypt is not poetry or prayer — it is accounting. Tallies of sheep and grain pressed into clay; the token, the envelope, the tablet.<sup class="snref">12</sup> The state was born as a ledger. Scribes were trained by copying the record and adding to it, generation onto generation — and the archive outlives the scribe exactly as the latch of the memory primer outlives the signal that set it, scaled up to a civilisation. Writing, teaching, remembering: culture itself as external memory. Civilisation formed as a form of abstract computation — the slowest and most successful information technology ever deployed.</p>
+<span class="sidenote"><span class="sn">12</span>On Denise Schmandt-Besserat’s account, writing began as bookkeeping: small clay counting tokens (as early as 8000 BCE) became impressions on envelopes, impressions became marks on flat clay, and marks became script. Literature arrived later, and inherited the clerk’s tools.</span>
+
+<p>The connections, stated plainly: the sky taught counting, the clay remembering, the scribal schools teaching. Computing is not a novelty of the last century; it is the oldest continuous human craft, order abstracted from recurrence, written down, passed forward, and the transistor only let the craft run at the speed of light. When Charles Moore pointed his five-character language at the radio sky, the loop quietly closed: the heavens that taught humanity to count were at last counted back through an instrument steered by a dictionary of a few dozen words.</p>
+
+<p>Between the Tigris and the Euphrates, civilisation formed on silt carried from two directions. The minority view suspects that between LISP and FORTH, silt of a similar kind is being carried — and that when the historical relationship between society and software matures, it will build its cities there.</p>
+
+</section>
+
+<!-- ================================================================ relations -->
+<section class="view hidden primer" id="relations" data-title="relations">
+<h2>The third way: relations</h2>
+
+<p>LISP speaks in sentences, FORTH in single words. A third way of speaking appeared in Marseille, in 1972, and it speaks in facts. A Prolog program is a list of what is true — <code>parent(gaia, cronus).</code>, which reads aloud as <em>gaia is a parent of cronus</em> — together with a few rules about what follows from what. No instruction appears in it anywhere, no order of doing, nothing that says <em>how</em>: the programmer states the truths, asks a question, and the machine goes looking for the answer itself. FORTH asks what things cost, LISP asks what things mean; Prolog asks what things imply.</p>
+
+<p>The notation is small enough to learn in a minute, and every mark in it earns its keep. A fact is a relation’s name, its subjects in parentheses, and a full stop to say <em>this stands</em>. A name that begins with a capital letter is not a name at all but a blank waiting to be filled: <code>parent(gaia, X)</code> says <em>gaia is a parent of somebody</em>, and the machine’s task is to find out who. A rule is a head and a body joined by <code>:-</code>, which reads as <em>if</em>; <code>grandparent(A, C) :- parent(A, B), parent(B, C).</code> says that A is a grandparent of C if A is a parent of B <em>and</em> B is a parent of C — the comma reads as <em>and</em>. And a question is any such sentence with <code>?-</code> written in front of it: <code>?- grandparent(G, zeus).</code> asks <em>who is a grandparent of Zeus?</em>, and the machine answers by filling in every G that the facts and the rules make true.</p>
+
+<p>The finding is ordinary machine work, and the machine of the sand-up primers does it. Take the goals one at a time; try each matching fact in order; bind a variable where it fits; when a road dead-ends, back up to the last choice and take the next. Unification and backtracking are the words; nested loops are the act. Every language before made the programmer write the loops; Prolog keeps the loops in the machine, and the program holds only the truths. An algorithm is logic plus control — Kowalski’s equation — and this is the language that takes the split seriously.<sup class="snref">13</sup></p>
+<span class="sidenote"><span class="sn">13</span>Prolog was born of a project to make a computer reason in French: Alain Colmerauer and Philippe Roussel had a preliminary version running in Marseille at the end of 1971 and a definitive one at the end of 1972; the name, short for <em>programmation en logique</em>, was suggested by Roussel’s wife. Robert Kowalski of Edinburgh supplied the theory; J. Alan Robinson’s resolution principle (1965) supplied the engine — if a machine can search for proofs, then a list of facts is a program.</span>
+
+<p>The subject matter is chosen on purpose. Hesiod’s <em>Theogony</em>, the first Greek cosmogony, is a genealogy of the sky: Uranus the sky and Gaia the earth beget Cronus and Rhea, and Cronus and Rhea beget Zeus. It is half myth and half table of facts, the exact shape Prolog wants. Nine facts and three rules hold all of it, a small pond of truths, and the figure below puts you beside the machine that swims in it. The chips at the top are questions; pick one, and begin with <code>?- grandparent(G, zeus).</code> — answer it yourself before running it, for the myth already told you who the grandparents are. Then press play, or step slowly and read the search one line at a time: the pond lights the fact being tried, the search is the machine’s thoughts, and the answers gather at the bottom as they are found. When a road dead-ends the machine backs up and takes the next; the ↩ lines are not mistakes but the search itself.</p>
+
+<figure class="demo">
+  <div class="controls" id="pl-queries">
+    <span class="qlabel">pick a question:</span>
+    <button class="btn" data-q="parent(rhea, X)">?- parent(rhea, X).</button>
+    <button class="btn active" data-q="grandparent(G, zeus)">?- grandparent(G, zeus).</button>
+    <button class="btn" data-q="ancestor(chaos, X)">?- ancestor(chaos, X).</button>
+    <button class="btn" data-q="grandparent(chaos, zeus)">?- grandparent(chaos, zeus).</button>
+  </div>
+  <div class="pl-board">
+    <div class="pl-zone">
+      <div class="pl-zlabel">the pond · everything the machine knows</div>
+      <div class="pl-kb" id="pl-kb"></div>
+    </div>
+    <div class="pl-zone">
+      <div class="pl-zlabel">the search · the machine’s thoughts, one per line</div>
+      <div class="pl-trail" id="pl-trail"></div>
+    </div>
+    <div class="pl-zone">
+      <div class="pl-zlabel">the answers · what it has found so far</div>
+      <div class="pl-answers" id="pl-answers"></div>
+    </div>
+  </div>
+  <div class="pl-runbar">
+    <div class="transport" id="pl-transport"></div>
+    <div class="pl-status" id="pl-note"></div>
+  </div>
+  <figcaption>Fig. 11 — The third way, for your hands. One machine, three labelled parts. The pond is everything it knows — nine facts in two columns, three rules beneath. The search is its mind, one thought per line: a fact that fits is bound, a fact that does not is rejected, and after every answer the machine backs up and hunts the next road, which is all backtracking is. The answers strip fills as findings arrive, each answer once, proofs and answers counted apart; the play, step and stop controls beneath drive the whole thing. Long runs of rejections fold into one line, and the highlight walks the pond’s facts as they are tried. The ↩ lines are the machine backing up to the last choice — not mistakes, the search itself. A few liberties with Hesiod keep the pond small.</figcaption>
+</figure>
+
+<p>Read the grandparent question closely. The machine walks every road that ends at Zeus, and the answer comes back twice over: Gaia and Uranus, the earth and the sky, each found once through Cronus and once through Rhea — four proofs of two answers, roads counted rather than destinations. The last question fails, and the failure is no malfunction: Chaos is Zeus’s ancestor but not his grandparent, and in Prolog a statement is true exactly when the machine can find a proof of it — a failed search is an answer, not an error. And the ancestor rule is the recursion primer’s subject: a relation defined in terms of itself, with the frames grown by the search, out of sight — the way LISP grows them, where FORTH would have made you push them by hand.<sup class="snref">14</sup></p>
+<span class="sidenote"><span class="sn">14</span>The third way stayed a minority taste, but it was bet on. Japan’s Fifth Generation project (1982–1992) wagered a decade of national research on logic programming as computing’s future, provoked answering programmes in America and Europe, and ended in quiet disappointment; Prolog survived it. David Warren’s 1983 compiler made the language fast — his abstract machine is still what every serious implementation compiles to — and it earns its keep wherever a problem is better described as facts than as steps: constraint solving, parsing, expert systems. IBM’s Watson parsed the questions it was asked in Prolog. Minority is not marginal.</span>
+
+<p>A pond like this holds no time. The facts are timeless, the search is timeless, one question at a time; nothing in the language says <em>now</em>, or <em>while</em>, or <em>first this, then that</em>. What happens when two acts must share one world — the question the pond cannot even ask — is the time primer’s business.</p>
+
+</section>
+
+<!-- ================================================================ time -->
+<section class="view hidden primer" id="time" data-title="time">
+<h2>Time enters</h2>
+
+<p>The sand-up machine was alone with its memory, and the loneliness was a kind of safety: one instruction at a time, one hand on the cell, order guaranteed by the clock. Most software lives in no such world. A server answers ten thousand strangers at once; a car runs a hundred little machines in parallel on one planet of wires; a phone keeps the network, the screen and the ear all in the air together. Time enters, and with it the oldest patient bug in computing: two acts, one memory, no agreed order. The memory primer hid the warning in the latch — two signals arriving without a doorman, release order deciding who wins — and a data race is that lesson scaled up: the forbidden state as an everyday occurrence.</p>
+
+<p>The mechanism is small enough to hold in one hand. Two workers, one cell holding 5, and each worker running the three-line program the machine primer taught: read the cell, add one, write it back. Each worker owns its register; the cell belongs to no one; and between any worker’s read and its write, the other is free to do exactly the same:</p>
+
+<figure class="demo">
+  <div class="controls" id="race-modes">
+    <button class="btn chip active" data-m="shared">a shared cell</button>
+    <button class="btn chip" data-m="pipe">a pipe and an owner</button>
+  </div>
+  <div class="controls" id="race-controls">
+    <button class="btn" id="race-w1">worker 1 acts</button>
+    <button class="btn" id="race-w2">worker 2 acts</button>
+    <button class="btn" id="race-own">the owner acts</button>
+    <span class="transport">
+      <button class="tbtn" id="race-play"></button>
+      <button class="tbtn" id="race-stop"></button>
+    </span>
+  </div>
+  <div class="race-grid">
+    <div class="race-col" id="race-c1"></div>
+    <div class="race-mid" id="race-mid"></div>
+    <div class="race-col" id="race-c2"></div>
+  </div>
+  <div class="decodeline" id="race-note"></div>
+  <figcaption>Fig. 12 — The lost update, and the cure, for your hands. In the first mode each worker reads the cell into its own register and writes its answer back; press the workers in any order, or press play — the classic unlucky interleaving. When both read before either writes, two increments become one; serialize the same steps by hand and the cell reaches 7, which is why races pass tests. The second mode takes away the sharing: the workers drop +1 into a pipe, and one owner takes the messages in order — any arrival order, no locks, nothing lost. Ownership is the whole of the doorman.</figcaption>
+</figure>
+
+<p>Read the race as it ran: both workers read 5, both added one, both wrote 6, and the cell ended at 6 when honest arithmetic says 7 — one increment vanished in the gap between a read and a write. Serialize the same steps by hand and the cell reaches 7, the bug disappears, and here is the cruellest property of a race: it passes tests. The unlucky order arrives only when no one is watching — under load, at scale, in the middle of the night — and the wrong answer is silent: a number slightly too small, a ticket sold twice, a balance that no longer balances.</p>
+
+<p>The classic cure is the doorman of the memory primer, promoted to software: a lock around the read–modify–write — Dijkstra’s semaphore, 1965 — so the second worker waits at the door until the first has left the room. It works, and it has carried fifty years of correct systems. But the doorman must be remembered on every path, requested in a consistent order, held briefly, released always; and one forgotten lock, one circular wait, one overlong hold is the forbidden state again, now in production.<sup class="snref">15</sup></p>
+<span class="sidenote"><span class="sn">15</span>Dijkstra introduced semaphores — the P and V operations, doormen in the strict sense — in “Cooperating Sequential Processes” (EWD-123, 1965), written while he built THE, an operating system presented together with a proof of its correctness: state the machine honestly, then show why it works.</span>
+
+<p>The figure’s second mode takes the other road, and it is worth walking slowly, because nothing about the work changes — two workers, two increments, the same cell — and the bug is simply gone. The sharing has been taken away. The workers no longer touch the cell at all, because the cell no longer belongs to everyone; it has an owner, and the workers’ whole job shrinks to dropping +1 into a pipe, while the owner’s whole job is taking the messages one at a time. Step through any interleaving the scheduler cares to produce and the cell reaches 7, and the reason is worth a second reading. The race existed because two hands each held a copy of the cell’s story, and the copies could disagree; here one hand holds the cell at every instant, and two stories cannot disagree where there is never a second story. The pipe is not a faster lock. It is the end of sharing.</p>
+
+<p>Hoare gave this arrangement its calculus in 1978 — <em>Communicating Sequential Processes</em>, where a program is processes that cannot touch each other’s memory and can only hand values through channels, the handoff a rendezvous: the sender waits, and the message never belongs to the wire. Go (2009) built its channels on CSP and made the doctrine a proverb: “don’t communicate by sharing memory, share memory by communicating.” But the pipe, like the lock, is still a discipline — a promise kept by hand, and nothing in either language stops a tired programmer from reaching around it. Rust closes the gap by moving the promise into the compiler: every value has exactly one owner, and a program in which two workers can reach the same cell is not an unlucky program but a refused one. The race of this figure, in Rust, is not a wrong answer in the middle of the night; it is a red line at build time — the forbidden state made unsayable, caught in the dark of the compiler, years before it could ever have been found in production.<sup class="snref">16</sup></p>
+<span class="sidenote"><span class="sn">16</span>Hoare’s “Communicating Sequential Processes” (<em>CACM</em> 21:8, August 1978) proposed that input and output are basic primitives of programming; it later grew into a full calculus. Go (2009) built its channels on CSP — Rob Pike’s proverb, “don’t communicate by sharing memory, share memory by communicating,” is the doctrine in one line. Rust began in 2006 as Graydon Hoare’s private project and reached 1.0 in 2015; its ownership system turns the race check into a type check, and the Rust book names the result <em>fearless concurrency</em>.</span>
+
+<p>Ownership, it turns out, is the whole of the cure; the doorman was only ever a stand-in for it. But a promise checked against memory needs a map of memory — which byte belongs to whom, where values live, when they die — and the sand-up machine kept memory a polite fiction: cells, numbered, nothing said about who owns them. The fiction has a famous repair — C, the heap, malloc and free, and the compiler that finally learned to read ownership — and it is a primer this deck has not yet built.</p>
+
+</section>
+
+<!-- ================================================================ tower -->
+<section class="view hidden primer" id="tower" data-title="the tower">
+<h2>The tower, and how to build well inside it</h2>
+
+<p>The climb, end to end:</p>
+
+<svg class="tower-svg" viewBox="0 0 720 436" role="img" aria-label="The tower of abstractions, from physics at the base to a program at the top">
+  <g font-family="Georgia,serif" font-size="17" text-anchor="middle">
+    <rect x="60"  y="382" width="600" height="46" rx="6" fill="#f5f2e8" stroke="#ddd6c4"/>
+    <text x="360" y="410" fill="#4c473c">physics — a voltage is high or low</text>
+    <rect x="90"  y="328" width="540" height="46" rx="6" fill="#faf7ec" stroke="#ddd6c4"/>
+    <text x="360" y="356" fill="#4c473c">transistors — switches etched in sand</text>
+    <rect x="120" y="274" width="480" height="46" rx="6" fill="#f5f2e8" stroke="#ddd6c4"/>
+    <text x="360" y="302" fill="#4c473c">logic gates — AND, OR, NOT…</text>
+    <rect x="150" y="220" width="420" height="46" rx="6" fill="#faf7ec" stroke="#ddd6c4"/>
+    <text x="360" y="248" fill="#4c473c">adders &amp; latches — compute and remember</text>
+    <rect x="180" y="166" width="360" height="46" rx="6" fill="#f5f2e8" stroke="#ddd6c4"/>
+    <text x="360" y="194" fill="#4c473c">instruction set — fetch · decode · execute</text>
+    <rect x="210" y="112" width="300" height="46" rx="6" fill="#faf7ec" stroke="#ddd6c4"/>
+    <text x="360" y="140" fill="#4c473c">machine code — 108, 700, 309…</text>
+    <rect x="240" y="58"  width="240" height="46" rx="6" fill="#f5f2e8" stroke="#ddd6c4"/>
+    <text x="360" y="86" fill="#4c473c">Scheme — meanings made of meanings</text>
+    <rect x="270" y="4"   width="180" height="46" rx="6" fill="#b3002d"/>
+    <text x="360" y="32" fill="#fffdf6">(fact 4) — a thought</text>
+    <path d="M 676 428 V 14" stroke="#b9b2a0" stroke-width="1.5"/>
+    <path d="M 676 12 l -5 9 h 10 z" fill="#b9b2a0"/>
+    <text x="0" y="0" font-size="12" fill="#7c7668" transform="rotate(-90 700 240)" text-anchor="middle" font-style="italic">each layer trusts the one below</text>
+  </g>
+</svg>
+
+<p>Each layer makes a promise — <em>“you don’t need to know how I do it”</em> — and that promise is what lets a single mind build at the top.<sup class="snref">17</sup> But every abstraction leaks: latency leaks, overflow leaks, the forbidden state of the latch leaks. Ground-up understanding matters not because you will hold the whole tower in your head, but because a leak is less frightening when you can look down a floor.</p>
+<span class="sidenote"><span class="sn">17</span>“All non-trivial abstractions, to some degree, are leaky.” — Joel Spolsky, stating the occupational hazard of the tower. Feynman stated the repair procedure: <em>create</em> the layer once, and you own it forever.</span>
+
+<p>Between the machine and the sky, the habits of good building. The machine discovered them before any engineer wrote them down:</p>
+
+<ul>
+  <li><strong>Name a thing once, then use the name forever.</strong> The subroutine is the discovery, made at machine-code level, that a numbered cell can be <em>called</em> by name instead of copied. The scribes of Sumer were doing the same when forty sheep, once forty tokens, one per animal, became a numeral and a sheep sign — the number named once and reused for everything counted after; the whole history of software is the long war against saying the same thing twice.</li>
+  <li><strong>Build the smallest thing that can possibly work.</strong> Turing’s tape is the pattern: the minimal machine, stated honestly, turns out to be enough for everything. Simplicity is not less care; it is care aimed at one target.</li>
+  <li><strong>Add nothing until something asks for it.</strong> The von Neumann architecture refuses features until the program demands them; the machine that reached the Moon kept its programs in core rope — copper wire threaded by hand through magnetic cores, through for 1, around for 0 — and its 4&nbsp;KB of working memory was so tight that one address did seven jobs in a single flight.</li>
+</ul>
+
+<p>Forth and Lisp are the two long-running experiments in taking those habits as an entire worldview: languages built the way Moore built his telescope controller and McCarthy his evaluator, from the smallest core that could suffice, extended only when the sky demanded it.</p>
+
+<hr>
+
+<p>One invitation remains: <em>view source</em>. This page practises what it preaches. What your browser receives is a single self-contained file, no framework, no network: one small table of gate definitions computes every truth table in the gate and adder primers; one engine runs the four play/step/stop machines — the Turing machine, the toy computer, the recursion stack, the pond; the calculator, the cons-cell sketchpad and the race track reuse the same handful of helpers; and the deck at the front door — cards, systems, parts, and the map of the whole graph underneath — is data all the way down, walked by four small words. Nothing in it is a scaffold for a hypothetical future feature. The authors keep that data in a schema-governed XML file and build this one file from it; the code is meant to be read by the same person who read the prose.</p>
+
+<p class="colophon">Colophon — set in Georgia for the text and your system’s own sans and monospace for the machinery; margin notes in the manner of Edward Tufte; demonstrations in the manner of Richard Feynman: no miracle left unexplained at the level below. Built from sand, meaning from symbols.</p>
+
+</section>
+
+</div>
+<footer></footer>
+
+<script>
+'use strict';
+/* ================================================================
+   ⌂ · THE DECK — cards, systems, and the stack of views.
+       Everything navigable on this page is data; the structure
+       is one small structure, walked by four words:
+       render · go · back · home.                         */
+/* ================================================================*/
+const VIEW = { cur: 'deck', trail: [] };
+
+/* ---- the deck data, injected by the build from the data parts.
+       The shape of the data is schema/deck.xsd; the build validates
+       against it, then hands the page this one object. ---------- */
+const DATA = /*__DECK_DATA__*/{};
+const SYSTEMS = DATA.cards;
+const EXPLAINERS = DATA.trails;
+const LADDER = DATA.ladder;
+const RUNGS = LADDER;
+const ICONS = DATA.icons;
+const PRIMER_META = DATA.primers;
+const PLACEHOLDERS = DATA.placeholders;
+const MAP = DATA.map;
+const EDGES = DATA.edges || [];
+const CHAIN = EDGES.filter((e) => e.kind === 'build');
+
+/* ================================================================
+   0 · TINY HELPERS — deliberately small, and shared: the deck's
+       own pages and the fundamentals map module (inlined below at
+       its marker) both call them, and the isolated map build lifts
+       this whole block out of the template to run the module
+       alone.                                                   */
+/* ================================================================*/
+/* [shared helpers] */
+const $ = (sel) => document.querySelector(sel);
+const el = (tag, cls, html) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (html != null) n.innerHTML = html;
+  return n;
+};
+const ic = (name, size) =>
+  '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + '</svg>';
+/* doors are round icons: every open step shows at least two, and
+   every one is named. A real door is a button into another path; a
+   gap is a greyed circle that names the patch to come. The names
+   and icons come from the views themselves. */
+function doorMeta(id) {
+  if (SYSTEMS[id]) return [SYSTEMS[id].icon, SYSTEMS[id].title.toLowerCase()];
+  if (EXPLAINERS[id]) return [EXPLAINERS[id].icon, EXPLAINERS[id].crumb];
+  return PRIMER_META[id] || ['stairs', id];
+}
+/* [/shared helpers] */
+
+/* ---- the ladder: the one climb every vertical walks. It is data
+       only — the rung order sorts the parts of every card, and the
+       chips label them. There is no pattern page; the deck starts
+       at the cards, and the reader drills down. */
+
+/* ---- the three systems, as data -------------------------------- */
+
+/* ---- the trails: one entry per line of inquiry; steps carry the
+       chain, cross links branch it, deep lands on the fundamentals */
+
+/* ---- four words: render · go · back · home -------------------- */
+function renderDeck() {
+  const d = $('#deck-cards');
+  Object.keys(SYSTEMS).forEach((id) => {
+    const s = SYSTEMS[id];
+    const c = el('button', 'card dgo');
+    c.dataset.go = id;
+    c.innerHTML =
+      '<span class="c-ic">' + ic(s.icon, 40) + '</span>' +
+      '<span class="c-name">' + s.title + '</span>' +
+      '<span class="c-q">' + s.q + '</span>' +
+      '<span class="c-hint">the walk, part by part</span>';
+    d.appendChild(c);
+  });
+}
+function rungChip(id) {
+  const r = RUNGS.find((x) => x.id === id);
+  return r ? r.chip : '';
+}
+function rungOrder(id) {
+  const i = RUNGS.findIndex((x) => x.id === id);
+  return i < 0 ? RUNGS.length : i;
+}
+/* ---- the doors: rows of round icons built by doorHTML from the
+       shared doorMeta above ------------------------------------ */
+function doorHTML(doors) {
+  const seen = {};
+  const uniq = (doors || []).filter((d) => (seen[d.to] ? false : (seen[d.to] = 1)));
+  const out = uniq.map((d) => {
+    const ph = PLACEHOLDERS[d.to];
+    if (ph) {
+      return '<span class="door soon" title="' + d.q.replace(/"/g, '&quot;') + '">' +
+        '<span class="d-ic">' + ic(ph.icon, 22) + '</span>' +
+        '<span class="d-name">' + ph.title + '</span></span>';
+    }
+    const m = doorMeta(d.to);
+    return '<button class="door dgo" data-go="' + d.to + '" title="' + d.q.replace(/"/g, '&quot;') + '">' +
+      '<span class="d-ic">' + ic(m[0], 22) + '</span>' +
+      '<span class="d-name">' + m[1] + '</span></button>';
+  });
+  return '<div class="doors">' + out.join('') + '</div>';
+}
+function buildStrand(holder, steps) {
+  steps.forEach((p) => {
+    const sp = el('div', 'spart');
+    sp.innerHTML =
+      '<button class="sp-head">' +
+        '<span class="sp-ic">' + ic(p.icon, 26) + '</span>' +
+        '<span class="sp-txt">' + (p.rung ? '<span class="rung">' + rungChip(p.rung) + '</span>' : '') +
+        '<span class="sp-name">' + p.name + '</span>' +
+        '<span class="sp-line">' + p.line + '</span></span>' +
+        '<span class="sp-tw">\u25be</span>' +
+      '</button>' +
+      '<div class="sp-body">' + (p.blurb ? '<p>' + p.blurb + '</p>' : '') + doorHTML(p.cross || p.deep) + '</div>';
+    sp.querySelector('.sp-head').addEventListener('click', () => sp.classList.toggle('open'));
+    holder.appendChild(sp);
+  });
+}
+function buildBottom(section, s) {
+  const b = el('div', 'sys-bottom');
+  b.innerHTML = '<p>' + s.bottom + '</p>' + doorHTML(s.deep || []);
+  section.appendChild(b);
+}
+function renderSystems() {
+  Object.keys(SYSTEMS).forEach((id) => {
+    const s = SYSTEMS[id];
+    buildStrand(document.getElementById(id + '-parts'),
+      s.parts.slice().sort((a, b) => rungOrder(a.rung) - rungOrder(b.rung)));
+    buildBottom(document.getElementById(id), s);
+  });
+}
+/* the model is the source of truth, and the trails page is one
+   of its views: the trails appear in the order the model arranges
+   them, stratum by stratum, as authored inside each stratum */
+const TRAIL_ORDER = MAP.reduce(
+  (acc, b) => acc.concat(b.views.filter((id) => EXPLAINERS[id])), []);
+function renderExplainers() {
+  const wrap = document.querySelector('.wrap');
+  TRAIL_ORDER.forEach((id) => {
+    const s = EXPLAINERS[id];
+    const sec = el('section', 'view hidden explainer');
+    sec.id = id;
+    sec.dataset.title = s.crumb;
+    sec.innerHTML =
+      '<h2>' + (s.rung ? '<span class="rung">' + rungChip(s.rung) + '</span>' : '') + s.title + '</h2>' +
+      '<p>' + s.intro + '</p>' +
+      '<p class="sys-how">Tap a step to open it; tap it again to close. Every explanation stands alone, and the row of round icons beneath it are doors into other paths, ready to be taken instead of the next step down. The note at the bottom lands on the fundamentals.</p>' +
+      '<div class="spine" id="' + id + '-parts"></div>';
+    buildStrand(sec.querySelector('.spine'), s.steps);
+    buildBottom(sec, s);
+    wrap.appendChild(sec);
+  });
+}
+/* ---- the map underneath it all: the territory beneath the
+       stories, drawn by the fundamentals map module (fund.js),
+       which the build inlines at the marker below — one source,
+       two builds: the deck ships it inlined, and the isolated
+       map build (build.py --only map) loads the same file to
+       test the map and its hover on their own. */
+/*__FUND_MODULE__*/
+
+function viewTitle(id) {
+  const s = document.getElementById(id);
+  return (s && s.dataset && s.dataset.title) || id;
+}
+function go(id, push) {
+  const target = document.getElementById(id);
+  if (!target || !target.classList.contains('view')) return;
+  document.querySelectorAll('.view').forEach((v) => v.classList.toggle('hidden', v.id !== id));
+  if (push !== false && VIEW.cur !== id) VIEW.trail.push(VIEW.cur);
+  VIEW.cur = id;
+  if (window.scrollTo) window.scrollTo(0, 0);
+  $('#crumb').textContent = viewTitle(id);
+  $('#back-btn').classList.toggle('hidden', VIEW.trail.length === 0);
+}
+function goBack() {
+  const prev = VIEW.trail.pop();
+  if (prev) go(prev, false);
+}
+function homeDeck() {
+  VIEW.trail.length = 0;
+  go('deck', false);
+}
+$('#back-btn').addEventListener('click', goBack);
+$('#home-link').addEventListener('click', homeDeck);
+renderDeck();
+renderSystems();
+renderExplainers();
+renderFundDAG();
+document.querySelectorAll('a.dgo, button.dgo').forEach((a) =>
+  a.addEventListener('click', () => go(a.dataset.go)));
+go('deck', false);
+
+/* ================================================================
+   1 · ONE TABLE OF GATES — the single source of truth for
+       every truth table and every wire colour on this page —
+       one definition per gate, used everywhere             */
+/* ================================================================*/
+const GATES = {
+  NOT:  (ins) => ins[0] ? 0 : 1,
+  AND:  (ins) => (ins[0] && ins[1]) ? 1 : 0,
+  OR:   (ins) => (ins[0] || ins[1]) ? 1 : 0,
+  XOR:  (ins) => (ins[0] ^ ins[1]) ? 1 : 0,
+  NAND: (ins) => (ins[0] && ins[1]) ? 0 : 1,
+  NOR:  (ins) => (ins[0] || ins[1]) ? 0 : 1,
+};
+const GATE_ORDER = ['NOT', 'AND', 'OR', 'XOR', 'NAND', 'NOR'];
+const GATE_ARITY = { NOT: 1, AND: 2, OR: 2, XOR: 2, NAND: 2, NOR: 2 };
+
+function truthRows(fn, arity) {
+  // every combination of `arity` inputs, e.g. 00, 01, 10, 11
+  const rows = [];
+  for (let v = 0; v < (1 << arity); v++) {
+    const ins = [];
+    for (let i = arity - 1; i >= 0; i--) ins.push((v >> i) & 1);
+    rows.push({ ins, out: fn(ins) });
+  }
+  return rows;
+}
+
+/* ================================================================
+   2 · ONE SHARED PLAYER — the video transport: play, step,
+       stop. Built once, wired four times: the Turing machine,
+       the CPU, the recursion demo, the Prolog search       */
+/* ================================================================*/
+const TICONS = {
+  play:  '<svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.6 1.4l7.6 4.6-7.6 4.6z"/></svg>',
+  pause: '<svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.2 1.6h2.8v8.8H2.2zM7 1.6h2.8v8.8H7z"/></svg>',
+  step:  '<svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M1.6 1.4l6.8 4.6-6.8 4.6zM9.4 1.6h1.8v8.8H9.4z"/></svg>',
+  stop:  '<svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><rect x="2.1" y="2.1" width="7.8" height="7.8" rx="1"/></svg>',
+};
+function tbtn(icon, label) { return '<span class="ti">' + icon + '</span>' + label; }
+function makePlayer(prefix, opts) {
+  let state = opts.initial();
+  let timer = null;
+  const bar = $('#' + prefix + '-transport');
+  bar.innerHTML =
+    '<button class="tbtn" id="' + prefix + '-play">' + tbtn(TICONS.play, 'play') + '</button>' +
+    '<button class="tbtn" id="' + prefix + '-step">' + tbtn(TICONS.step, 'step') + '</button>' +
+    '<button class="tbtn" id="' + prefix + '-stop">' + tbtn(TICONS.stop, 'stop') + '</button>';
+  const bPlay = $('#' + prefix + '-play');
+  const bStep = $('#' + prefix + '-step');
+  const render = () => opts.render(state);
+  const halt = () => {
+    if (timer) { clearInterval(timer); timer = null; }
+    bPlay.innerHTML = tbtn(TICONS.play, 'play');
+    bPlay.classList.remove('running');
+  };
+  const doStep = () => { state = opts.step(state); render(); if (state.done) halt(); };
+  const rewind = () => { halt(); state = opts.initial(); render(); };
+  bPlay.addEventListener('click', () => {
+    if (timer) { halt(); return; }
+    if (state.done) { state = opts.initial(); render(); }
+    bPlay.innerHTML = tbtn(TICONS.pause, 'pause');
+    bPlay.classList.add('running');
+    timer = setInterval(() => { doStep(); if (state.done) halt(); }, opts.speed || 500);
+  });
+  bStep.addEventListener('click', () => { halt(); doStep(); });
+  $('#' + prefix + '-stop').addEventListener('click', rewind);
+  render();
+  return { rewind };
+}
+
+/* ================================================================
+   3 · CHAPTER 1 — the binary switches                        */
+/* ================================================================*/
+const binState = [1, 0, 1, 0, 1];            // 16 8 4 2 1, most significant first
+function renderBin() {
+  const places = [16, 8, 4, 2, 1];
+  const row = $('#bin-row');
+  row.innerHTML = '';
+  places.forEach((p, i) => {
+    const holder = el('div');
+    const b = el('button', 'bitcell' + (binState[i] ? ' on' : ''), String(binState[i]));
+    b.addEventListener('click', () => { binState[i] ^= 1; renderBin(); });
+    holder.appendChild(b);
+    holder.appendChild(el('div', 'bitlabel', String(p)));
+    row.appendChild(holder);
+  });
+  const value = places.reduce((s, p, i) => s + binState[i] * p, 0);
+  $('#bin-out').textContent = String(value);
+  const lit = places.filter((p, i) => binState[i]);
+  $('#bin-exp').textContent = lit.length
+    ? lit.join(' + ') + '  =  ' + value
+    : 'nothing lit  =  0';
+}
+renderBin();
+
+/* ================================================================
+   4 · CHAPTER 2 — the gate playground                        */
+/* ================================================================*/
+const PG = { gate: 'AND', a: 0, b: 0 };
+
+// SVG geometry: input pads at x=30, gate body x≈120, lamp x=344
+function gateGeometry(type) {
+  switch (type) {
+    case 'NOT':  return { body: '<path class="gbody" d="M130,25 L205,60 L130,95 Z"/><circle class="gbubble" cx="211" cy="60" r="6"/>',
+                          inAX: 130, single: true, outX: 217 };
+    case 'AND':  return { body: '<path class="gbody" d="M120,20 h55 a40,40 0 0 1 0,80 h-55 z"/>',
+                          inAX: 120, inBX: 120, outX: 215 };
+    case 'NAND': return { body: '<path class="gbody" d="M120,20 h55 a40,40 0 0 1 0,80 h-55 z"/><circle class="gbubble" cx="221" cy="60" r="6"/>',
+                          inAX: 120, inBX: 120, outX: 227 };
+    case 'OR':   return { body: '<path class="gbody" d="M120,20 Q160,20 195,60 Q160,100 120,100 Q138,60 120,20 z"/>',
+                          inAX: 127, inBX: 127, outX: 195 };
+    case 'NOR':  return { body: '<path class="gbody" d="M120,20 Q160,20 195,60 Q160,100 120,100 Q138,60 120,20 z"/><circle class="gbubble" cx="201" cy="60" r="6"/>',
+                          inAX: 127, inBX: 127, outX: 207 };
+    case 'XOR':  return { body: '<path class="garc" d="M106,20 Q124,60 106,100"/><path class="gbody" d="M120,20 Q160,20 195,60 Q160,100 120,100 Q138,60 120,20 z"/>',
+                          inAX: 112, inBX: 112, outX: 195 };
+  }
+}
+
+function renderGate() {
+  const t = PG.gate, g = gateGeometry(t), arity = GATE_ARITY[t];
+  const ins = arity === 1 ? [PG.a] : [PG.a, PG.b];
+  const out = GATES[t](ins);
+  const wire = (v) => v ? 'w1' : 'w0';
+  let pads = '';
+  if (g.single) {
+    pads = `<line class="${wire(PG.a)}" x1="43" y1="60" x2="${g.inAX}" y2="60"/>
+      <g class="pad ${PG.a ? 'on' : ''}" onclick="PG.toggle('a')">
+        <circle cx="30" cy="60" r="13"/><text x="30" y="64" text-anchor="middle">${PG.a}</text></g>`;
+  } else {
+    pads = `<line class="${wire(PG.a)}" x1="43" y1="40" x2="${g.inAX}" y2="40"/>
+      <line class="${wire(PG.b)}" x1="43" y1="80" x2="${g.inBX}" y2="80"/>
+      <g class="pad ${PG.a ? 'on' : ''}" onclick="PG.toggle('a')">
+        <circle cx="30" cy="40" r="13"/><text x="30" y="44" text-anchor="middle">${PG.a}</text></g>
+      <g class="pad ${PG.b ? 'on' : ''}" onclick="PG.toggle('b')">
+        <circle cx="30" cy="80" r="13"/><text x="30" y="84" text-anchor="middle">${PG.b}</text></g>`;
+  }
+  $('#gate-svg').innerHTML =
+    `<svg viewBox="0 0 380 140" style="max-width:420px;width:100%;display:block;margin:0 auto">
+      ${pads}
+      ${g.body}
+      <text x="${g.inAX + 20}" y="34" text-anchor="middle" style="font:italic 13px Georgia">${t}</text>
+      <line class="${wire(out)}" x1="${g.outX}" y1="60" x2="330" y2="60"/>
+      <circle class="lamp ${out ? 'on' : ''}" cx="344" cy="60" r="13"/>
+      <text x="344" y="96" text-anchor="middle">out ${out}</text>
+    </svg>`;
+
+  // chips: gate selection
+  const chips = $('#gate-chips');
+  chips.innerHTML = '';
+  GATE_ORDER.forEach(name => {
+    const b = el('button', 'btn chip' + (PG.gate === name ? ' active' : ''), name);
+    b.addEventListener('click', () => { PG.gate = name; renderGate(); });
+    chips.appendChild(b);
+  });
+  // input toggles (buttons for keyboards, pads for pointers)
+  const inputs = $('#gate-inputs');
+  inputs.innerHTML = '';
+  const mk = (key) => {
+    const b = el('button', 'btn', `${key.toUpperCase()} = ${PG[key]}`);
+    b.addEventListener('click', () => { PG[key] ^= 1; renderGate(); });
+    inputs.appendChild(b);
+  };
+  mk('a');
+  if (arity === 2) mk('b');
+
+  // truth table with the current row highlighted
+  const rows = truthRows(GATES[t], arity);
+  let html = `<tr><th>in a</th>${arity === 2 ? '<th>in b</th>' : ''}<th>out</th></tr>`;
+  rows.forEach(r => {
+    const cur = arity === 2 ? (r.ins[0] === PG.a && r.ins[1] === PG.b) : (r.ins[0] === PG.a);
+    html += `<tr class="${cur ? 'cur' : ''}">` +
+      r.ins.map(v => `<td>${v}</td>`).join('') +
+      `<td class="${r.out ? 'hot' : ''}">${r.out}</td></tr>`;
+  });
+  $('#gate-table').innerHTML = html;
+}
+PG.toggle = (k) => { PG[k] ^= 1; renderGate(); };
+window.PG = PG;
+renderGate();
+
+/* ================================================================
+   5 · CHAPTER 3 — NAND recipes, then the ripple-carry adder   */
+/* ================================================================*/
+// every table below is generated by the same GATES table — proof by rehearsal
+const NAND = (a, b) => GATES.NAND([a, b]);
+const recipes = [
+  { title: 'NOT a  =  NAND(a, a)', arity: 1,
+    fn: (ins) => NAND(ins[0], ins[0]) },
+  { title: 'AND(a, b)  =  NAND(NAND(a,b), NAND(a,b))', arity: 2,
+    fn: (ins) => NAND(NAND(ins[0], ins[1]), NAND(ins[0], ins[1])) },
+  { title: 'OR(a, b)  =  NAND(NAND(a,a), NAND(b,b))   (De Morgan)', arity: 2,
+    fn: (ins) => NAND(NAND(ins[0], ins[0]), NAND(ins[1], ins[1])) },
+];
+{
+  const holder = $('#nand-tbls');
+  recipes.forEach(r => {
+    const box = el('div');
+    box.innerHTML = '<h4>' + r.title + '</h4>';
+    let html = '<table class="tt"><tr>' +
+      '<th>a</th>' + (r.arity === 2 ? '<th>b</th>' : '') + '<th>out</th></tr>';
+    truthRows(r.fn, r.arity).forEach(row => {
+      html += '<tr>' + row.ins.map(v => `<td>${v}</td>`).join('') +
+              `<td class="${row.out ? 'hot' : ''}">${row.out}</td></tr>`;
+    });
+    box.innerHTML += html + '</table>';
+    holder.appendChild(box);
+  });
+}
+
+// ---- the adder ------------------------------------------------
+// bits are stored least-significant first: A[0] is the 1s bit
+let A = [1, 0, 0, 1];   // 9
+let B = [1, 0, 1, 0];   // 5
+
+function fullAdder(a, b, cin) {
+  return { sum: a ^ b ^ cin, carry: (a & b) | (cin & (a ^ b)) };
+}
+function addBits(a, b) {
+  let carry = 0; const sum = []; const carries = [0];
+  for (let i = 0; i < a.length; i++) {
+    const r = fullAdder(a[i], b[i], carry);
+    sum.push(r.sum); carry = r.carry; carries.push(r.carry);
+  }
+  return { sum, carries, carryOut: carry };
+}
+const bitsToNum = (bits) => bits.reduce((s, v, i) => s + v * (1 << i), 0);
+const msb = (bits) => bits.slice().reverse().join('');
+
+function renderAdder() {
+  const r = addBits(A, B);
+  const places = ['1s', '2s', '4s', '8s'];
+  const grid = $('#adder');
+  let html = '';
+  // place headers
+  places.forEach(p => { html += `<div class="place">${p}</div><div class="blank"></div>`; });
+  html += '<div class="place">carry</div>';
+  // A and B rows: bit buttons, blanks between, row tag at the end
+  [['A', A], ['B', B]].forEach(([name, bits]) => {
+    bits.forEach((v, i) => {
+      html += `<button class="bitcell ${v ? 'on' : ''}" data-row="${name}" data-i="${i}">${v}</button><div class="blank"></div>`;
+    });
+    html += `<div class="rowtag">${name} = ${bitsToNum(bits)}</div>`;
+  });
+  // full adders with carry chips between, exit chip after the 8s column
+  for (let i = 0; i < 4; i++) {
+    const cin = r.carries[i], cout = r.carries[i + 1];
+    html += `<div class="fa-box">
+        <div class="fa-name">FULL ADDER</div>
+        <div class="fa-sum">${r.sum[i]}</div>
+        <div class="fa-tiny">cin ${cin} · cout ${cout}</div>
+      </div>`;
+    if (i < 3) html += `<div class="carry-chip ${r.carries[i + 1] ? 'one' : ''}">${r.carries[i + 1]}</div>`;
+    else html += `<div class="carry-chip ${r.carryOut ? 'one' : ''}" title="the fifth bit">${r.carryOut}</div>`;
+  }
+  html += `<div class="rowtag" style="font-size:11px">${r.carryOut ? 'too big!' : 'fits'}</div>`;
+  grid.innerHTML = html;
+  grid.querySelectorAll('button.bitcell').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const row = btn.dataset.row, i = +btn.dataset.i;
+      if (row === 'A') A[i] ^= 1; else B[i] ^= 1;
+      renderAdder();
+    });
+  });
+  const sumStr = (r.carryOut ? String(r.carryOut) : '') + msb(r.sum);
+  $('#adder-eq').innerHTML =
+    `${msb(A)} + ${msb(B)} &nbsp;=&nbsp; ${sumStr}<sub>2</sub> &nbsp;=&nbsp; ${bitsToNum(A)} + ${bitsToNum(B)} = ${bitsToNum(A) + bitsToNum(B)}`;
+}
+renderAdder();
+
+/* ================================================================
+   6 · CHAPTER 4 — the SR latch                                */
+/* ================================================================*/
+const LATCH = { s: 0, r: 0, q: 1 };   // it wakes up remembering a 1
+
+function latchEval() {
+  if (LATCH.s && LATCH.r) return { q: 0, qb: 0, invalid: true };
+  if (LATCH.s) return { q: 1, qb: 0 };
+  if (LATCH.r) return { q: 0, qb: 1 };
+  return { q: LATCH.q, qb: 1 - LATCH.q };   // hold: the loop re-confirms itself
+}
+
+function renderLatch() {
+  const v = latchEval();
+  const w = (on) => on ? 'w1' : 'w0';
+  $('#latch-holder').innerHTML =
+    `<svg viewBox="0 0 340 224" style="max-width:480px;width:100%;display:block;margin:0 auto">
+      <!-- inputs -->
+      <line class="${w(LATCH.r)}" x1="20" y1="50" x2="127" y2="50"/>
+      <line class="${w(LATCH.s)}" x1="20" y1="194" x2="127" y2="194"/>
+      <g class="pad ${LATCH.r ? 'on' : ''}" onclick="latchClick('r')">
+        <circle cx="20" cy="50" r="13"/><text x="20" y="54" text-anchor="middle">${LATCH.r}</text></g>
+      <g class="pad ${LATCH.s ? 'on' : ''}" onclick="latchClick('s')">
+        <circle cx="20" cy="194" r="13"/><text x="20" y="198" text-anchor="middle">${LATCH.s}</text></g>
+      <text x="20" y="30" text-anchor="middle">R</text>
+      <text x="20" y="172" text-anchor="middle">S</text>
+      <!-- the two NOR gates, cross-coupled -->
+      <path class="gbody" d="M120,30 Q160,30 195,70 Q160,110 120,110 Q138,70 120,30 z"/>
+      <circle class="gbubble" cx="201" cy="70" r="6"/>
+      <text x="147" y="74" style="font:italic 12px Georgia">NOR</text>
+      <path class="gbody" d="M120,134 Q160,134 195,174 Q160,214 120,214 Q138,174 120,134 z"/>
+      <circle class="gbubble" cx="201" cy="174" r="6"/>
+      <text x="147" y="178" style="font:italic 12px Georgia">NOR</text>
+      <!-- outputs and lamps -->
+      <line class="${w(v.q)}" x1="207" y1="70" x2="316" y2="70"/>
+      <line class="${w(v.qb)}" x1="207" y1="174" x2="316" y2="174"/>
+      <circle class="lamp ${v.q ? 'on' : ''}" cx="328" cy="70" r="10"/>
+      <circle class="lamp ${v.qb ? 'on' : ''}" cx="328" cy="174" r="10"/>
+      <text x="328" y="48" text-anchor="middle">Q</text>
+      <text x="328" y="150" text-anchor="middle">Q&#772;</text>
+      <!-- the strange loop: each output feeds the other gate -->
+      <path class="${w(v.q)}" fill="none" d="M250,70 V12 H72 V154 H127"/>
+      <path class="${w(v.qb)}" fill="none" d="M250,174 V220 H52 V90 H127"/>
+      <circle cx="250" cy="70" r="3.5" fill="#111"/>
+      <circle cx="250" cy="174" r="3.5" fill="#111"/>
+    </svg>`;
+  LATCH.q = v.q;   // store what the loop just agreed on
+  $('#latch-s').textContent = `S = ${LATCH.s}`;
+  $('#latch-r').textContent = `R = ${LATCH.r}`;
+  $('#latch-note').innerHTML = v.invalid
+    ? 'forbidden: both gates driven — outputs both 0; release one and the survivor decides'
+    : (LATCH.s ? 'S = 1 → Q set to 1' : LATCH.r ? 'R = 1 → Q reset to 0'
+      : `S = R = 0 → the loop holds Q = ${v.q} (and will hold it for years)`);
+}
+function latchClick(k) { LATCH[k] ^= 1; renderLatch(); }
+window.latchClick = latchClick;
+$('#latch-s').addEventListener('click', () => { LATCH.s ^= 1; renderLatch(); });
+$('#latch-r').addEventListener('click', () => { LATCH.r ^= 1; renderLatch(); });
+renderLatch();
+
+/* ================================================================
+   7 · CHAPTER 5 — the Turing machine                          */
+/* ================================================================*/
+// one rule table: keyed "state:read" -> write, move, next state
+const TM_RULES = {
+  'scan:0': { w: '0', m: 1,  n: 'scan' },
+  'scan:1': { w: '1', m: 1,  n: 'scan' },
+  'scan:_': { w: '_', m: -1, n: 'carry' },
+  'carry:1': { w: '0', m: -1, n: 'carry' },
+  'carry:0': { w: '1', m: 0,  n: 'halt' },
+  'carry:_': { w: '1', m: 0,  n: 'halt' },
+};
+const tmInitial = () => ({
+  tape: ['_', '_', '1', '0', '1', '1', '_', '_', '_'],
+  head: 2, state: 'scan', halted: false, done: false, steps: 0,
+});
+function tmStep(m) {
+  if (m.halted) return Object.assign({}, m, { done: true });
+  const read = m.tape[m.head] !== undefined ? m.tape[m.head] : '_';
+  const rule = TM_RULES[m.state + ':' + read];
+  const tape = m.tape.slice();
+  tape[m.head] = rule.w;
+  let head = m.head + rule.m;
+  if (head < 0) { tape.unshift('_'); head = 0; }
+  if (head >= tape.length) tape.push('_');
+  const state = rule.n, halted = state === 'halt';
+  return { tape, head, state, halted, done: halted, steps: m.steps + 1 };
+}
+function renderTM(m) {
+  $('#tm-tape').innerHTML = m.tape.map((c, i) =>
+    `<div class="tcell ${c === '_' ? 'blank' : ''} ${i === m.head && !m.halted ? 'current' : ''}">${c}</div>`
+  ).join('');
+  const st = $('#tm-state');
+  st.textContent = m.halted ? 'HALT' : m.state;
+  st.classList.toggle('halted', m.halted);
+  const read = m.tape[m.head] !== undefined ? m.tape[m.head] : '_';
+  $('#tm-note').textContent = m.halted
+    ? `halted after ${m.steps} steps — the tape reads ${m.tape.filter(c => c !== '_').join('')}₂`
+    : `step ${m.steps + 1}: in state ${m.state}, read ${read}`;
+  // rule table with the active thought lit
+  let html = '<tr><th>state</th><th>read</th><th>write</th><th>move</th><th>next</th></tr>';
+  Object.keys(TM_RULES).forEach(key => {
+    const parts = key.split(':');
+    const r = TM_RULES[key];
+    const cur = !m.halted && key === m.state + ':' + (m.tape[m.head] !== undefined ? m.tape[m.head] : '_');
+    const mv = r.m === 1 ? '→' : r.m === -1 ? '←' : '·';
+    html += `<tr class="${cur ? 'cur' : ''}"><td>${parts[0]}</td><td>${parts[1]}</td><td>${r.w}</td><td>${mv}</td><td>${r.n}</td></tr>`;
+  });
+  $('#tm-rules').innerHTML = html;
+}
+makePlayer('tm', { initial: tmInitial, step: tmStep, render: renderTM, speed: 450 });
+
+/* ================================================================
+   8 · CHAPTER 6 — the von Neumann toy CPU                    */
+/* ================================================================*/
+// three-digit cells: opcode × 100 + operand.
+// 1 LDA x · 2 ADD x · 3 SUB x · 4 STA x · 5 JMP x · 6 JZ x · 7 OUT · 0 HLT
+const OPS = { 0: 'HLT', 1: 'LDA', 2: 'ADD', 3: 'SUB', 4: 'STA', 5: 'JMP', 6: 'JZ', 7: 'OUT' };
+const LISTING = [
+  { a: 0, code: 'LDA 8', note: 'ACC ← count', data: false },
+  { a: 1, code: 'OUT',   note: 'say it', data: false },
+  { a: 2, code: 'SUB 9', note: 'count − 1', data: false },
+  { a: 3, code: 'STA 8', note: 'count ← ACC', data: false },
+  { a: 4, code: 'JZ 6',  note: 'if ACC = 0, done', data: false },
+  { a: 5, code: 'JMP 0', note: '…else loop', data: false },
+  { a: 6, code: 'HLT',   note: 'stop', data: false },
+  { a: 7, code: '—',     note: 'unused', data: false },
+  { a: 8, code: 'DAT 5', note: 'the count (data!)', data: true },
+  { a: 9, code: 'DAT 1', note: 'the one (data!)', data: true },
+];
+const cpuInitial = () => ({
+  mem: [108, 700, 309, 408, 606, 500, 0, 0, 5, 1],
+  pc: 0, acc: 0, ir: null, halted: false, done: false,
+  out: [], fetchPc: null, ref: -1, decode: '', text: '',
+});
+function cpuStep(c) {
+  if (c.halted) return Object.assign({}, c, { done: true });
+  const mem = c.mem.slice();
+  const fetchPc = c.pc;
+  const ir = mem[c.pc];
+  const op = Math.floor(ir / 100), x = ir % 100;
+  const wrap = (v) => ((v % 1000) + 1000) % 1000;
+  let pc = c.pc + 1, acc = c.acc, out = c.out.slice();
+  let halted = false, ref = -1, text = '';
+  if (op === 1) { acc = mem[x]; ref = x; text = `ACC ← MEM[${x}] = ${mem[x]}`; }
+  else if (op === 2) { acc = wrap(acc + mem[x]); ref = x; text = `ACC ← ${c.acc} + ${mem[x]} = ${acc}`; }
+  else if (op === 3) { acc = wrap(acc - mem[x]); ref = x; text = `ACC ← ${c.acc} − ${mem[x]} = ${acc}`; }
+  else if (op === 4) { mem[x] = acc; ref = x; text = `MEM[${x}] ← ${acc}`; }
+  else if (op === 5) { pc = x; text = `PC ← ${x}`; }
+  else if (op === 6) {
+    if (acc === 0) { pc = x; text = `ACC = 0 → PC ← ${x}`; }
+    else { text = `ACC = ${acc} ≠ 0 → fall through`; }
+  }
+  else if (op === 7) { out.push(acc); text = `print ${acc}`; }
+  else { halted = true; pc = fetchPc; text = 'stop'; }
+  return { mem, pc, acc, ir, out, halted, done: halted, fetchPc, ref,
+           decode: `${OPS[op]}${op >= 1 && op <= 6 ? ' ' + x : ''}`, text };
+}
+function renderCPU(c) {
+  // the listing: the same ten numbers, seen twice
+  let html = '<tr><th>#</th><th>what the programmer wrote</th><th>what memory holds</th></tr>';
+  LISTING.forEach(row => {
+    const val = c.mem[row.a];
+    const cur = c.fetchPc === row.a;
+    const refd = c.ref === row.a;
+    html += `<tr class="${cur ? 'cur' : ''}">
+      <td>${row.a}</td>
+      <td class="${row.data ? 'data' : ''}">${row.code} <span class="cmt">; ${row.note}</span></td>
+      <td class="num ${refd ? 'data' : ''}">${String(val).padStart(3, '0')}</td></tr>`;
+  });
+  $('#cpu-table').innerHTML = html;
+  $('#cpu-pc').textContent = c.pc;
+  $('#cpu-ir').textContent = c.ir == null ? '—' : String(c.ir).padStart(3, '0');
+  $('#cpu-acc').textContent = c.acc;
+  $('#cpu-out').innerHTML = c.out.length
+    ? c.out.map(v => `<span class="outchip">${v}</span>`).join(' ')
+    : '<span style="font:13px var(--sans);color:var(--faint)">nothing yet</span>';
+  $('#cpu-decode').innerHTML = c.ir == null
+    ? 'Press step to begin the cycle.'
+    : `fetch: IR ← MEM[${c.fetchPc}] = ${String(c.ir).padStart(3, '0')} &nbsp;·&nbsp; decode: ${c.decode} &nbsp;·&nbsp; execute: ${c.text}` +
+      (c.halted ? ' &nbsp;·&nbsp; <strong>machine halted</strong>' : '');
+}
+makePlayer('cpu', { initial: cpuInitial, step: cpuStep, render: renderCPU, speed: 550 });
+
+/* ================================================================
+   9 · CHAPTER 7 — recursion, seen from below                  */
+/* ================================================================*/
+// the trace is computed by the same idea the machine uses:
+// push a frame per call, pop one per return
+function traceFact(n) {
+  const evs = [];
+  for (let k = n; k >= 1; k--) evs.push({ t: 'call', n: k });
+  evs.push({ t: 'base' });
+  let v = 1;
+  for (let k = 1; k <= n; k++) { v *= k; evs.push({ t: 'ret', n: k, val: v }); }
+  return evs;
+}
+const FACT_N = 4;
+const FACT_EVENTS = traceFact(FACT_N);
+
+// replay events up to i and return the stack snapshot
+function stackAt(evs, i) {
+  const frames = [];
+  for (let j = 0; j <= i; j++) {
+    const e = evs[j];
+    if (e.t === 'call') frames.push({ n: e.n, note: `waiting for (fact ${e.n - 1})`, fresh: j === i });
+    else if (e.t === 'base') frames.push({ n: 0, note: 'n = 0 → return 1', bedrock: true, fresh: j === i });
+    else if (e.t === 'ret') {
+      frames.pop();
+      if (frames.length) {
+        const top = frames[frames.length - 1];
+        top.note = `(* ${top.n} ${e.val}) pending`;
+      }
+    }
+  }
+  return frames;
+}
+const recInitial = () => ({ i: 0, done: false });
+function recStep(s) {
+  return (s.i >= FACT_EVENTS.length - 1)
+    ? { i: s.i, done: true }
+    : { i: s.i + 1, done: false };
+}
+function narrate(e) {
+  if (e.t === 'call') {
+    return `(fact ${e.n}) is called. ${e.n} ≠ 0, so its body needs (* ${e.n} (fact ${e.n - 1})) — push a frame, then wait inside it.`;
+  }
+  if (e.t === 'base') {
+    return `(fact 0) is called. n is zero — bedrock. It returns 1 at once; the stack has stopped growing.`;
+  }
+  if (e.n === 1) {
+    return `The 1 from (fact 0) pops back into (fact 1): 1 × 1 = 1. One frame disappears.`;
+  }
+  const child = e.val / e.n;
+  return `(fact ${e.n}) finally has its answer: ${e.n} × ${child} = ${e.val}. It returns ${e.val} and pops; the waiting frame resumes.`;
+}
+function renderRec(s) {
+  const e = FACT_EVENTS[s.i];
+  const frames = stackAt(FACT_EVENTS, s.i);
+  // newest frame on top, oldest at the bottom — a stack of plates
+  $('#rec-stack').innerHTML = frames.length
+    ? frames.slice().reverse().map(f =>
+        `<div class="frame ${f.bedrock ? 'bedrock' : ''} ${f.fresh ? 'new' : ''}">
+           <span class="fn">(fact ${f.n})</span><span class="fw">${f.note}</span>
+         </div>`).join('')
+    : `<div class="frame" style="border-style:dashed;border-color:#b9b2a0;color:#7c7668">
+         <span class="fn">stack empty</span><span class="fw">answer: ${e.t === 'ret' ? e.val : 1}</span>
+       </div>`;
+  // values returned so far
+  const vals = [];
+  for (let j = 0; j <= s.i; j++) {
+    const ev = FACT_EVENTS[j];
+    if (ev.t === 'base') vals.push(1);
+    if (ev.t === 'ret') vals.push(ev.val);
+  }
+  $('#rec-ribbon').innerHTML = vals.length
+    ? vals.map((v, k) => `<span class="valchip" style="${k === vals.length - 1 ? '' : 'opacity:.45'}">${v}</span>`).join(' ')
+    : '<span style="font:13px var(--sans);color:var(--faint)">waiting for bedrock…</span>';
+  $('#rec-note').innerHTML = narrate(e) +
+    (s.done ? ' &nbsp;·&nbsp; <strong>(fact 4) = 24</strong>' : '');
+  // move the highlight in the Scheme code
+  document.querySelectorAll('#rec-code .hl').forEach(n => n.classList.remove('active'));
+  const target = e.t === 'call' ? 'hl-call' : e.t === 'base' ? 'hl-base' : 'hl-mul';
+  const node = document.getElementById(target);
+  if (node) node.classList.add('active');
+}
+makePlayer('rec', { initial: recInitial, step: recStep, render: renderRec, speed: 850 });
+
+/* ================================================================
+   10 · CHAPTER 8 — FORTH: a language that is a stack         */
+/* ================================================================*/
+const FORTH = { stack: [], out: [], note: 'Push numbers, then let words act on them.' };
+function forthRender() {
+  const s = FORTH.stack;
+  $('#forth-stack').innerHTML = s.length
+    ? s.slice().reverse().map(v => `<div class="fchip">${v}</div>`).join('')
+    : '<div class="cnil">empty — the machine is listening</div>';
+  $('#forth-out').innerHTML = FORTH.out.length
+    ? FORTH.out.map(v => `<span class="outchip">${v}</span>`).join(' ')
+    : '<span style="font:13px var(--sans);color:var(--faint)">nothing printed</span>';
+  $('#forth-note').textContent = FORTH.note;
+}
+function forthOp(op) {
+  if (op === 'RESET') { FORTH.stack = []; FORTH.out = []; FORTH.note = 'cleared.'; return; }
+  const s = FORTH.stack;
+  const lbl = op === 'DOT' ? '.' : op;
+  const need = (k) => {
+    if (s.length < k) { FORTH.note = `${lbl} needs ${k} number${k > 1 ? 's' : ''} — the stack is bare.`; return false; }
+    return true;
+  };
+  const push = (v) => {
+    if (s.length >= 10) { FORTH.note = 'the demo stack is full — real Forth never checks, and that is a story for another day.'; return false; }
+    s.push(v); return true;
+  };
+  if (op === '+' || op === '-' || op === '*') {
+    if (!need(2)) return;
+    const b = s.pop(), a = s.pop();
+    const r = op === '+' ? a + b : op === '*' ? a * b : a - b;
+    if (push(r)) FORTH.note = `${a} ${b} ${op} \u2192 ${r}`;
+  } else if (op === 'DUP') {
+    if (!need(1)) return;
+    const a = s.pop();
+    if (push(a) && push(a)) FORTH.note = `${a} DUP \u2192 ${a} ${a}`;
+  } else if (op === 'DROP') {
+    if (!need(1)) return;
+    const a = s.pop();
+    FORTH.note = `${a} DROP \u2192 gone.`;
+  } else if (op === 'DOT') {
+    if (!need(1)) return;
+    const a = s.pop();
+    FORTH.out.push(a);
+    FORTH.note = `${a} . \u2192 printed.`;
+  } else if (op === 'SQUARE') {
+    if (!need(1)) return;
+    const a = s.pop();
+    if (push(a * a)) FORTH.note = `${a} SQUARE \u2192 ${a * a} — by its definition: DUP *`;
+  } else {
+    // a number: words of this kind simply push themselves
+    if (push(+op)) FORTH.note = `${op} pushed.`;
+  }
+}
+document.querySelectorAll('#forth-controls button').forEach(b => {
+  b.addEventListener('click', () => { forthOp(b.dataset.op); forthRender(); });
+});
+forthRender();
+
+/* ================================================================
+   11 · CHAPTER 8 — LISP: a language that is a list           */
+/* ================================================================*/
+const LISP = { list: ['mars', 'venus', 'mercury'], next: 0, note: 'Three entries; nil at the end.' };
+const DISCOVERIES = ['jupiter', 'saturn', 'a-comet', 'a-nova', 'a-galaxy'];
+const lispQuote = () => "'(" + LISP.list.join(' ') + ")";
+function lispRender() {
+  const items = LISP.list;
+  const cells = items.map((it, i) => {
+    const last = i === items.length - 1;
+    return `<div class="ccell"><div class="car">${it}</div><div class="cdr">${last ? '\u2205' : '\u2022'}</div></div>` +
+      (last ? '' : '<span class="carrow">\u2192</span>');
+  }).join('');
+  $('#lisp-cells').innerHTML = cells || '<span class="cnil">() — nil, the empty catalogue</span>';
+  $('#lisp-note').textContent = LISP.note;
+}
+function lispOp(op) {
+  const before = lispQuote();
+  if (op === 'RESET') {
+    LISP.list = ['mars', 'venus', 'mercury'];
+    LISP.note = 'the catalogue, restored.';
+  } else if (op === 'car') {
+    if (!LISP.list.length) { LISP.note = "(car '()) \u21D2 nil — the empty catalogue has no first star."; }
+    else LISP.note = `(car ${before}) \u21D2 ${LISP.list[0]}`;
+  } else if (op === 'cdr') {
+    if (!LISP.list.length) { LISP.note = "(cdr '()) \u21D2 () — nothing remains of nothing."; }
+    else {
+      LISP.list = LISP.list.slice(1);
+      LISP.note = `(cdr ${before}) \u21D2 (${LISP.list.join(' ')})`;
+    }
+  } else if (op === 'cons') {
+    if (LISP.list.length >= 8) { LISP.note = 'the catalogue is full — astronomy, too, has budgets.'; }
+    else {
+      const d = DISCOVERIES[LISP.next % DISCOVERIES.length];
+      LISP.next++;
+      LISP.list = [d].concat(LISP.list);
+      LISP.note = `(cons '${d} ${before}) \u21D2 (${LISP.list.join(' ')})`;
+    }
+  }
+}
+document.querySelectorAll('#lisp-controls button').forEach(b => {
+  b.addEventListener('click', () => { lispOp(b.dataset.op); lispRender(); });
+});
+lispRender();
+
+/* ================================================================
+   12 · CHAPTER 9 — PROLOG: a language that is a search. One
+       small resolver does the finding; every attempt is on
+       the record (runs of rejections fold to one trail line).
+   ================================================================*/
+const PL_FACTS = [
+  ['chaos', 'gaia'], ['gaia', 'cronus'], ['uranus', 'cronus'],
+  ['gaia', 'rhea'], ['uranus', 'rhea'],
+  ['cronus', 'zeus'], ['rhea', 'zeus'], ['cronus', 'hera'], ['rhea', 'hera'],
+];
+const PL_RULES = [
+  { head: ['grandparent', 'G', 'C'], body: [['parent', 'G', 'P'], ['parent', 'P', 'C']],
+    text: 'grandparent(G, C) :- parent(G, P), parent(P, C).', kb: 9 },
+  { head: ['ancestor', 'A', 'D'], body: [['parent', 'A', 'D']],
+    text: 'ancestor(A, D) :- parent(A, D).', kb: 10 },
+  { head: ['ancestor', 'A', 'D'], body: [['parent', 'A', 'M'], ['ancestor', 'M', 'D']],
+    text: 'ancestor(A, D) :- parent(A, M), ancestor(M, D).', kb: 11 },
+];
+const PL = { q: ['grandparent', 'G', 'zeus'] };
+const plIsVar = (t) => /^[A-Z_]/.test(t);
+const plSub = (n) => String(n).replace(/[0-9]/g, (d) => '₀₁₂₃₄₅₆₇₈₉'[+d]);
+function plWalk(t, s) { while (plIsVar(t) && s[t]) t = s[t]; return t; }
+function plUnifyArgs(a, b, s) {
+  let out = s;
+  for (let i = 0; i < a.length; i++) {
+    const x = plWalk(a[i], out), y = plWalk(b[i], out);
+    if (x === y) continue;
+    if (plIsVar(x)) { out = Object.assign({}, out); out[x] = y; continue; }
+    if (plIsVar(y)) { out = Object.assign({}, out); out[y] = x; continue; }
+    return null;
+  }
+  return out;
+}
+function plBuildTrace(query) {
+  const events = [];
+  let counter = 0, gid = 0;
+  const qvars = query.slice(1).filter(plIsVar);
+  function solve(goals, s, depth) {
+    if (goals.length === 0) {
+      events.push({ kind: 'sol', depth, kb: -1, gid: 0, goal: '',
+        text: qvars.map((v) => v + ' = ' + plWalk(v, s)).join(', ') });
+      return true;
+    }
+    const g = goals[0], rest = goals.slice(1), myGid = ++gid;
+    const gtxt = g[0] + '(' + g.slice(1).map((t) => plWalk(t, s)).join(', ') + ')';
+    let candidates;
+    if (g[0] === 'parent') {
+      candidates = PL_FACTS.map((f, i) => ({ head: ['parent', f[0], f[1]], body: [], text: 'parent(' + f[0] + ', ' + f[1] + ').', kb: i }));
+    } else {
+      counter++;
+      const ren = (t) => plIsVar(t) ? t + plSub(counter) : t;
+      candidates = PL_RULES.filter((r) => r.head[0] === g[0]).map((r) => ({
+        head: [r.head[0]].concat(r.head.slice(1).map(ren)),
+        body: r.body.map((b) => [b[0]].concat(b.slice(1).map(ren))),
+        text: r.text, kb: r.kb }));
+    }
+    let yielded = false, backEmitted = false;
+    for (const c of candidates) {
+      if (yielded && !backEmitted) {
+        events.push({ kind: 'back', depth, kb: -1, gid: myGid, goal: gtxt, text: '' });
+        backEmitted = true;
+      }
+      const s2 = plUnifyArgs(g.slice(1), c.head.slice(1), s);
+      let note = '';
+      if (s2) {
+        note = c.body.length === 0
+          ? g.slice(1).filter(plIsVar).map((v) => v + ' = ' + plWalk(v, s2)).join(', ')
+          : c.body.map((b) => b[0] + '(' + b.slice(1).map((t) => plWalk(t, s2)).join(', ') + ')').join(', ');
+      }
+      events.push({ kind: c.body.length === 0 ? 'fact' : 'rule', ok: !!s2, depth, kb: c.kb, gid: myGid, goal: gtxt, text: c.text, note });
+      if (!s2) continue;
+      if (solve(c.body.concat(rest), s2, depth + 1)) { yielded = true; backEmitted = false; }
+    }
+    return yielded;
+  }
+  solve([query], {}, 0);
+  const sols = events.filter((e) => e.kind === 'sol');
+  const distinct = new Set(sols.map((e) => e.text)).size;
+  events.push({ kind: 'end', depth: 0, kb: -1, gid: 0, goal: '',
+    text: sols.length === 0
+      ? 'false — no proof exists in the pond'
+      : sols.length + (sols.length === 1 ? ' proof' : ' proofs') + ', ' + distinct + (distinct === 1 ? ' answer' : ' answers') });
+  return events;
+}
+function plLineHTML(e) {
+  const ind = 'padding-left:' + (e.depth * 14) + 'px';
+  if (e.kind === 'sol') return '<div class="ln sol" style="' + ind + '">★ ' + e.text + '</div>';
+  if (e.kind === 'back') return '<div class="ln back" style="' + ind + '">↩ back up, take the next road</div>';
+  if (e.kind === 'end') return '<div class="ln end" style="' + ind + '">— ' + e.text + '</div>';
+  if (e.kind === 'run') return '<div class="ln no" style="' + ind + '">✗ ' + e.goal + ': ' + e.count + (e.count === 1 ? ' fact rejected' : ' facts rejected') + (e.more ? ' so far…' : '') + '</div>';
+  const note = e.ok ? '<span class="as">' + (e.kind === 'rule' ? ' → ' : ' · ') + e.note + '</span>' : '';
+  return '<div class="ln ' + (e.ok ? 'ok' : 'no') + '" style="' + ind + '">' + (e.ok ? '✓' : '✗') + ' ' + e.text + note + '</div>';
+}
+function plTrailHTML(events, upto) {
+  const out = [];
+  let k = 0;
+  while (k < upto) {
+    const e = events[k];
+    if (e.kind === 'fact' && !e.ok) {
+      let end = k;
+      while (end + 1 < events.length && events[end + 1].kind === 'fact' && !events[end + 1].ok && events[end + 1].gid === e.gid) end++;
+      const shown = Math.min(end + 1, upto);
+      const count = shown - k;
+      const more = shown <= end;
+      if (count === 1 && !more) out.push(plLineHTML(e));
+      else out.push(plLineHTML({ kind: 'run', depth: e.depth, goal: e.goal, count, more }));
+      k = shown;
+    } else { out.push(plLineHTML(e)); k++; }
+  }
+  return out.join('');
+}
+function renderPL(st) {
+  const trail = $('#pl-trail');
+  trail.innerHTML = st.i === 0
+    ? '<div class="hint">The pond is still; the machine has not moved.</div>'
+    : plTrailHTML(st.trace, st.i);
+  document.querySelectorAll('#pl-kb div').forEach((d) => d.classList.remove('cur'));
+  if (st.i > 0) {
+    for (let k = st.i - 1; k >= 0; k--) {
+      if (st.trace[k].kb >= 0) {
+        const line = document.getElementById('pl-c-' + st.trace[k].kb);
+        if (line) line.classList.add('cur');
+        break;
+      }
+    }
+  }
+  const sols = st.trace.slice(0, st.i).filter((e) => e.kind === 'sol');
+  const seen = new Set();
+  let ans = '';
+  sols.forEach((s) => { if (!seen.has(s.text)) { seen.add(s.text); ans += '<span class="ans">' + s.text + '</span>'; } });
+  if (st.done && !sols.length) ans = '<span class="ans">false</span>';
+  else if (!sols.length) ans = '<span class="pl-none">none yet — the machine is still walking the pond</span>';
+  if (st.done && sols.length) ans += '<span class="pl-count">' + st.trace[st.trace.length - 1].text + '</span>';
+  $('#pl-answers').innerHTML = ans;
+  const note = $('#pl-note');
+  if (st.i === 0) note.textContent = 'Press play to watch the hunt, or step through it one thought at a time.';
+  else if (st.done) note.textContent = 'Search over: ' + st.trace[st.trace.length - 1].text + '.';
+  else if (sols.length) note.textContent = sols.length + (sols.length === 1 ? ' answer so far — press step to hunt for the next.' : ' answers so far — press step to hunt for the next.');
+  else note.textContent = 'No answer yet; the machine is still walking the pond.';
+  trail.scrollTop = trail.scrollHeight;
+}
+(function () {
+  const kb = $('#pl-kb');
+  let facts = '';
+  PL_FACTS.forEach((f, i) => { facts += '<div id="pl-c-' + i + '">parent(' + f[0] + ', ' + f[1] + ').</div>'; });
+  let rules = '';
+  PL_RULES.forEach((r) => { rules += '<div id="pl-c-' + r.kb + '">' + r.text + '</div>'; });
+  kb.innerHTML = '<div class="kbhead">the facts</div><div class="kb-cols">' + facts + '</div>' +
+    '<div class="kbhead">the rules</div>' + rules;
+})();
+const plPlayer = makePlayer('pl', {
+  initial: () => ({ trace: plBuildTrace(PL.q), i: 0, done: false }),
+  step: (st) => { const i = Math.min(st.i + 1, st.trace.length); return { trace: st.trace, i, done: i >= st.trace.length }; },
+  render: renderPL,
+  speed: 140,
+});
+document.querySelectorAll('#pl-queries .btn').forEach((b) => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('#pl-queries .btn').forEach((x) => x.classList.remove('active'));
+    b.classList.add('active');
+    PL.q = b.dataset.q.replace(/[?.(),]/g, ' ').split(/\s+/).filter(Boolean);
+    plPlayer.rewind();
+  });
+});
+
+/* ================================================================
+   13 · CHAPTER 10 — TIME: two hands, one cell. The lost update
+       and the owner who prevents it; one state machine, two
+       postures, every act narrated.
+   ================================================================*/
+const RACE = { mode: 'shared', cell: 5, w: [{ pc: 0, reg: null }, { pc: 0, reg: null }], pipe: [], note: '', timer: null, script: [], si: 0 };
+const RACE_SHARED_PROG = ['load the cell', 'add 1', 'store to the cell'];
+const RACE_PIPE_PROG = ['send “+1” to the owner'];
+function raceSteps() { return RACE.mode === 'shared' ? 3 : 1; }
+function raceResetState() { RACE.cell = 5; RACE.w = [{ pc: 0, reg: null }, { pc: 0, reg: null }]; RACE.pipe = []; }
+function raceVerdict() {
+  const n = raceSteps();
+  if (RACE.mode === 'shared') {
+    if (RACE.w[0].pc >= n && RACE.w[1].pc >= n) {
+      const surv = RACE.cell - 5;
+      RACE.note += surv === 2
+        ? ' Both workers done: the cell reached 7 — the order happened to be safe. The same code under other skies loses one.'
+        : ' Both workers done: two increments went in, ' + surv + (surv === 1 ? ' survived.' : ' survived of two.');
+    }
+  } else if (RACE.w[0].pc >= n && RACE.w[1].pc >= n && RACE.pipe.length === 0) {
+    RACE.note += ' Everything is taken: the cell is ' + RACE.cell + '.';
+  }
+}
+function raceAct(who) {
+  if (who === 'own') {
+    if (RACE.pipe.length === 0) { RACE.note = 'The pipe is empty; the owner waits.'; return; }
+    RACE.pipe.shift(); RACE.cell += 1;
+    RACE.note = 'The owner takes a “+1”; the cell is now ' + RACE.cell + '.';
+  } else {
+    const w = RACE.w[who];
+    if (w.pc >= raceSteps()) { RACE.note = 'Worker ' + (who + 1) + ' is finished; press stop, then play, to run it again.'; return; }
+    if (RACE.mode === 'shared') {
+      if (w.pc === 0) { w.reg = RACE.cell; RACE.note = 'Worker ' + (who + 1) + ' reads ' + w.reg + ' into its own register — a private copy, already growing old.'; }
+      else if (w.pc === 1) { w.reg += 1; RACE.note = 'Worker ' + (who + 1) + ' adds one; its register says ' + w.reg + '.'; }
+      else {
+        const moved = RACE.cell !== w.reg - 1;
+        RACE.cell = w.reg;
+        RACE.note = moved
+          ? 'Worker ' + (who + 1) + ' stores ' + w.reg + ' over a cell that moved since its load — someone’s work is overwritten.'
+          : 'Worker ' + (who + 1) + ' stores ' + w.reg + ' into the cell.';
+      }
+    } else {
+      RACE.pipe.push('+1');
+      RACE.note = 'Worker ' + (who + 1) + ' drops “+1” into the pipe; the cell is not touched.';
+    }
+    w.pc += 1;
+  }
+  raceVerdict();
+}
+function raceStop() { if (RACE.timer) { clearInterval(RACE.timer); RACE.timer = null; } $('#race-play').innerHTML = tbtn(TICONS.play, 'play'); $('#race-play').classList.remove('running'); }
+function raceRun() {
+  if (RACE.timer) { raceStop(); return; }
+  raceResetState();
+  RACE.script = RACE.mode === 'shared' ? [0, 1, 0, 1, 0, 1] : [0, 1, 'own', 'own'];
+  RACE.si = 0;
+  $('#race-play').innerHTML = tbtn(TICONS.pause, 'pause');
+  $('#race-play').classList.add('running');
+  RACE.timer = setInterval(() => {
+    if (RACE.si >= RACE.script.length) {
+      raceStop();
+      RACE.note = RACE.mode === 'shared'
+        ? 'The race is over: the cell is ' + RACE.cell + ' — both workers read the same 5, and the second store wrote over the first. Two increments went in; one survived.'
+        : 'The messages are taken: the cell is ' + RACE.cell + '. The arrivals interleaved freely and nothing was lost — one owner was the whole of the doorman.';
+      raceRender();
+      return;
+    }
+    raceAct(RACE.script[RACE.si++]);
+    raceRender();
+  }, 550);
+}
+function raceWorkerHTML(i) {
+  const w = RACE.w[i], prog = RACE.mode === 'shared' ? RACE_SHARED_PROG : RACE_PIPE_PROG;
+  let lines = '';
+  prog.forEach((p, k) => {
+    lines += '<div class="' + (w.pc === k ? 'cur' : (w.pc > k ? 'did' : '')) + '">' + p + '</div>';
+  });
+  const reg = RACE.mode === 'shared'
+    ? '<div class="regrow"><span class="rl">its register</span> <span class="valchip">' + (w.reg == null ? '—' : w.reg) + '</span></div>'
+    : '';
+  return '<div class="rc-label">worker ' + (i + 1) + '</div><div class="race-prog">' + lines + '</div>' + reg;
+}
+function raceMidHTML() {
+  if (RACE.mode === 'shared') {
+    return '<div class="rc-label">the cell — owned by no one</div><div class="race-cell">' + RACE.cell + '</div>';
+  }
+  const msgs = RACE.pipe.length
+    ? RACE.pipe.map(() => '<span class="msg">+1</span>').join('')
+    : '<span class="pipe-empty">empty — the owner waits</span>';
+  return '<div class="rc-label">the pipe</div><div class="pipe">' + msgs + '</div>' +
+    '<div class="ownerbox"><div class="rc-label">the owner — the cell lives here now</div><div class="race-cell">' + RACE.cell + '</div></div>';
+}
+function raceRender() {
+  $('#race-c1').innerHTML = raceWorkerHTML(0);
+  $('#race-c2').innerHTML = raceWorkerHTML(1);
+  $('#race-mid').innerHTML = raceMidHTML();
+  const n = raceSteps();
+  $('#race-w1').disabled = RACE.w[0].pc >= n;
+  $('#race-w2').disabled = RACE.w[1].pc >= n;
+  $('#race-own').disabled = RACE.mode !== 'pipe';
+  $('#race-note').textContent = RACE.note;
+}
+function raceReset() {
+  raceStop();
+  raceResetState();
+  RACE.note = RACE.mode === 'shared'
+    ? 'Two workers, one cell holding 5. Press the workers in any order, or press play.'
+    : 'Two workers, a pipe, an owner. The workers no longer touch the cell at all.';
+  raceRender();
+}
+$('#race-w1').addEventListener('click', () => { raceStop(); raceAct(0); raceRender(); });
+$('#race-w2').addEventListener('click', () => { raceStop(); raceAct(1); raceRender(); });
+$('#race-own').addEventListener('click', () => { raceStop(); raceAct('own'); raceRender(); });
+$('#race-stop').innerHTML = tbtn(TICONS.stop, 'stop');
+$('#race-play').addEventListener('click', raceRun);
+$('#race-stop').addEventListener('click', raceReset);
+document.querySelectorAll('#race-modes .btn').forEach((b) => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('#race-modes .btn').forEach((x) => x.classList.remove('active'));
+    b.classList.add('active');
+    RACE.mode = b.dataset.m;
+    raceReset();
+  });
+});
+raceReset();
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="oitgvRUTJOCplB+2EIYj5A==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>

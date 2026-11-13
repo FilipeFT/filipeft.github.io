@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================
+     data/ladder.xml — the universal ladder: one slim ordered list of rungs (an
+     id and a chip, nothing else). The order sorts the parts
+     of every card; the chips label them.
+     Governed by deck.xsd; the build validates this part
+     alone (build.py with the part option) and all parts
+     assembled (the default build).
+     ================================================================ -->
+  <ladder>
+    <rung id="sense" chip="the world in"/>
+    <rung id="show" chip="the world out"/>
+    <rung id="os" chip="the manager"/>
+    <rung id="app" chip="the program"/>
+    <rung id="code" chip="the code"/>
+    <rung id="machine" chip="the machine"/>
+    <rung id="instructions" chip="the dance"/>
+    <rung id="logic" chip="the fork"/>
+    <rung id="bit" chip="the bedrock"/>
+    <rung id="memory" chip="memory"/>
+    <rung id="network" chip="the wire"/>
+    <rung id="time" chip="time"/>
+  </ladder>

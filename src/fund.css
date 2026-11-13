@@ -1,0 +1,54 @@
+/* fund.css — the fundamentals map module's styles: the door
+   component (shared with the deck's views) and the map itself.
+   The build inlines this file into the deck's stylesheet, so the
+   reader still receives one self-contained page — and the
+   isolated map build (build.py --only map) loads it whole, so the
+   module is tested in isolation with exactly the styles the deck
+   ships. The root variables are the module's own fallbacks; the
+   deck's stylesheet declares the same values. */
+:root{--ink:#111111;--paper:#fffdf6;--accent:#b3002d;--hair:#ddd6c4;--faint:#7c7668;--sans:system-ui,-apple-system,"Segoe UI",sans-serif}
+/* the map: labelled bands of circles, one line per door that
+   crosses a band */
+.dag{position:relative;margin:2em 0 1em}
+.dag-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+/* the traced walks ride above the circles, so a long walk stays
+   readable where it passes over dimmed bands */
+.dag-svg-top{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.dag-walk{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:3 5}
+.dag-walk-arrowhead{fill:var(--accent)}
+.dag-edge{fill:none;stroke:var(--hair);stroke-width:1.5;transition:opacity .18s}
+.dag-edge.dag-soon{stroke-dasharray:3 4}
+.dag-edge.dag-build{stroke:var(--ink);stroke-width:2.5}
+.dag-arrowhead{fill:var(--ink)}
+#fund-dag .door{transition:opacity .18s}
+#fund-dag.dag-focusing .door{opacity:.22}
+#fund-dag.dag-focusing .door.dag-hi{opacity:1}
+#fund-dag .door.dag-hi .d-ic{border-color:var(--ink);box-shadow:0 0 0 4px rgba(17,17,17,.14)}
+#fund-dag.dag-focusing .dag-band-label{opacity:.2}
+#fund-dag.dag-focusing .dag-edge{opacity:.1}
+#fund-dag.dag-focusing .dag-edge.dag-hi{opacity:1;stroke:var(--ink);stroke-width:2}
+#fund-dag.dag-focusing .dag-edge.dag-build.dag-hi{stroke-width:2.5}
+.dag-row{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 28px;margin:0 0 56px;position:relative;z-index:1}
+.dag-row:last-child{margin-bottom:0}
+.dag-band{border:1px solid var(--hair);border-radius:999px;gap:6px 14px;margin:0 0 46px;padding:8px 16px 10px}
+.dag-band:last-child{margin-bottom:0}
+.dag-band-label{align-self:center;font-size:.72rem;letter-spacing:.06em;opacity:.6;margin-right:8px;white-space:nowrap}
+/* the fork: once the storeys split, the two sides draw side by
+   side — the abstract computers left, the machine as built
+   right — with a seam down the middle, and the left side ends
+   on its own floor: mathematics itself, nothing beneath */
+.dag-fork{display:flex;gap:0;margin:0 0 46px;position:relative;z-index:1}
+.dag-fork::before{content:'';position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed var(--hair)}
+.dag-fork-col{flex:1;min-width:0;padding:0 24px}
+.dag-fork-col .dag-band{margin-bottom:34px}
+.dag-floor{border-top:1px dashed var(--hair);color:var(--faint);font-size:.78rem;font-style:italic;margin-top:4px;padding-top:14px;text-align:center}
+/* the door component: a round icon wearing a view's own name.
+   Shared by the map's circles and the door rows of the views */
+.door{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:0;cursor:pointer;font:inherit;color:inherit;padding:0;width:86px;position:relative;z-index:1}
+.door .d-ic{width:46px;height:46px;border-radius:50%;background:#fff;border:1px solid #9a927e;display:flex;align-items:center;justify-content:center;color:var(--accent);transition:border-color .12s}
+.door:hover .d-ic{border-color:var(--ink)}
+.door:active .d-ic{transform:translateY(1px)}
+.door .d-name{font:600 10.5px/1.3 var(--sans);letter-spacing:.03em;color:var(--ink);text-align:center}
+.door.soon{cursor:default}
+.door.soon .d-ic{border-style:dashed;background:transparent;color:var(--faint)}
+.door.soon .d-name{color:var(--faint)}

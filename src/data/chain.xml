@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================
+     data/chain.xml — the built-from chain: how the bottom storeys are built
+     from the ones beneath them, drawn upward from ingredient
+     to built thing. A link spans exactly one storey up.
+     Governed by deck.xsd; the build validates this part
+     alone (build.py with the part option) and all parts
+     assembled (the default build).
+     ================================================================ -->
+  <chain>
+    <link from="gates" to="adders"/>
+    <link from="gates" to="memory"/>
+    <link from="adders" to="cpu"/>
+    <link from="memory" to="cpu"/>
+  </chain>
