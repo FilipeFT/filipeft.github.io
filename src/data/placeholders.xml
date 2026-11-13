@@ -1,1 +1,22 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================
+     data/placeholders.xml — the named placeholders: promises of views still to come,
+     greyed and dashed wherever a door points at one — never
+     an anonymous filler.
+     Governed by deck.xsd; the build validates this part
+     alone (build.py with the part option) and all parts
+     assembled (the default build).
+     ================================================================ -->
+  <placeholders>
+    <placeholder id="p-input" level="1" icon="controller" title="how a press becomes a number" line="buttons, glass, and the row of numbers they speak"/>
+    <placeholder id="p-memory" level="1" icon="save" title="how it remembers" line="numbers held against the off switch"/>
+    <placeholder id="p-routes" level="1" icon="map" title="how a route finds its way" line="a recipe that contains a copy of itself"/>
+    <placeholder id="p-words" level="1" icon="remote" title="the one-word language" line="a language small enough for a keypad"/>
+    <placeholder id="p-ledger" level="1" icon="save" title="how money moves" line="one ledger, no double spend, no one in charge"/>
+    <placeholder id="p-drawing" level="1" icon="play" title="how the picture is drawn" line="triangles, a pipeline, a thousand small painters"/>
+    <placeholder id="p-store" level="1" icon="save" title="how everything is kept" line="tables, and the shortcuts that find them again"/>
+    <placeholder id="p-learning" level="1" icon="star" title="how a machine improves its guesses" line="guesses scored, and the better ones kept"/>
+    <placeholder id="p-gpu" level="1" icon="chip" title="how a game chip learned math" line="built to paint, rehired to learn"/>
+    <placeholder id="p-embed" level="1" icon="map" title="how a word becomes a place" line="every word a point, and its neighbours its meaning"/>
+    <placeholder id="p-universal" level="1" icon="app" title="how one machine can be any machine" line="the same machine, wearing a different program"/>
+  </placeholders>
