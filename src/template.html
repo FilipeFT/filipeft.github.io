@@ -216,27 +216,29 @@ table.listing td.data, table.listing span.data{color:#1c6e3c}
 #home-link{color:var(--accent);text-decoration:none;cursor:pointer}
 #home-link:hover{color:var(--ink)}
 /* ---------- the deck ---------- */
+header .overline{font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:3.2em 0 0}
+.subtitle{font-size:22px;font-style:italic;color:var(--faint);margin:0 0 1.6em}
 .deck{display:grid;grid-template-columns:1fr;gap:16px;margin:2em 0 0}
 @media (min-width:760px){.deck{grid-template-columns:repeat(3,1fr)}}
 .card{
   display:block;text-align:left;border:1px solid #9a927e;border-radius:12px;background:#fff;
-  padding:24px 22px 20px;cursor:pointer;font:inherit;color:inherit;transition:border-color .12s, box-shadow .12s;
+  padding:24px 22px 20px;cursor:pointer;font:inherit;color:inherit;
+  transition:border-color .12s, box-shadow .12s;
 }
 .card:hover{border-color:var(--ink);box-shadow:0 3px 14px rgba(60,50,20,.12)}
 .card:active{transform:translateY(1px)}
 .card .c-ic{display:block;color:var(--accent);margin-bottom:14px}
 .card .c-name{font:700 13px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.card .c-q{display:block;font:400 20px/1.35 Georgia,serif;margin-top:8px}
+.card .c-hint{display:block;font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:16px}
 /* ---------- the fundamentals ---------- */
 .fund{margin-top:3.2em;border-top:1px solid var(--hair);padding-top:1.6em}
 .fund h3{font-size:24px;font-weight:400;margin:0 0 .2em}
-.fgrid{display:grid;grid-template-columns:1fr;gap:0 44px}
-@media (min-width:900px){.fgrid{grid-template-columns:1fr 1fr}}
-.fgroup h4{font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:1.3em 0 .4em}
-a.fq{display:block;font:15px/1.45 var(--sans);color:var(--ink);text-decoration:none;padding:7px 0;border-bottom:1px dashed var(--hair);cursor:pointer}
-a.fq:hover{color:var(--accent)}
-a.fq::after{content:" →";color:var(--faint)}
+/* the map's own styles live in fund.css, inlined here by the build
+   (the same module source the isolated map build loads) */
+/*__FUND_CSS__*/
 /* ---------- the systems: a spine of parts ---------- */
-.system h2,.explainer h2,.pattern h2{margin-top:1.4em}
+.system h2,.explainer h2{margin-top:1.4em}
 .sys-how{font:15px/1.5 var(--sans);color:var(--faint)}
 .spine{position:relative;margin:1.8em 0;max-width:600px}
 .spine::before{content:"";position:absolute;left:27px;top:31px;bottom:31px;border-left:2px solid var(--hair)}
@@ -251,28 +253,17 @@ a.fq::after{content:" →";color:var(--faint)}
 .spart.open .sp-tw{transform:rotate(180deg)}
 .rung{display:inline-block;font:700 9.5px var(--sans);letter-spacing:.15em;text-transform:uppercase;color:#a29370;border:1px solid var(--hair);border-radius:999px;padding:2px 8px;margin:0 8px 4px 0;vertical-align:1px}
 h2 .rung{margin-right:10px}
-.rails-h{font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:2.4em 0 .2em;max-width:600px}
-/* ---------- the pattern band on the deck ---------- */
-.pattern-band{margin:2.4em 0 .8em;max-width:600px}
-.pb-link{display:block;border:1px solid #9a927e;border-radius:10px;padding:14px 18px;text-decoration:none;background:#fff;cursor:pointer;transition:border-color .12s}
-.pb-link:hover{border-color:var(--ink)}
-.pb-name{display:block;font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
 .sp-body{display:none;margin:2px 0 8px 69px;padding-bottom:6px}
 .spart.open .sp-body{display:block}
 .sp-body p{font-size:16px;line-height:1.55;margin:0 0 .8em}
-.orbs{display:flex;flex-wrap:wrap;gap:4px 18px;margin:14px 0 2px}
-.orb{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:0;cursor:pointer;font:inherit;color:inherit;padding:0;width:86px}
-.orb .o-ic{width:46px;height:46px;border-radius:50%;background:#fff;border:1px solid #9a927e;display:flex;align-items:center;justify-content:center;color:var(--accent);transition:border-color .12s}
-.orb:hover .o-ic{border-color:var(--ink)}
-.orb:active .o-ic{transform:translateY(1px)}
-.orb .o-name{font:600 10.5px/1.3 var(--sans);letter-spacing:.03em;color:var(--ink);text-align:center}
-.orb.soon{cursor:default}
-.orb.soon .o-ic{border-style:dashed;background:transparent;color:var(--faint)}
-.orb.soon .o-name{color:var(--faint)}
+.doors{display:flex;flex-wrap:wrap;gap:4px 18px;margin:14px 0 2px}
+/* the door component's styles live in fund.css with the map, its
+   other home — inlined above by the build */
 .sys-bottom{margin:1.8em 0 0;padding:16px 20px;border:1px dashed #b9b2a0;border-radius:10px;max-width:600px}
 .sys-bottom p{font-size:16px;line-height:1.55;margin:0 0 .9em}
 @media(max-width:600px){
-  h1{font-size:38px}h2{font-size:27px}
+  h1{font-size:38px}h2{font-size:27px}.subtitle{font-size:19px}
+  .card .c-q{font-size:18px}
 }
 /* ---------- two rivers ---------- */
 blockquote.koan{
@@ -368,66 +359,69 @@ footer{padding-bottom:80px}
 
 <section class="view" id="deck" data-title="the deck">
 <header>
+  <p class="overline">A deck of doors into the machine</p>
   <h1>Everything to bits</h1>
+  <p class="subtitle">Something your computers already do, walked all the way down to the sand.</p>
+  <p>A computer is a machine that follows instructions — exactly, and at absurd speed. Each card opens on a thing one of your computers already does for you; every part opens a trail that shows, step by step, how the thing is done — and the trails branch, so one question leads to another at your own pace. Follow them as far as curiosity carries you, and step back to the deck whenever you like. There is no order here, and no course — though whatever the thing, every walk has the same shape.</p>
 </header>
 
 <div class="deck" id="deck-cards"></div>
 
-<div class="pattern-band">
-  <a class="pb-link dgo" data-go="pattern">
-    <span class="pb-name">the pattern</span>
-  </a>
-</div>
-
 <section class="fund">
   <h3>Underneath it all</h3>
-  <div class="fgrid">
-    <div class="fgroup">
-      <h4>the machine, from sand up</h4>
-      <a class="fq dgo" data-go="bits">How can a machine that knows only two words do anything?</a>
-      <a class="fq dgo" data-go="gates">How does it decide anything?</a>
-      <a class="fq dgo" data-go="adders">How does it add?</a>
-      <a class="fq dgo" data-go="memory">How does it remember?</a>
-      <a class="fq dgo" data-go="turing">Is there anything it cannot do?</a>
-      <a class="fq dgo" data-go="cpu">What is inside a real one?</a>
-      <a class="fq dgo" data-go="recursion">What happens when a task contains a copy of itself?</a>
-    </div>
-    <div class="fgroup">
-      <h4>ways of speaking to it</h4>
-      <a class="fq dgo" data-go="rivers">Why are there so many programming languages?</a>
-      <a class="fq dgo" data-go="relations">Can you tell it only facts, and still get answers?</a>
-    </div>
-    <div class="fgroup">
-      <h4>when machines meet the world</h4>
-      <a class="fq dgo" data-go="time">What happens when two act on the same thing at once?</a>
-    </div>
-    <div class="fgroup">
-      <h4>the long view</h4>
-      <a class="fq dgo" data-go="tower">How does it all stack up?</a>
-    </div>
-  </div>
+  <p>Every trail above, followed far enough down, lands on one of these. Each is a self-contained primer; they are not waiting to be read in order, they are waiting to be needed.</p>
+  <p class="sys-how">The territory beneath the stories, drawn from the model, the one structure the whole deck is checked against. The strata run top to bottom, one zoom deeper each storey: what a person sees; the boundary where the world crosses into data and data crosses back; machines together; one machine, at work; the words and numbers inside — then the fork: the abstract computers on the left, the machine as built on the right, opening into its components and ending in the bedrock, while the left side bottoms in mathematics itself, nothing drawn beneath it. One line per road that descends exactly one storey; a road that climbs, runs level, or skips a storey is walked in the views, never drawn here. The stories themselves are the cards above; the grey circles are paths still to come, and every full circle opens its view.</p>
+  <div class="dag" id="fund-dag"></div>
 </section>
 </section>
 
 <section class="view hidden system" id="games" data-title="playing games">
   <h2>Playing games</h2>
   <p>You press a button, and the world on the screen answers — sixty times a second, wherever you steer it. Nothing about that is magic, and every part of the trail has a name. This is the walk, from your thumb to the screen.</p>
-  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the orbs beneath it are doors into other paths, ready to be taken instead of the next step down. The small label on each part names its rung of the ladder; the pattern, on the deck, holds the whole climb.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
   <div class="spine" id="games-parts"></div>
 </section>
 
 <section class="view hidden system" id="food" data-title="delivering food">
   <h2>Delivering food</h2>
   <p>A few taps on a phone, and half an hour later a meal arrives at the door. A surprising amount of computing lives in between those two moments. This is the trail, from your finger to the doorbell.</p>
-  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the orbs beneath it are doors into other paths, ready to be taken instead of the next step down. The small label on each part names its rung of the ladder; the pattern, on the deck, holds the whole climb.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
   <div class="spine" id="food-parts"></div>
 </section>
 
 <section class="view hidden system" id="movies" data-title="watching movies">
   <h2>Watching movies</h2>
   <p>The film is not inside your television. It arrives continuously, as numbers, and the television paints it — sixty times a second, wherever you sit. This is the trail, from the studio to your living room.</p>
-  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the orbs beneath it are doors into other paths, ready to be taken instead of the next step down. The small label on each part names its rung of the ladder; the pattern, on the deck, holds the whole climb.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
   <div class="spine" id="movies-parts"></div>
+</section>
+
+<section class="view hidden system" id="weather" data-title="forecasting the weather">
+  <h2>Forecasting the weather</h2>
+  <p>You ask your phone about tomorrow, and a little sun answers. That sun was computed, hours before, from millions of measurements of the air and a warehouse-sized machine walking arithmetic. This is the trail, from the whole sky to the icon in your pocket.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
+  <div class="spine" id="weather-parts"></div>
+</section>
+
+<section class="view hidden system" id="gps" data-title="finding where you are">
+  <h2>Finding where you are</h2>
+  <p>You ask your phone where it is, and a blue dot answers on a map. The dot is computed, from whispers sent down by machines falling around the Earth, and it is arithmetic all the way. This is the trail, from the sky to the dot.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
+  <div class="spine" id="gps-parts"></div>
+</section>
+
+<section class="view hidden system" id="launches" data-title="getting to orbit">
+  <h2>Getting to orbit</h2>
+  <p>A rocket is lit, and minutes later a sealed machine is falling around the Earth, staying up by never landing. The launch is the bridge between the two, and it is the whole deck in one afternoon: senses, lists, arithmetic, fire, and forks that can say no. This is the trail, from the pad to the fall.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
+  <div class="spine" id="launches-parts"></div>
+</section>
+
+<section class="view hidden system" id="chat" data-title="talking to a machine">
+  <h2>Talking to a machine</h2>
+  <p>You ask it a question, and it answers in sentences — with no one, anywhere, having written the answer. Nothing about that is magic, and every part of the trail has a name. This is the walk, from your words to the arithmetic underneath.</p>
+  <p class="sys-how">Tap a part to open it; tap it again to close. Every explanation stands alone, and the row of round icons at the end of an open part are doors into the next trail down. The small label on each part names its rung of the ladder; the ladder, rung by rung, is the whole climb.</p>
+  <div class="spine" id="chat-parts"></div>
 </section>
 
 <!-- ================================================================ bits -->
@@ -887,7 +881,7 @@ The student was enlightened, and returned to his work.
 
 <hr>
 
-<p>One invitation remains: <em>view source</em>. This page practises what it preaches. What your browser receives is a single self-contained file, no framework, no network: one small table of gate definitions computes every truth table in the gate and adder primers; one engine runs the four play/step/stop machines — the Turing machine, the toy computer, the recursion stack, the pond; the calculator, the cons-cell sketchpad and the race track reuse the same handful of helpers; and the deck at the front door — cards, systems, parts — is data all the way down, walked by four small words. Nothing in it is a scaffold for a hypothetical future feature. The authors keep that data in a schema-governed XML file and build this one file from it; the code is meant to be read by the same person who read the prose.</p>
+<p>One invitation remains: <em>view source</em>. This page practises what it preaches. What your browser receives is a single self-contained file, no framework, no network: one small table of gate definitions computes every truth table in the gate and adder primers; one engine runs the four play/step/stop machines — the Turing machine, the toy computer, the recursion stack, the pond; the calculator, the cons-cell sketchpad and the race track reuse the same handful of helpers; and the deck at the front door — cards, systems, parts, and the map of the whole graph underneath — is data all the way down, walked by four small words. Nothing in it is a scaffold for a hypothetical future feature. The authors keep that data in a schema-governed XML file and build this one file from it; the code is meant to be read by the same person who read the prose.</p>
 
 <p class="colophon">Colophon — set in Georgia for the text and your system’s own sans and monospace for the machinery; margin notes in the manner of Edward Tufte; demonstrations in the manner of Richard Feynman: no miracle left unexplained at the level below. Built from sand, meaning from symbols.</p>
 
@@ -899,17 +893,6 @@ The student was enlightened, and returned to his work.
 <script>
 'use strict';
 /* ================================================================
-   0 · TINY HELPERS — deliberately small                    */
-/* ================================================================*/
-const $ = (sel) => document.querySelector(sel);
-const el = (tag, cls, html) => {
-  const n = document.createElement(tag);
-  if (cls) n.className = cls;
-  if (html != null) n.innerHTML = html;
-  return n;
-};
-
-/* ================================================================
    ⌂ · THE DECK — cards, systems, and the stack of views.
        Everything navigable on this page is data; the structure
        is one small structure, walked by four words:
@@ -917,25 +900,53 @@ const el = (tag, cls, html) => {
 /* ================================================================*/
 const VIEW = { cur: 'deck', trail: [] };
 
-/* ---- the deck data, injected by the build from data/deck.xml.
+/* ---- the deck data, injected by the build from the data parts.
        The shape of the data is schema/deck.xsd; the build validates
        against it, then hands the page this one object. ---------- */
 const DATA = /*__DECK_DATA__*/{};
 const SYSTEMS = DATA.cards;
 const EXPLAINERS = DATA.trails;
 const LADDER = DATA.ladder;
-const RAILS = DATA.rails;
-const RUNGS = LADDER.concat(RAILS);
-const PATTERN = DATA.pattern;
+const RUNGS = LADDER;
 const ICONS = DATA.icons;
 const PRIMER_META = DATA.primers;
 const PLACEHOLDERS = DATA.placeholders;
+const MAP = DATA.map;
+const EDGES = DATA.edges || [];
+const CHAIN = EDGES.filter((e) => e.kind === 'build');
+
+/* ================================================================
+   0 · TINY HELPERS — deliberately small, and shared: the deck's
+       own pages and the fundamentals map module (inlined below at
+       its marker) both call them, and the isolated map build lifts
+       this whole block out of the template to run the module
+       alone.                                                   */
+/* ================================================================*/
+/* [shared helpers] */
+const $ = (sel) => document.querySelector(sel);
+const el = (tag, cls, html) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (html != null) n.innerHTML = html;
+  return n;
+};
 const ic = (name, size) =>
   '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + '</svg>';
+/* doors are round icons: every open step shows at least two, and
+   every one is named. A real door is a button into another path; a
+   gap is a greyed circle that names the patch to come. The names
+   and icons come from the views themselves. */
+function doorMeta(id) {
+  if (SYSTEMS[id]) return [SYSTEMS[id].icon, SYSTEMS[id].title.toLowerCase()];
+  if (EXPLAINERS[id]) return [EXPLAINERS[id].icon, EXPLAINERS[id].crumb];
+  return PRIMER_META[id] || ['stairs', id];
+}
+/* [/shared helpers] */
 
-/* ---- the ladder: the one pattern every vertical walks. Rungs are
-       the descent from world to bedrock; rails cut across every rung.
-       The pattern view is assembled from this data alone. */
+/* ---- the ladder: the one climb every vertical walks. It is data
+       only — the rung order sorts the parts of every card, and the
+       chips label them. There is no pattern page; the deck starts
+       at the cards, and the reader drills down. */
 
 /* ---- the three systems, as data -------------------------------- */
 
@@ -951,7 +962,9 @@ function renderDeck() {
     c.dataset.go = id;
     c.innerHTML =
       '<span class="c-ic">' + ic(s.icon, 40) + '</span>' +
-      '<span class="c-name">' + s.title + '</span>';
+      '<span class="c-name">' + s.title + '</span>' +
+      '<span class="c-q">' + s.q + '</span>' +
+      '<span class="c-hint">the walk, part by part</span>';
     d.appendChild(c);
   });
 }
@@ -963,31 +976,24 @@ function rungOrder(id) {
   const i = RUNGS.findIndex((x) => x.id === id);
   return i < 0 ? RUNGS.length : i;
 }
-/* doors are orbs: every open step shows at least two, and every
-   orb is named. A real door is a button into another path; a gap is
-   a grey placeholder orb that names the patch to come. The names
-   and icons come from the views themselves. */
-function orbMeta(id) {
-  if (SYSTEMS[id]) return [SYSTEMS[id].icon, SYSTEMS[id].title.toLowerCase()];
-  if (EXPLAINERS[id]) return [EXPLAINERS[id].icon, EXPLAINERS[id].crumb];
-  return PRIMER_META[id] || ['stairs', id];
-}
-function orbHTML(doors) {
+/* ---- the doors: rows of round icons built by doorHTML from the
+       shared doorMeta above ------------------------------------ */
+function doorHTML(doors) {
   const seen = {};
   const uniq = (doors || []).filter((d) => (seen[d.to] ? false : (seen[d.to] = 1)));
   const out = uniq.map((d) => {
     const ph = PLACEHOLDERS[d.to];
     if (ph) {
-      return '<span class="orb soon" title="' + d.q.replace(/"/g, '&quot;') + '">' +
-        '<span class="o-ic">' + ic(ph.icon, 22) + '</span>' +
-        '<span class="o-name">' + ph.title + '</span></span>';
+      return '<span class="door soon" title="' + d.q.replace(/"/g, '&quot;') + '">' +
+        '<span class="d-ic">' + ic(ph.icon, 22) + '</span>' +
+        '<span class="d-name">' + ph.title + '</span></span>';
     }
-    const m = orbMeta(d.to);
-    return '<button class="orb dgo" data-go="' + d.to + '">' +
-      '<span class="o-ic">' + ic(m[0], 22) + '</span>' +
-      '<span class="o-name">' + m[1] + '</span></button>';
+    const m = doorMeta(d.to);
+    return '<button class="door dgo" data-go="' + d.to + '" title="' + d.q.replace(/"/g, '&quot;') + '">' +
+      '<span class="d-ic">' + ic(m[0], 22) + '</span>' +
+      '<span class="d-name">' + m[1] + '</span></button>';
   });
-  return '<div class="orbs">' + out.join('') + '</div>';
+  return '<div class="doors">' + out.join('') + '</div>';
 }
 function buildStrand(holder, steps) {
   steps.forEach((p) => {
@@ -1000,16 +1006,14 @@ function buildStrand(holder, steps) {
         '<span class="sp-line">' + p.line + '</span></span>' +
         '<span class="sp-tw">\u25be</span>' +
       '</button>' +
-      '<div class="sp-body">' + (p.blurb ? '<p>' + p.blurb + '</p>' : '') + orbHTML(p.cross || p.deep) + '</div>';
+      '<div class="sp-body">' + (p.blurb ? '<p>' + p.blurb + '</p>' : '') + doorHTML(p.cross || p.deep) + '</div>';
     sp.querySelector('.sp-head').addEventListener('click', () => sp.classList.toggle('open'));
     holder.appendChild(sp);
   });
 }
-function buildBottom(section, s, opts) {
-  const doors = (s.deep || []).concat(
-    (opts && opts.noPattern) ? [] : [{ to: 'pattern' }]);
+function buildBottom(section, s) {
   const b = el('div', 'sys-bottom');
-  b.innerHTML = '<p>' + s.bottom + '</p>' + orbHTML(doors);
+  b.innerHTML = '<p>' + s.bottom + '</p>' + doorHTML(s.deep || []);
   section.appendChild(b);
 }
 function renderSystems() {
@@ -1020,9 +1024,14 @@ function renderSystems() {
     buildBottom(document.getElementById(id), s);
   });
 }
+/* the model is the source of truth, and the trails page is one
+   of its views: the trails appear in the order the model arranges
+   them, stratum by stratum, as authored inside each stratum */
+const TRAIL_ORDER = MAP.reduce(
+  (acc, b) => acc.concat(b.views.filter((id) => EXPLAINERS[id])), []);
 function renderExplainers() {
   const wrap = document.querySelector('.wrap');
-  Object.keys(EXPLAINERS).forEach((id) => {
+  TRAIL_ORDER.forEach((id) => {
     const s = EXPLAINERS[id];
     const sec = el('section', 'view hidden explainer');
     sec.id = id;
@@ -1030,46 +1039,21 @@ function renderExplainers() {
     sec.innerHTML =
       '<h2>' + (s.rung ? '<span class="rung">' + rungChip(s.rung) + '</span>' : '') + s.title + '</h2>' +
       '<p>' + s.intro + '</p>' +
-      '<p class="sys-how">Tap a step to open it; tap it again to close. Every explanation stands alone, and the orbs beneath it are doors into other paths, ready to be taken instead of the next step down. The note at the bottom lands on the fundamentals.</p>' +
+      '<p class="sys-how">Tap a step to open it; tap it again to close. Every explanation stands alone, and the row of round icons beneath it are doors into other paths, ready to be taken instead of the next step down. The note at the bottom lands on the fundamentals.</p>' +
       '<div class="spine" id="' + id + '-parts"></div>';
     buildStrand(sec.querySelector('.spine'), s.steps);
     buildBottom(sec, s);
     wrap.appendChild(sec);
   });
 }
-function lateralDoors(rung) {
-  const out = [];
-  Object.keys(SYSTEMS).forEach((sid) => {
-    SYSTEMS[sid].parts.forEach((p) => {
-      if (p.rung === rung) out.push({ to: sid, q: SYSTEMS[sid].title + ' — ' + p.name });
-    });
-  });
-  Object.keys(EXPLAINERS).forEach((tid) => {
-    if (EXPLAINERS[tid].rung === rung) out.push({ to: tid, q: EXPLAINERS[tid].title });
-  });
-  return out;
-}
-function renderPattern() {
-  const wrap = document.querySelector('.wrap');
-  const sec = el('section', 'view hidden pattern');
-  sec.id = 'pattern';
-  sec.dataset.title = 'the pattern';
-  sec.innerHTML =
-    '<h2>the pattern</h2>' +
-    '<div class="spine" id="pattern-steps"></div>' +
-    '<h3 class="rails-h">the rails</h3>' +
-    '<div class="spine" id="pattern-rails"></div>';
-  buildStrand(sec.querySelector('#pattern-steps'), LADDER.map((r) => ({
-    icon: r.icon, name: r.name, line: r.line,
-    cross: [r.deep].concat(r.deep2 ? [r.deep2] : []).concat(lateralDoors(r.id)),
-  })));
-  buildStrand(sec.querySelector('#pattern-rails'), RAILS.map((r) => ({
-    icon: r.icon, name: r.name, line: r.line,
-    cross: [r.deep].concat(r.deep2 ? [r.deep2] : []).concat(lateralDoors(r.id)),
-  })));
-  buildBottom(sec, PATTERN, { noPattern: true });
-  wrap.appendChild(sec);
-}
+/* ---- the map underneath it all: the territory beneath the
+       stories, drawn by the fundamentals map module (fund.js),
+       which the build inlines at the marker below — one source,
+       two builds: the deck ships it inlined, and the isolated
+       map build (build.py --only map) loads the same file to
+       test the map and its hover on their own. */
+/*__FUND_MODULE__*/
+
 function viewTitle(id) {
   const s = document.getElementById(id);
   return (s && s.dataset && s.dataset.title) || id;
@@ -1097,7 +1081,7 @@ $('#home-link').addEventListener('click', homeDeck);
 renderDeck();
 renderSystems();
 renderExplainers();
-renderPattern();
+renderFundDAG();
 document.querySelectorAll('a.dgo, button.dgo').forEach((a) =>
   a.addEventListener('click', () => go(a.dataset.go)));
 go('deck', false);
@@ -2032,6 +2016,6 @@ document.querySelectorAll('#race-modes .btn').forEach((b) => {
 });
 raceReset();
 </script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="GXJaLu8VWOikl0zA2V7/Hw==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="oitgvRUTJOCplB+2EIYj5A==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
