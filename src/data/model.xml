@@ -14,16 +14,26 @@
      The strata are one descent, each storey one zoom deeper than
      the last: what a person sees; the boundary where the world
      crosses into data and data crosses back; machines together;
-     one machine, at work; the words and numbers inside it — then
-     the fork, the machine seen two ways: the abstract computers on
-     the left, and on the right the machine as built, which opens
-     into its components and ends in the bedrock. The left side
-     bottoms in mathematics itself; nothing is drawn beneath it.
+     one machine, at work; the words and numbers inside it; the
+     machinery of thought, where the founding argument of computing
+     is walked — then the fork, the machine seen two ways, drawn as
+     two columns that step down together: the tower of abstractions
+     on the left above the ways of speaking above the formal
+     machines; the machine as built on the right above its
+     components above the bedrock. The two columns mirror one
+     another, storey for storey, and each is a construction: on
+     the right the built-from chain of the machine as it is, on
+     the left the built-from chain of the machine as thought —
+     the formal machines built up into the ways of speaking,
+     the languages built up into the tower. Both sides bottom in
+     mathematics itself; nothing is drawn beneath either floor.
 
      A node is a view by reference: a trail, a promise, or a
      primer. The order inside a stratum is the deck's canonical
-     order: trails open the stratum, promises close it, and the
-     trails page walks the strata top to bottom in this order.
+     order: trails open the stratum, promises close it, and where
+     a stratum ends in the construction the primer grounds it
+     last. The trails page walks the strata top to bottom in
+     this order.
 
      An edge is one road, with a kind:
        land  — a landing: where a trail bottoms out. Lit on hover,
@@ -42,6 +52,7 @@
      (build.py with the part option) and all parts assembled (the
      default build).
      ================================================================ -->
+
   <model>
     <stratum id="m-surface" label="what a person sees">
       <node ref="x-image"/>
@@ -57,48 +68,62 @@
     </stratum>
     <stratum id="m-many" label="machines together">
       <node ref="x-many"/>
-      <node ref="x-race"/>
-      <node ref="x-network"/>
       <node ref="x-satellite"/>
-      <node ref="x-copies"/>
       <node ref="x-fail"/>
+      <node ref="x-race"/>
       <node ref="x-alive"/>
+      <node ref="x-network"/>
+      <node ref="x-copies"/>
     </stratum>
     <stratum id="m-one" label="one machine, at work">
       <node ref="x-machine"/>
       <node ref="x-choices"/>
+      <node ref="x-clock"/>
       <node ref="x-os"/>
       <node ref="x-simulate"/>
-      <node ref="x-secrets"/>
-      <node ref="x-clock"/>
       <node ref="x-watch"/>
+      <node ref="x-secrets"/>
       <node ref="p-gpu"/>
       <node ref="p-universal"/>
+      <node ref="time"/>
     </stratum>
     <stratum id="m-subsystems" label="the words and numbers inside">
       <node ref="x-written"/>
       <node ref="x-facts"/>
-      <node ref="p-words"/>
+      <node ref="x-words"/>
       <node ref="p-learning"/>
       <node ref="p-routes"/>
       <node ref="p-memory"/>
       <node ref="p-ledger"/>
       <node ref="p-store"/>
+      <node ref="p-conway"/>
+      <node ref="p-theory"/>
+      <node ref="p-org"/>
     </stratum>
-    <stratum id="m-abstract" label="abstract computers" col="left">
-      <node ref="turing"/>
-      <node ref="rivers"/>
+    <stratum id="m-ideas" label="the machinery of thought">
+      <node ref="x-rivers"/>
+      <node ref="x-rules"/>
+      <node ref="x-thought"/>
+      <node ref="p-proof"/>
+      <node ref="p-selfcopy"/>
+    </stratum>
+    <stratum id="m-tower" label="the tower of abstractions" col="left">
       <node ref="tower"/>
-      <node ref="recursion"/>
-      <node ref="relations"/>
-      <node ref="time"/>
     </stratum>
     <stratum id="m-machine" label="the machine as built" col="right">
       <node ref="cpu"/>
     </stratum>
+    <stratum id="m-speaking" label="the ways of speaking" col="left">
+      <node ref="relations"/>
+      <node ref="rivers"/>
+    </stratum>
     <stratum id="m-components" label="the components" col="right">
       <node ref="adders"/>
       <node ref="memory"/>
+    </stratum>
+    <stratum id="m-formal" label="the formal machines" col="left">
+      <node ref="turing"/>
+      <node ref="recursion"/>
     </stratum>
     <stratum id="m-bedrock" label="the bedrock" col="right">
       <node ref="bits"/>
@@ -114,46 +139,54 @@
     <edge from="x-measure" to="gates" kind="land"/>
     <edge from="x-motion" to="cpu" kind="land"/>
     <edge from="x-motion" to="gates" kind="land"/>
+    <edge from="x-many" to="x-network" kind="land"/>
+    <edge from="x-many" to="cpu" kind="land"/>
+    <edge from="x-race" to="time" kind="land"/>
+    <edge from="x-race" to="memory" kind="land"/>
     <edge from="x-network" to="x-machine" kind="land"/>
     <edge from="x-network" to="bits" kind="land"/>
     <edge from="x-satellite" to="cpu" kind="land"/>
     <edge from="x-satellite" to="bits" kind="land"/>
-    <edge from="x-race" to="time" kind="land"/>
-    <edge from="x-race" to="memory" kind="land"/>
-    <edge from="x-many" to="x-network" kind="land"/>
-    <edge from="x-many" to="cpu" kind="land"/>
     <edge from="x-copies" to="time" kind="land"/>
     <edge from="x-copies" to="memory" kind="land"/>
-    <edge from="x-fail" to="turing" kind="land"/>
     <edge from="x-fail" to="tower" kind="land"/>
-    <edge from="x-alive" to="recursion" kind="land"/>
+    <edge from="x-fail" to="turing" kind="land"/>
     <edge from="x-alive" to="cpu" kind="land"/>
-    <edge from="x-machine" to="turing" kind="land"/>
+    <edge from="x-alive" to="recursion" kind="land"/>
     <edge from="x-machine" to="cpu" kind="land"/>
-    <edge from="x-os" to="x-machine" kind="land"/>
-    <edge from="x-os" to="time" kind="land"/>
+    <edge from="x-machine" to="turing" kind="land"/>
     <edge from="x-choices" to="bits" kind="land"/>
     <edge from="x-choices" to="gates" kind="land"/>
+    <edge from="x-os" to="x-machine" kind="land"/>
+    <edge from="x-os" to="time" kind="land"/>
     <edge from="x-simulate" to="memory" kind="land"/>
     <edge from="x-simulate" to="bits" kind="land"/>
+    <edge from="x-secrets" to="time" kind="land"/>
+    <edge from="x-secrets" to="bits" kind="land"/>
     <edge from="x-clock" to="time" kind="land"/>
     <edge from="x-clock" to="gates" kind="land"/>
     <edge from="x-watch" to="memory" kind="land"/>
     <edge from="x-watch" to="bits" kind="land"/>
-    <edge from="x-secrets" to="time" kind="land"/>
-    <edge from="x-secrets" to="bits" kind="land"/>
     <edge from="x-written" to="tower" kind="land"/>
     <edge from="x-written" to="cpu" kind="land"/>
-    <edge from="x-facts" to="recursion" kind="land"/>
     <edge from="x-facts" to="relations" kind="land"/>
+    <edge from="x-facts" to="recursion" kind="land"/>
+    <edge from="x-thought" to="turing" kind="land"/>
+    <edge from="x-thought" to="recursion" kind="land"/>
+    <edge from="x-rules" to="rivers" kind="land"/>
+    <edge from="x-rules" to="recursion" kind="land"/>
+    <edge from="x-rivers" to="rivers" kind="land"/>
+    <edge from="x-rivers" to="relations" kind="land"/>
+    <edge from="x-words" to="memory" kind="land"/>
+    <edge from="x-words" to="cpu" kind="land"/>
     <edge from="x-image" to="x-audio" kind="cross"/>
     <edge from="x-image" to="x-camera" kind="cross"/>
     <edge from="x-image" to="p-drawing" kind="cross"/>
     <edge from="x-image" to="x-measure" kind="cross"/>
-    <edge from="x-image" to="x-network" kind="cross"/>
     <edge from="x-image" to="x-race" kind="cross"/>
-    <edge from="x-image" to="x-os" kind="cross"/>
+    <edge from="x-image" to="x-network" kind="cross"/>
     <edge from="x-image" to="x-choices" kind="cross"/>
+    <edge from="x-image" to="x-os" kind="cross"/>
     <edge from="x-image" to="p-gpu" kind="cross"/>
     <edge from="x-image" to="p-memory" kind="cross"/>
     <edge from="x-image" to="memory" kind="cross"/>
@@ -187,95 +220,107 @@
     <edge from="x-motion" to="x-measure" kind="cross"/>
     <edge from="x-motion" to="x-satellite" kind="cross"/>
     <edge from="x-motion" to="x-machine" kind="cross"/>
-    <edge from="x-motion" to="x-os" kind="cross"/>
     <edge from="x-motion" to="x-choices" kind="cross"/>
+    <edge from="x-motion" to="x-os" kind="cross"/>
     <edge from="x-motion" to="x-simulate" kind="cross"/>
     <edge from="x-motion" to="x-clock" kind="cross"/>
-    <edge from="x-motion" to="p-words" kind="cross"/>
-    <edge from="x-network" to="x-satellite" kind="cross"/>
-    <edge from="x-network" to="x-race" kind="cross"/>
-    <edge from="x-network" to="x-secrets" kind="cross"/>
-    <edge from="x-network" to="p-words" kind="cross"/>
-    <edge from="x-network" to="p-ledger" kind="cross"/>
-    <edge from="x-network" to="p-store" kind="cross"/>
-    <edge from="x-network" to="time" kind="cross"/>
-    <edge from="x-network" to="memory" kind="cross"/>
-    <edge from="x-satellite" to="x-audio" kind="cross"/>
-    <edge from="x-satellite" to="x-camera" kind="cross"/>
-    <edge from="x-satellite" to="x-motion" kind="cross"/>
-    <edge from="x-satellite" to="x-network" kind="cross"/>
-    <edge from="x-satellite" to="x-machine" kind="cross"/>
-    <edge from="x-satellite" to="x-os" kind="cross"/>
-    <edge from="x-satellite" to="x-choices" kind="cross"/>
-    <edge from="x-satellite" to="x-clock" kind="cross"/>
-    <edge from="x-satellite" to="p-memory" kind="cross"/>
-    <edge from="x-satellite" to="p-words" kind="cross"/>
-    <edge from="x-satellite" to="p-store" kind="cross"/>
+    <edge from="x-motion" to="x-words" kind="cross"/>
+    <edge from="x-many" to="x-race" kind="cross"/>
+    <edge from="x-many" to="x-machine" kind="cross"/>
+    <edge from="x-many" to="x-choices" kind="cross"/>
+    <edge from="x-many" to="x-os" kind="cross"/>
+    <edge from="x-many" to="memory" kind="cross"/>
+    <edge from="x-race" to="x-many" kind="cross"/>
     <edge from="x-race" to="x-network" kind="cross"/>
     <edge from="x-race" to="x-satellite" kind="cross"/>
-    <edge from="x-race" to="x-many" kind="cross"/>
     <edge from="x-race" to="x-machine" kind="cross"/>
     <edge from="x-race" to="x-os" kind="cross"/>
     <edge from="x-race" to="x-simulate" kind="cross"/>
     <edge from="x-race" to="x-facts" kind="cross"/>
     <edge from="x-race" to="p-memory" kind="cross"/>
     <edge from="x-race" to="relations" kind="cross"/>
-    <edge from="x-many" to="x-race" kind="cross"/>
-    <edge from="x-many" to="x-machine" kind="cross"/>
-    <edge from="x-many" to="x-os" kind="cross"/>
-    <edge from="x-many" to="x-choices" kind="cross"/>
-    <edge from="x-many" to="memory" kind="cross"/>
-    <edge from="x-copies" to="x-network" kind="cross"/>
-    <edge from="x-copies" to="x-race" kind="cross"/>
+    <edge from="x-network" to="x-race" kind="cross"/>
+    <edge from="x-network" to="x-satellite" kind="cross"/>
+    <edge from="x-network" to="x-secrets" kind="cross"/>
+    <edge from="x-network" to="time" kind="cross"/>
+    <edge from="x-network" to="x-words" kind="cross"/>
+    <edge from="x-network" to="p-ledger" kind="cross"/>
+    <edge from="x-network" to="p-store" kind="cross"/>
+    <edge from="x-network" to="memory" kind="cross"/>
+    <edge from="x-satellite" to="x-audio" kind="cross"/>
+    <edge from="x-satellite" to="x-camera" kind="cross"/>
+    <edge from="x-satellite" to="x-motion" kind="cross"/>
+    <edge from="x-satellite" to="x-network" kind="cross"/>
+    <edge from="x-satellite" to="x-machine" kind="cross"/>
+    <edge from="x-satellite" to="x-choices" kind="cross"/>
+    <edge from="x-satellite" to="x-os" kind="cross"/>
+    <edge from="x-satellite" to="x-clock" kind="cross"/>
+    <edge from="x-satellite" to="x-words" kind="cross"/>
+    <edge from="x-satellite" to="p-memory" kind="cross"/>
+    <edge from="x-satellite" to="p-store" kind="cross"/>
     <edge from="x-copies" to="x-many" kind="cross"/>
+    <edge from="x-copies" to="x-race" kind="cross"/>
+    <edge from="x-copies" to="x-network" kind="cross"/>
     <edge from="x-copies" to="x-fail" kind="cross"/>
     <edge from="x-copies" to="x-simulate" kind="cross"/>
     <edge from="x-copies" to="x-facts" kind="cross"/>
     <edge from="x-copies" to="p-routes" kind="cross"/>
     <edge from="x-copies" to="p-ledger" kind="cross"/>
     <edge from="x-copies" to="p-store" kind="cross"/>
-    <edge from="x-fail" to="x-satellite" kind="cross"/>
-    <edge from="x-fail" to="x-race" kind="cross"/>
     <edge from="x-fail" to="x-many" kind="cross"/>
+    <edge from="x-fail" to="x-race" kind="cross"/>
+    <edge from="x-fail" to="x-satellite" kind="cross"/>
     <edge from="x-fail" to="x-alive" kind="cross"/>
     <edge from="x-fail" to="x-machine" kind="cross"/>
     <edge from="x-fail" to="x-os" kind="cross"/>
     <edge from="x-fail" to="x-clock" kind="cross"/>
     <edge from="x-fail" to="x-watch" kind="cross"/>
     <edge from="x-fail" to="x-written" kind="cross"/>
-    <edge from="x-alive" to="x-network" kind="cross"/>
-    <edge from="x-alive" to="x-race" kind="cross"/>
+    <edge from="x-fail" to="x-thought" kind="cross"/>
     <edge from="x-alive" to="x-many" kind="cross"/>
+    <edge from="x-alive" to="x-race" kind="cross"/>
+    <edge from="x-alive" to="x-network" kind="cross"/>
     <edge from="x-alive" to="x-os" kind="cross"/>
     <edge from="x-alive" to="x-simulate" kind="cross"/>
     <edge from="x-alive" to="x-watch" kind="cross"/>
     <edge from="x-alive" to="x-facts" kind="cross"/>
     <edge from="x-alive" to="p-ledger" kind="cross"/>
-    <edge from="x-machine" to="x-os" kind="cross"/>
     <edge from="x-machine" to="x-choices" kind="cross"/>
+    <edge from="x-machine" to="x-os" kind="cross"/>
     <edge from="x-machine" to="p-universal" kind="cross"/>
     <edge from="x-machine" to="x-written" kind="cross"/>
-    <edge from="x-machine" to="p-words" kind="cross"/>
+    <edge from="x-machine" to="x-words" kind="cross"/>
+    <edge from="x-machine" to="x-thought" kind="cross"/>
+    <edge from="x-choices" to="x-machine" kind="cross"/>
+    <edge from="x-choices" to="x-written" kind="cross"/>
+    <edge from="x-choices" to="x-facts" kind="cross"/>
+    <edge from="x-choices" to="x-words" kind="cross"/>
+    <edge from="x-choices" to="p-learning" kind="cross"/>
+    <edge from="x-choices" to="adders" kind="cross"/>
     <edge from="x-os" to="x-race" kind="cross"/>
     <edge from="x-os" to="x-choices" kind="cross"/>
     <edge from="x-os" to="x-written" kind="cross"/>
     <edge from="x-os" to="memory" kind="cross"/>
-    <edge from="x-choices" to="x-machine" kind="cross"/>
-    <edge from="x-choices" to="x-written" kind="cross"/>
-    <edge from="x-choices" to="x-facts" kind="cross"/>
-    <edge from="x-choices" to="p-learning" kind="cross"/>
-    <edge from="x-choices" to="p-words" kind="cross"/>
-    <edge from="x-choices" to="adders" kind="cross"/>
     <edge from="x-simulate" to="x-image" kind="cross"/>
-    <edge from="x-simulate" to="x-race" kind="cross"/>
     <edge from="x-simulate" to="x-many" kind="cross"/>
+    <edge from="x-simulate" to="x-race" kind="cross"/>
     <edge from="x-simulate" to="x-machine" kind="cross"/>
-    <edge from="x-simulate" to="x-os" kind="cross"/>
     <edge from="x-simulate" to="x-choices" kind="cross"/>
+    <edge from="x-simulate" to="x-os" kind="cross"/>
     <edge from="x-simulate" to="x-facts" kind="cross"/>
     <edge from="x-simulate" to="p-learning" kind="cross"/>
     <edge from="x-simulate" to="p-routes" kind="cross"/>
     <edge from="x-simulate" to="p-memory" kind="cross"/>
+    <edge from="x-secrets" to="x-measure" kind="cross"/>
+    <edge from="x-secrets" to="x-many" kind="cross"/>
+    <edge from="x-secrets" to="x-network" kind="cross"/>
+    <edge from="x-secrets" to="x-copies" kind="cross"/>
+    <edge from="x-secrets" to="x-fail" kind="cross"/>
+    <edge from="x-secrets" to="x-alive" kind="cross"/>
+    <edge from="x-secrets" to="x-machine" kind="cross"/>
+    <edge from="x-secrets" to="x-watch" kind="cross"/>
+    <edge from="x-secrets" to="p-ledger" kind="cross"/>
+    <edge from="x-secrets" to="p-store" kind="cross"/>
     <edge from="x-clock" to="x-measure" kind="cross"/>
     <edge from="x-clock" to="x-motion" kind="cross"/>
     <edge from="x-clock" to="x-network" kind="cross"/>
@@ -283,8 +328,8 @@
     <edge from="x-clock" to="x-copies" kind="cross"/>
     <edge from="x-clock" to="x-fail" kind="cross"/>
     <edge from="x-clock" to="x-machine" kind="cross"/>
-    <edge from="x-clock" to="x-os" kind="cross"/>
     <edge from="x-clock" to="x-choices" kind="cross"/>
+    <edge from="x-clock" to="x-os" kind="cross"/>
     <edge from="x-clock" to="x-watch" kind="cross"/>
     <edge from="x-watch" to="x-measure" kind="cross"/>
     <edge from="x-watch" to="x-network" kind="cross"/>
@@ -296,38 +341,74 @@
     <edge from="x-watch" to="x-os" kind="cross"/>
     <edge from="x-watch" to="p-ledger" kind="cross"/>
     <edge from="x-watch" to="p-store" kind="cross"/>
-    <edge from="x-secrets" to="x-measure" kind="cross"/>
-    <edge from="x-secrets" to="x-network" kind="cross"/>
-    <edge from="x-secrets" to="x-many" kind="cross"/>
-    <edge from="x-secrets" to="x-copies" kind="cross"/>
-    <edge from="x-secrets" to="x-fail" kind="cross"/>
-    <edge from="x-secrets" to="x-alive" kind="cross"/>
-    <edge from="x-secrets" to="x-machine" kind="cross"/>
-    <edge from="x-secrets" to="x-watch" kind="cross"/>
-    <edge from="x-secrets" to="p-ledger" kind="cross"/>
-    <edge from="x-secrets" to="p-store" kind="cross"/>
     <edge from="x-written" to="x-machine" kind="cross"/>
-    <edge from="x-written" to="x-os" kind="cross"/>
     <edge from="x-written" to="x-choices" kind="cross"/>
+    <edge from="x-written" to="x-os" kind="cross"/>
     <edge from="x-written" to="x-facts" kind="cross"/>
+    <edge from="x-written" to="x-words" kind="cross"/>
     <edge from="x-written" to="p-learning" kind="cross"/>
-    <edge from="x-written" to="p-words" kind="cross"/>
-    <edge from="x-written" to="recursion" kind="cross"/>
+    <edge from="x-written" to="x-rivers" kind="cross"/>
     <edge from="x-written" to="rivers" kind="cross"/>
     <edge from="x-written" to="relations" kind="cross"/>
     <edge from="x-written" to="memory" kind="cross"/>
+    <edge from="x-written" to="recursion" kind="cross"/>
     <edge from="x-written" to="bits" kind="cross"/>
-    <edge from="x-facts" to="x-race" kind="cross"/>
+    <edge from="x-written" to="p-conway" kind="cross"/>
+    <edge from="x-written" to="p-theory" kind="cross"/>
     <edge from="x-facts" to="x-many" kind="cross"/>
+    <edge from="x-facts" to="x-race" kind="cross"/>
     <edge from="x-facts" to="x-choices" kind="cross"/>
     <edge from="x-facts" to="x-simulate" kind="cross"/>
     <edge from="x-facts" to="x-written" kind="cross"/>
+    <edge from="x-facts" to="x-words" kind="cross"/>
     <edge from="x-facts" to="p-learning" kind="cross"/>
     <edge from="x-facts" to="p-routes" kind="cross"/>
-    <edge from="x-facts" to="p-words" kind="cross"/>
     <edge from="x-facts" to="p-store" kind="cross"/>
-    <edge from="gates" to="adders" kind="build"/>
-    <edge from="gates" to="memory" kind="build"/>
+    <edge from="x-facts" to="p-org" kind="cross"/>
+    <edge from="x-facts" to="x-rules" kind="cross"/>
+    <edge from="x-thought" to="x-fail" kind="cross"/>
+    <edge from="x-thought" to="x-machine" kind="cross"/>
+    <edge from="x-thought" to="p-universal" kind="cross"/>
+    <edge from="x-thought" to="x-facts" kind="cross"/>
+    <edge from="x-thought" to="x-rules" kind="cross"/>
+    <edge from="x-thought" to="p-proof" kind="cross"/>
+    <edge from="x-thought" to="p-selfcopy" kind="cross"/>
+    <edge from="x-thought" to="cpu" kind="cross"/>
+    <edge from="x-rules" to="x-alive" kind="cross"/>
+    <edge from="x-rules" to="x-facts" kind="cross"/>
+    <edge from="x-rules" to="x-words" kind="cross"/>
+    <edge from="x-rules" to="p-routes" kind="cross"/>
+    <edge from="x-rules" to="p-memory" kind="cross"/>
+    <edge from="x-rules" to="x-thought" kind="cross"/>
+    <edge from="x-rules" to="x-rivers" kind="cross"/>
+    <edge from="x-rules" to="p-selfcopy" kind="cross"/>
+    <edge from="x-rules" to="tower" kind="cross"/>
+    <edge from="x-rules" to="memory" kind="cross"/>
+    <edge from="x-rivers" to="x-satellite" kind="cross"/>
+    <edge from="x-rivers" to="x-written" kind="cross"/>
+    <edge from="x-rivers" to="x-words" kind="cross"/>
+    <edge from="x-rivers" to="p-learning" kind="cross"/>
+    <edge from="x-rivers" to="p-store" kind="cross"/>
+    <edge from="x-rivers" to="x-thought" kind="cross"/>
+    <edge from="x-rivers" to="x-rules" kind="cross"/>
+    <edge from="x-rivers" to="tower" kind="cross"/>
+    <edge from="x-rivers" to="recursion" kind="cross"/>
+    <edge from="x-words" to="x-written" kind="cross"/>
+    <edge from="x-words" to="x-rules" kind="cross"/>
+    <edge from="x-words" to="x-machine" kind="cross"/>
+    <edge from="x-words" to="x-os" kind="cross"/>
+    <edge from="x-words" to="turing" kind="cross"/>
+    <edge from="x-words" to="x-simulate" kind="cross"/>
+    <edge from="x-words" to="x-thought" kind="cross"/>
+    <edge from="x-words" to="recursion" kind="cross"/>
+    <edge from="x-words" to="x-rivers" kind="cross"/>
+    <edge from="x-words" to="p-drawing" kind="cross"/>
+    <edge from="rivers" to="tower" kind="build"/>
+    <edge from="relations" to="tower" kind="build"/>
     <edge from="adders" to="cpu" kind="build"/>
     <edge from="memory" to="cpu" kind="build"/>
+    <edge from="turing" to="relations" kind="build"/>
+    <edge from="recursion" to="rivers" kind="build"/>
+    <edge from="gates" to="adders" kind="build"/>
+    <edge from="gates" to="memory" kind="build"/>
   </model>
