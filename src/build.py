@@ -18,7 +18,7 @@ nothing half-built is ever shipped or installed.
 
     1. parse     every data part under data/ must be well-formed
                  XML, and every file the build needs must be
-                 present; --part stops after parsing and
+                 present, and --part stops after parsing and
                  schema-checking the one named part
     2. schema    the parts, each against its own declaration in
                  deck.xsd, checked by the mini-XSD interpreter
@@ -43,11 +43,11 @@ nothing half-built is ever shipped or installed.
 
 What is deliberately NOT checked: the interactive engines (the live
 figures in the primers) live in the template, not the data. The build
-checks the page around them; it does not drive them. The checks are
-few on purpose — every one guards a mistake that has actually
+checks the page around them, and it does not drive them. The checks
+are few on purpose: every one guards a mistake that has actually
 happened, and each failure names the exact row and target involved.
 
-Exit codes: 0 the page was built; 1 a check failed; 2 bad usage.
+Exit codes: 0 the page was built, 1 a check failed, 2 bad usage.
 """
 
 import json
@@ -68,6 +68,8 @@ DATA_DIR = os.path.join(HERE, 'data')
 TEMPLATE_PATH = os.path.join(HERE, 'template.html')
 FUND_JS_PATH = os.path.join(HERE, 'fund.js')
 FUND_CSS_PATH = os.path.join(HERE, 'fund.css')
+ENGINE_LAYOUT_PATH = os.path.join(HERE, 'engine', 'layout.js')
+ENGINE_RELATIONS_PATH = os.path.join(HERE, 'engine', 'relations.js')
 OUT_PATH = os.path.join(HERE, 'out')
 CANVAS_PATH = '/home/user/canvases/from-sand-to-symbols/CANVAS.md'
 
@@ -79,16 +81,34 @@ PARTS = ['icons', 'primers', 'placeholders', 'cards', 'trails',
          'ladder', 'model']
 
 # The template carries one empty slot for the data and two for the
-# fundamentals map module (its script and its styles). The build
-# inlines both, so the reader still receives one self-contained
-# file — and the isolated map build (--only map) loads the very
-# same module source into a bare harness, so the map is tested in
-# isolation with exactly the code the deck ships.
+# fundamentals map (its script and its styles). The map's script
+# is three sources inlined together — the layout engine, the
+# relations module (both under engine/), and fund.js, which paints
+# the geometry they compute — so the reader still receives one
+# self-contained file, and the isolated map build (--only map)
+# loads the very same sources into a bare harness, so the map is
+# tested in isolation with exactly the code the deck ships.
 MARKER = '/*__DECK_DATA__*/{}'
 FUND_JS_MARKER = '/*__FUND_MODULE__*/'
 FUND_CSS_MARKER = '/*__FUND_CSS__*/'
 SHARED_BEGIN = '/* [shared helpers] */'
 SHARED_END = '/* [/shared helpers] */'
+# The deck's version, stamped in the built pages (the generator
+# meta and the footer) and verified against the template's own
+# stamps — bump this without the footer and the build refuses.
+# Releases are delivered as everything-to-bits-vX.Y.Z.zip; the
+# record of what each release changed is CHANGELOG.md.
+VERSION = '1.8.1'
+VERSION_STAMP = 'v' + VERSION
+SPONSOR = 'https://naveo.dev'
+FAVICON = ('<link rel="icon" type="image/svg+xml" '
+           'href="data:image/svg+xml,%3Csvg '
+           "xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E"
+           '%3Crect width=%2224%22 height=%2224%22 rx=%225%22 '
+           "fill='%23fffdf6'/%3E%3Ccircle cx='7.5' cy='12' r='2.9' "
+           "fill='%23b3002d'/%3E%3Ccircle cx='16.5' cy='12' r='2.9' "
+           "fill='none' stroke='%23111111' stroke-width='1.7'/%3E"
+           '%3C/svg%3E">')
 FRONTMATTER = ('---\nname: "from-sand-to-symbols"\n'
                'title: "Everything to bits"\ntype: "text/html"\n---\n\n')
 
@@ -866,6 +886,56 @@ def check_data(root, data, template):
     k.that('DATA.edges' in template,
            'template ignores the roads of the model (DATA.edges)')
     k.that(MARKER in template, 'template has no data slot (%s)' % MARKER)
+    # the version and the sponsorship travel with the template:
+    # a bump that forgets the footer, or a footer that drifts
+    # from the build's own constant, is refused here
+    k.that(VERSION_STAMP in template,
+           'the template has no version stamp (%s) — bump '
+           'build.py and the footer together' % VERSION_STAMP)
+    k.that(template.count(VERSION_STAMP) >= 2,
+           'the template version stamp appears only once — the '
+           'generator meta and the footer both carry it')
+    k.that(FAVICON in template,
+           'the template has no favicon (or it drifted from the '
+           'build\'s own — keep the two identical)')
+    k.that(SPONSOR in template,
+           'the template has no sponsor link (%s)' % SPONSOR)
+    # the sponsorship view: the deck and the footer both door into
+    # it, the view names its own crumb, and every static door the
+    # template carries must open a section the template actually
+    # has — a door into a missing room is a broken promise
+    k.that('id="naveo"' in template,
+           'the template has no sponsorship view (id="naveo") — '
+           'the deck and the footer both door into it')
+    k.that('data-title="supported by naveo"' in template,
+           'the sponsorship view carries no title '
+           '(data-title="supported by naveo") — without it the '
+           'breadcrumb names the room, not the view')
+    k.that('data-go="naveo"' in template,
+           'no static door opens the sponsorship view '
+           '(data-go="naveo") — a view nothing names is a room '
+           'without a door')
+    for target in sorted(set(re.findall(
+            r'data-go="([a-z0-9-]+)"', template))):
+        k.that('id="%s"' % target in template,
+               'a static door points at %r, but the template has '
+               'no section for it — every door opens somewhere'
+               % target)
+    # the sponsor's line is the sponsor's: credited in the footer
+    # of both built pages, in the sponsor's own words, and never
+    # re-voiced by the deck's own parts. The mesh of the two
+    # theses is written in the deck's voice, not quoted from
+    # anyone's — that is what subtle means here
+    for part in PARTS:
+        node = root.find(part)
+        if node is None:
+            continue
+        text = ET.tostring(node, encoding='unicode')
+        k.that('a program that writes itself' not in text,
+               'data/%s.xml quotes the sponsor\'s line — the '
+               'sponsor\'s words are credited in the footer, and '
+               'the deck writes its own version instead of '
+               're-voicing theirs' % part)
     return k
 
 
@@ -881,6 +951,16 @@ def check_output(page, data, template):
     k.that(MARKER not in page, 'the data slot was not filled')
     k.that('<title>Everything to bits</title>' in page,
            'the built page lost its title')
+    k.that(VERSION_STAMP in page,
+           'the built page lost its version stamp (%s)' % VERSION_STAMP)
+    k.that(FAVICON in page,
+           'the built page lost its favicon')
+    k.that(SPONSOR in page,
+           'the built page lost its sponsor link (%s)' % SPONSOR)
+    k.that('id="naveo"' in page,
+           'the built page lost the sponsorship view')
+    k.that('data-go="naveo"' in page,
+           'the built page lost its door into the sponsorship view')
     k.that(page.rstrip().endswith('</html>'), 'the built page is truncated')
     # The script and style tags must balance. Openings may carry
     # attributes (<script defer>, <script src="…">, <style
@@ -965,9 +1045,9 @@ def assemble(parts):
 
 def map_rows(data):
     """The storeys, fork-aware: a stratum with no column runs the
-    full width of the map and opens a new storey; the left stratum
-    opens the fork and its own storey; a right stratum shares the
-    left stratum's storey when it follows it directly, and opens
+    full width of the map and opens a new storey, the left stratum
+    opens the fork and its own storey, and a right stratum shares
+    the left stratum's storey when it follows it directly, and opens
     its own below. Two strata side by side across the fork seam
     share one row: nothing lights upward across the seam, and
     nothing on the left is ever below anything on the right."""
@@ -985,10 +1065,10 @@ def map_rows(data):
 
 def map_paths(data):
     """The hover contract, computed from the model: for every
-    circle on the map, the full path down — its landings (the
+    circle on the map, the full path down, its landings (the
     land roads of the model) and the built-from roads read
     downward, followed transitively, over views the map actually
-    draws — then the construction completed: once any part of the
+    draws, then the construction completed: once any part of the
     built-from web is lit, the rest of it joins, provided it sits
     strictly below the hovered circle, so nothing lights upward
     and a bottom still rings alone. Returns (members,
@@ -1063,9 +1143,9 @@ def map_paths(data):
 
 
 def build_map_page(data, fund_css, fund_js, raw_template):
-    """The fundamentals map in isolation: same data, same module
-    source, none of the deck around it — the harness that makes
-    the map and its hover testable on their own."""
+    """The fundamentals map in isolation: same engine, same data,
+    same module source, none of the deck around it — the harness
+    that makes the map and its relations testable on their own."""
     i = raw_template.index(SHARED_BEGIN)
     j = raw_template.index(SHARED_END) + len(SHARED_END)
     shared = raw_template[i:j]
@@ -1074,18 +1154,21 @@ def build_map_page(data, fund_css, fund_js, raw_template):
         '<!doctype html>\n<html lang="en">\n<head>\n'
         '<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        '<meta name="generator" content="Everything to bits '
+        + VERSION_STAMP + '">\n'
+        + FAVICON + '\n'
         '<title>the map, in isolation — Everything to bits</title>\n'
         '<style>\n'
         '/* the harness: the map module and nothing else. The module\n'
         '   carries its own styles and root variables; the rules here\n'
         '   are only the page around it */\n'
         'body{margin:0 auto;max-width:1150px;padding:2.5em 2em 4em;'
-        'font:16px/1.6 Georgia,serif;color:var(--ink);background:var(--paper)}\n'
+        'font:18px/1.6 Georgia,serif;color:var(--ink);background:var(--paper)}\n'
         'h1{font-size:1.25rem;font-weight:600;margin:0 0 .2em}\n'
         'h2{font-size:1rem;font-weight:600;margin:2.5em 0 .8em}\n'
-        '.note{font-size:.85rem;color:var(--faint);max-width:46em;'
+        '.note{font-size:.95rem;color:var(--faint);max-width:46em;'
         'margin:0 0 1.5em}\n'
-        '.rep{font:12.5px/1.7 var(--sans)}\n'
+        '.rep{font:15px/1.7 var(--sans)}\n'
         '.rep .row{display:flex;gap:1.2em;border-bottom:1px solid var(--hair);'
         'padding:3px 0}\n'
         '.rep .row span:first-child{width:200px}\n'
@@ -1094,27 +1177,43 @@ def build_map_page(data, fund_css, fund_js, raw_template):
         + fund_css +
         '\n</style>\n</head>\n<body>\n'
         '<h1>the map, in isolation</h1>\n'
-        '<p class="note">The fundamentals map and its hover, built with '
-        '<code>build.py --only map</code>: the same module source the deck '
-        'inlines, the same data, none of the deck around it. The strata '
-        'run top to bottom, one zoom deeper each storey — what a person '
-        'sees; the boundary where the world crosses into data and data '
-        'crosses back; machines together; one machine, at work; the words '
-        'and numbers inside — then the fork: the abstract computers on '
-        'the left, and on the right the machine as built, opening into '
-        'its components and ending in the bedrock; the left side bottoms '
-        'in mathematics itself, nothing drawn beneath it. One line per '
-        'road that descends exactly one storey; a road that climbs, runs '
-        'level, or skips storeys is walked in the views, never drawn. '
-        'Hovering a circle lights the full path down from it — its '
-        'landings, and the construction they stand on, completed as one '
-        'web of tracks: the drawn lines light, and every lit step the '
-        'map leaves undrawn, a long walk, is traced live, dashed, only '
-        'while hovered. A circle with nothing beneath it, a promise or '
-        'the bedrock, rings alone.</p>\n'
+        '<p class="note">The fundamentals map, built with '
+        '<code>build.py --only map</code>: the same engine, module '
+        'source and data the deck inlines, none of the deck around '
+        'it. The strata run top to bottom, one zoom deeper each '
+        'storey: what a person sees, the boundary where the world '
+        'crosses into data and data crosses back, machines together, '
+        'one machine at work, the words and numbers inside, and the '
+        'machinery of thought. Then the fork: the machine drawn two '
+        'ways, as two columns that step down together. On the left, '
+        'the tower of abstractions, the ways of speaking, the formal '
+        'machines. On the right, the machine as built, its '
+        'components, the bedrock. Each side ends in its own floor '
+        'and nothing is drawn beneath either: the machine as '
+        'thought bottoms in mathematics itself, the machine as '
+        'built bottoms in physics itself, a voltage high or low. '
+        'Every storey is a frame of one width, its label centred '
+        'above it, its circles centred within, balanced across the '
+        'rows the engine chooses at the width the window gives: '
+        'the same symmetry at every scale, the doors always full '
+        'size, never scaled, never scrolling sideways. No lines '
+        'are drawn. The relations are the tap\'s to show. Tap a '
+        'circle and it lights with its one-step neighbours, the '
+        'roads that cross exactly one storey and the built-from '
+        'links, and dims the rest. The panel names what was '
+        'tapped and counts its roads, and the dive button opens its '
+        'view in the deck, and here in isolation it shows the '
+        'intro the view would open with. Tap another to move '
+        'the light. Tap the same circle again, or the space '
+        'around, to clear it. The Old Master said: the largest '
+        'computer and the smallest switch answer the same '
+        'question, is the voltage high or is it low.</p>\n'
         '<div class="dag" id="fund-dag"></div>\n'
         '<h2>the report</h2>\n'
         '<div class="rep" id="fund-report"></div>\n'
+        '<p class="note">Everything to bits · ' + VERSION_STAMP +
+        ' · supported by <a href="' + SPONSOR + '">Naveo</a>'
+        '</p>\n'
         "<script>\n'use strict';\n"
         'const DATA = ' + payload + ';\n'
         'const SYSTEMS = DATA.cards;\n'
@@ -1133,35 +1232,38 @@ def build_map_page(data, fund_css, fund_js, raw_template):
 
 
 def print_census(data, members, paths):
-    """The map census, read off the model: the lines the map draws
-    (roads that descend exactly one storey), the walks inside a
-    layer, the long walks left to the views — including every
-    upward road, which the map never draws — and the built-from
-    links."""
+    """The map census, read off the model: the one set of
+    relations the tap shows (the roads that cross exactly one
+    storey, plus the built-from links) and what that set leaves
+    behind: the roads that run inside a layer, and the long
+    walks, which the views carry and the map keeps out of the
+    drawing. The hover contract follows: the full path down
+    still exists (the official test pins it), but the map's tap
+    no longer lights it."""
     brow = map_rows(data)
     band_of = {v: b['id'] for b in data['map'] for v in b['views']}
     band_row = {v: brow[band_of[v]] for v in band_of}
-    lines = walked = skipped = 0
-    build = 0
+    roads = inside = long = build = 0
     for e in data['edges']:
         if e['kind'] == 'build':
             build += 1
             continue
-        a, b = e['from'], e['to']
-        ra, rb = band_row.get(a), band_row.get(b)
+        ra, rb = band_row.get(e['from']), band_row.get(e['to'])
         if ra is None or rb is None:
             continue
-        d = rb - ra
-        if d == 1:
-            lines += 1
-        elif d == 0:
-            walked += 1
+        if ra - rb == 1:
+            roads += 1
+        elif ra == rb:
+            inside += 1
         else:
-            skipped += 1
-    print('  map: %d lines · %d walked inside a layer · %d long walks not drawn · %d built-from links'
-          % (lines, walked, skipped, build))
+            long += 1
+    print('  map: %d cross roads, one storey each · %d built-from '
+          'links · %d relations in all — what a tap lights; %d roads '
+          'inside a layer and %d long walks stay behind, in the views'
+          % (roads, build, roads + build, inside, long))
     full = sum(1 for v in members if len(paths[v]) > 1)
-    print('  hover: %d full paths down · %d bottoms ring alone'
+    print('  hover: %d full paths down · %d bottoms ring alone — the '
+          'tested contract, kept for the official test, not for the tap'
           % (full, len(members) - full))
 
 
@@ -1204,7 +1306,8 @@ def main(argv):
     install, data_only = flags['--install'], flags['--data']
 
     # ---- stage 1: parse (missing files, malformed XML) ----
-    for path in (SCHEMA_PATH, TEMPLATE_PATH, FUND_JS_PATH, FUND_CSS_PATH):
+    for path in (SCHEMA_PATH, TEMPLATE_PATH, FUND_JS_PATH, FUND_CSS_PATH,
+                 ENGINE_LAYOUT_PATH, ENGINE_RELATIONS_PATH):
         if not os.path.exists(path):
             fail('startup', ['%s is missing — restore it from the artifacts'
                              % os.path.basename(path)])
@@ -1238,12 +1341,120 @@ def main(argv):
     raw_template = read_template()
     fund_js = read_text(FUND_JS_PATH, 'fund.js')
     fund_css = read_text(FUND_CSS_PATH, 'fund.css')
+    layout_js = read_text(ENGINE_LAYOUT_PATH, 'engine/layout.js')
+    relations_js = read_text(ENGINE_RELATIONS_PATH, 'engine/relations.js')
+    # the map's script: the engine and the relations module first,
+    # then the module that paints what they compute
+    engine_js = layout_js + '\n' + relations_js + '\n'
     for marker, what in ((FUND_JS_MARKER, 'the map module slot'),
                          (FUND_CSS_MARKER, 'the map style slot')):
         if marker not in raw_template:
             fail('startup',
                  ['template.html has no %s (%s) — the fundamentals '
                   'map cannot be inlined' % (what, marker)])
+    # the map is a panorama, laid out by the engine: every guard
+    # below pins one piece of that model. The map's two failed
+    # regimes are the fence posts: a reflowing layout (ragged
+    # rows at every width, the 1.2.0-1.3.2 bug), and a scaled
+    # figure (doors shrunk past reading on a phone, the 1.4.0
+    # defect). Lose any guard and the map drifts back toward one
+    for src, what, fn in (
+            (layout_js, 'engine/layout.js', 'function layoutMap'),
+            (relations_js, 'engine/relations.js', 'function makeRelations')):
+        if fn not in src:
+            fail('startup',
+                 ['%s lost its own engine (%s is gone) — the map '
+                  'cannot be laid out without it' % (what, fn)])
+    if ('ETBLayout.layoutMap' not in fund_js or
+        'ETBRelations.makeRelations' not in fund_js):
+        fail('startup',
+             ['fund.js no longer lays the map out through the '
+              'engine (ETBLayout.layoutMap / '
+              'ETBRelations.makeRelations) — the panorama must be '
+              'painted from the engine\'s geometry and light the '
+              'relations module\'s one-step set, not re-measure '
+              'a figure of its own'])
+    if ('width:min(1120px,calc(100vw - 48px))' not in fund_css or
+        'margin-left:calc(50% - min(560px,calc(50vw - 24px)))'
+        not in fund_css):
+        fail('startup',
+             ['fund.css lost the map\'s stage (width + centre) — '
+              'the map must span the page\'s own design width '
+              '(width:min(1120px,calc(100vw - 48px))) and centre '
+              'on the column (margin-left:calc(50% - min(560px,'
+              'calc(50vw - 24px)))), or a stage wider than its '
+              'parent column overflows to the right and the map '
+              'reads skewed: margin:auto cannot centre a child '
+              'wider than its parent'])
+    if ('topbar' not in fund_js):
+        fail('startup',
+             ['fund.js no longer clears the page\'s own bar '
+              '(#topbar) — the tap\'s panel sticks below the bar '
+              'the page wears, or it sticks behind it and the '
+              'dive is never seen'])
+    if ('.dag-band{position:absolute' not in fund_css):
+        fail('startup',
+             ['fund.css lost the engine-placed frames '
+              '(.dag-band{position:absolute) — a storey is placed '
+              'by the engine\'s geometry; let the browser lay it '
+              'out and the map reflows into ragged rows again, '
+              'the bug the engine was built to end'])
+    if ('border-radius:12px' not in fund_css):
+        fail('startup',
+             ['fund.css lost the band\'s rounded-rectangle border '
+              '(border-radius:12px) — the group border must be a '
+              'rectangle whose padding keeps its curves off the '
+              'circles; a capsule radius (999px) swings the border '
+              'across nodes, and that bug must never return'])
+    if ('transform-origin' in fund_css):
+        fail('startup',
+             ['fund.css scales the map again (transform-origin) — '
+              'the panorama re-lays out at every width with the '
+              'doors full size; scaling keeps the geometry but '
+              'shrinks the doors past reading, the v1.4.0 defect'])
+    # a storey's frame is placed and sized by the engine: the
+    # panel under the controls may wrap its own text, a band may
+    # not, or the storey reflows into ragged rows again
+    for rule in fund_css.split('}'):
+        if '.dag-band' in rule and 'flex-wrap' in rule:
+            fail('startup',
+                 ['fund.css wraps a storey again (flex-wrap in a '
+                  '.dag-band rule) — the engine itself chooses the '
+                  'balanced rows a wide storey breaks into; browser '
+                  'wrapping is the ragged reflow the map left behind'])
+            break
+    if ('overflow-x:auto' in fund_css or 'overflow-x:scroll' in fund_css):
+        fail('startup',
+             ['fund.css lets the map scroll sideways again '
+              '(overflow-x:auto or scroll) — the engine fits every '
+              'width by wrapping, and nothing in the map may ever '
+              'scroll sideways, at any size'])
+    if ('dag-svg' in fund_css or 'dag-svg' in fund_js or
+        'dag-edge' in fund_css or 'dag-edge' in fund_js):
+        fail('startup',
+             ['the connecting lines came back (dag-svg / '
+              'dag-edge) — the panorama draws no lines: the roads '
+              'the lines once carried are the tap\'s to show, one '
+              'step each way, or they are not shown at all'])
+    if ('dag-panel' not in fund_js or 'dag-dive' not in fund_js):
+        fail('startup',
+             ['the tap\'s panel or dive went missing (fund.js: '
+              'dag-panel, dag-dive) — tapping a circle must tell '
+              'its story and offer the dive into its view'])
+    if ('.dag-dive-btn{background:var(--accent)' not in fund_css):
+        fail('startup',
+             ['the dive button lost its accent fill '
+              '(.dag-dive-btn{background:var(--accent)) — the '
+              'dive is the panel\'s one loud action, the way '
+              'further down; a quiet ghost button reads as '
+              'decoration and the reader never takes it'])
+    if ('dag-full' in fund_js or 'dag-full' in fund_css or
+        'dagFullscreen' in fund_js):
+        fail('startup',
+             ['the full-screen figure view is still here '
+              '(dag-full / dagFullscreen) — the panorama replaces '
+              'it: the map re-lays out at every width with the '
+              'doors full size, so there is nothing left to zoom'])
     if SHARED_BEGIN not in raw_template or SHARED_END not in raw_template:
         fail('startup',
              ['template.html has no shared helper block (%s … %s) — '
@@ -1251,7 +1462,7 @@ def main(argv):
               % (SHARED_BEGIN, SHARED_END)])
     template = (raw_template
                 .replace(FUND_CSS_MARKER, fund_css)
-                .replace(FUND_JS_MARKER, fund_js))
+                .replace(FUND_JS_MARKER, engine_js + fund_js))
     data = build_data(root)
     checks = check_data(root, data, template)
     if checks.errors:
@@ -1268,16 +1479,30 @@ def main(argv):
         return 0
 
     if only == 'map':
-        page = build_map_page(data, fund_css, fund_js, raw_template)
+        page = build_map_page(data, fund_css, engine_js + fund_js,
+                              raw_template)
         k = Checks()
         k.that('id="fund-dag"' in page,
                'the isolated page has no map holder')
         k.that('const DATA = {' in page,
                'the isolated page has no data payload')
+        k.that('function layoutMap' in page,
+               'the isolated page lost the layout engine '
+               '(function layoutMap)')
+        k.that('function makeRelations' in page,
+               'the isolated page lost the relations module '
+               '(function makeRelations)')
         k.that('function renderFundDAG' in page,
                'the isolated page has no map module')
         k.that('function fundReport' in page,
                'the isolated page has no report')
+        k.that(VERSION_STAMP in page,
+               'the isolated page lost its version stamp (%s)'
+               % VERSION_STAMP)
+        k.that(FAVICON in page,
+               'the isolated page lost its favicon')
+        k.that(SPONSOR in page,
+               'the isolated page lost its sponsor link (%s)' % SPONSOR)
         k.that('/*__' not in page and '__DECK_DATA__' not in page,
                'the isolated page still carries an unfilled slot')
         if k.errors:
