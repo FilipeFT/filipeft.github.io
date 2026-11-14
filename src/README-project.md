@@ -6,9 +6,10 @@ canvas is build output: never edit it by hand.
 
 The project is modular by design: the data is seven small XML
 parts, the model is the source of truth every part is checked
-against, the map is a module of its own, and the build can validate
-a part alone or build the map in isolation. No dependencies beyond
-Python 3 (no Node, no packages, no network):
+against, the map is a module of its own laid out by its own
+engine, and the build can validate a part alone or build the map
+in isolation. No dependencies beyond Python 3 and Node for the
+tests (no packages, no network):
 
 ```
 deck.xsd        the single source of truth: what the data may be.
@@ -19,46 +20,125 @@ data/           the deck data, one root per file:
   primers.xml     the primer index (level 2)
   placeholders.xml the named promises
   cards.xml       the seven stories (level 0)
-  trails.xml      the twenty-one trails (level 1)
+  trails.xml      the twenty-five trails (level 1)
   ladder.xml      the one climb: rungs, an id and a chip each
   model.xml       the model, the source of truth: the strata of
                   the territory (what a person sees; the boundary
                   between the world and the data; machines
                   together; one machine, at work; the words and
-                  numbers inside; then the fork — abstract
-                  computers on the left, the machine as built,
-                  its components, and the bedrock on the right),
+                  numbers inside; the machinery of thought; then
+                  the fork, drawn as two mirrored columns that
+                  step down together — left: the tower of
+                  abstractions, the ways of speaking, the formal
+                  machines; right: the machine as built, its
+                  components, the bedrock),
                   the nodes placing every view in exactly one
                   stratum, and the roads: land (where a trail
                   bottoms out), cross (a door inside a trail's
                   steps), build (ingredient to built thing)
 template.html   the page skeleton: prose, CSS, JS, the live
                 figures. Two markers receive the map module, and
-                one `/*__DECK_DATA__*/{}` slot receives the data
-fund.js         the map module's script: bands, the fork, door
-                lines, the built-from arrows, the hover, the
-                report. One source, two builds (see below)
-fund.css        the map module's styles: the band layout, the
-                lines, the traced walks, and the door component
-                the whole deck wears
-tests/hover.js  the hover contract as logic: lifts the built
-                data, exercises every circle's decision, checks
-                them against an independent reimplementation of
-                the contract, and runs applyHighlight against a
-                mock DOM. No dependencies beyond Node itself
+                one `/*__DECK_DATA__*/{}` slot receives the data.
+                The view stack keeps each view's place in the
+                page and names the view in the address bar, so
+                back, reload, and bookmark all return the reader
+                to the same spot
+fund.js         the map module's script: the panorama (the bands
+                and doors painted from the engine's geometry,
+                re-laid out whenever the width the window gives
+                changes), the tap (a circle and its one-step
+                neighbours light, the rest fades), the panel
+                (name, stratum, roads, dive), the dive into the
+                view itself, the report. One source, two builds
+                (see below)
+fund.css        the map module's styles: the panorama layout
+                (every band placed by the engine's geometry,
+                labels centred above the doors, doors full size
+                at every width; nothing scaled, nothing wrapped
+                by the browser, nothing scrolling sideways; the
+                stage is the page's own design width, 1120px,
+                centred on the column by a negative margin —
+                margin:auto cannot centre a child wider than its
+                parent), the focus dimming, the panel (stuck
+                below the page's own bar), its accent dive
+                button, and the door component the whole deck
+                wears
+engine/         the map's own engine, inlined ahead of fund.js
+                by the build:
+  layout.js      the pure layout function: the model, the
+                widths, and the width available become one
+                geometry — every storey a frame the width of
+                its column, labels centred above it, rows
+                centred and balanced within it, the fork side
+                by side while 872px can hold it and stacked
+                below, floors beneath their columns. No DOM,
+                no CSS: geometry only, tested at 17 widths
+                (engine/tests/engine.js)
+  relations.js  the one relationship set the tap lights,
+                pinned to the deck's own fundEdges: the roads
+                that cross exactly one storey plus the
+                built-from links, 47 relations, read from
+                either end (engine/tests/relations.js)
+  design.md     the engine's design record: the steps as they
+                happened, the pivot to symmetry and no lines,
+                the tap-and-dive interaction, the integration
+  demo.html     the engine's demo page (make-demo.js writes
+                it): the layout and the relations working
+                together, with a width slider — the step-2
+                prototype, superseded by the deck itself
+tests/hover.js  the pure layer's contract as logic (the route
+                down every circle, kept from the map's hover
+                era and still the official test): lifts the
+                built data, exercises every circle's decision,
+                checks them against an independent
+                reimplementation of the contract, and runs
+                applyHighlight against a mock DOM. No
+                dependencies beyond Node itself
 build.py        validate → test → build (and --install the canvas)
 build.sh        the one command: validate, test, build, install
+CHANGELOG.md    the release record: what each version changed
+STYLE.md        the deck's voice: the law, the registers, the
+                banned list — read before writing prose anywhere
+                in the project
 ```
 
 `out/site.html` is regenerated by every build; `out/map.html` by
 the isolated map build. This project is exported as artifacts
-(deck.xsd, the data/ directory, template.html, fund.js, fund.css,
-build.py, build.sh, README.md, this file, and tests/hover.js under
-a `tests/` directory). The working environment can be reset
-between sessions; the artifacts are the durable copies. To resume
-work, copy those files into one directory (the seven parts under a
-`data/` subdirectory, the test under `tests/`) and run
-`bash build.sh`.
+(deck.xsd, the data/ directory, template.html, fund.js,
+fund.css, the engine/ directory — the layout engine, the
+relations module, the design record, the demo and its tests —
+build.py, build.sh, README.md, this file, STYLE.md,
+tests/hover.js under
+a `tests/` directory, and CHANGELOG.md). The working
+environment can be reset between sessions; the artifacts are
+the durable copies. To resume work, copy those files into one
+directory (the seven parts under a `data/` subdirectory, the
+test under `tests/`, the engine under `engine/`) and run `bash
+build.sh`.
+
+## Versioning
+
+The version lives in `build.py` (`VERSION`), one constant, and
+the build stamps it into both built pages — the `generator` meta
+and the footer — refusing a template whose stamps disagree with
+the constant, so a bump that forgets the footer fails the build.
+A release is one set of files published together as
+`everything-to-bits-vX.Y.Z.zip` (the unversioned
+`everything-to-bits.zip` always mirrors the latest), and
+`CHANGELOG.md` records what each release changed: minor for new
+content or features, patch for fixes and wording. The footer of
+both built pages also names the deck's sponsor, Naveo
+(sociotechnical consulting), with its link; since 1.3.0 the
+sponsorship also has a view of its own in the deck (`id="naveo"`,
+titled *Supported by Naveo*), opened by doors from the deck's
+front page and the footer, and three grey circles on the map —
+how the team shapes the machine, how a program is a theory, how
+an organization runs — hold the same perspective as
+promises of views to come. The build refuses a template that
+loses the view, its doors, or a static door that opens a section
+the template does not carry, and it refuses any data part that
+re-voices the sponsor's own line: the sponsor's words stay in
+the footer, credited, and the deck writes its own version.
 
 ## Commands
 
@@ -73,24 +153,32 @@ bash build.sh                  # the full build and install, one command
 
 The isolation options exist so one piece can be tested thoroughly
 on its own before it meets the whole — the lesson of the map
-redesign: build it in isolation, get every hover right, then
-integrate. `--only map` emits the same module the deck inlines,
-the same data, none of the deck around it, plus a per-circle
-report of what hovering each circle lights. The hover is tested
-one level deeper still: `node tests/hover.js` lifts the data off
-the built isolated page and exercises the module's decision
-layer alone — every circle's route, down-only and connected,
-bottoms that ring alone, parity with an independent
-reimplementation of the contract, and applyHighlight against a
-mock of the DOM calls it makes.
+redesign: build it in isolation, get every relation right, then
+integrate. `--only map` emits the same engine, module and
+relations the deck inlines, the same data, none of the deck
+around it, plus a per-circle report of the full route down each
+circle (the hover contract the official test pins). The
+decision layer is tested one level deeper still: `node
+tests/hover.js` lifts the data off the built isolated page and
+exercises the module's pure layer alone — every circle's route,
+down-only and connected, bottoms that ring alone, parity with an
+independent reimplementation of the contract, and applyHighlight
+against a mock of the DOM calls it makes. The engine and the
+relations module have their own batteries: `node
+engine/tests/engine.js` (the layout's invariants across 17
+widths) and `node engine/tests/relations.js` (the one-step set,
+pinned to fundEdges).
 
 Every check must pass before anything is written. A failure prints
 every problem found at the failing stage, writes nothing, and exits
 non-zero (`1` a check failed, `2` bad usage). On success the build
 prints how many checks passed and what the page holds, including
-the map census: lines, walked doors, long walks, built-from links,
-and the hover contract (how many circles light a full path down,
-how many bottoms ring alone).
+the map census: the one relationship set a tap lights (cross
+roads one storey each, built-from links, relations in all) and
+what stays behind in the views (roads inside a layer, long
+walks), plus the hover contract, reported as what it now is —
+the tested contract, kept for the official test, not for the
+tap.
 
 ## How the build works
 
@@ -144,70 +232,76 @@ fix is usually obvious.
 
 ## The map module: one source, two builds
 
-The fundamentals map (the strata of circles, the road lines, the
-built-from arrows, the hover) is deliberately not entangled with the
-deck's page code. It lives in fund.js and fund.css, and both builds
-consume the same source — and both read the model: MAP is its
-strata, EDGES its roads, and CHAIN is derived from EDGES (the
-kind="build" roads) in the template's shared constants, so the
-deck and the isolated page walk the same territory:
+The fundamentals map (the strata of circles, the tap, the panel
+and its dive) is deliberately not entangled with the deck's page
+code. It lives in engine/layout.js, engine/relations.js, fund.js
+and fund.css, and both builds consume the same sources — and
+both read the model: MAP is its strata, EDGES its roads, and
+CHAIN is derived from EDGES (the kind="build" roads) in the
+template's shared constants, so the deck and the isolated page
+walk the same territory:
 
-- **the deck build** inlines both files into template.html at the
-  `/*__FUND_MODULE__*/` and `/*__FUND_CSS__*/` markers. The shared
-  helpers (`$`, `el`, `ic`, `doorMeta`) sit inside marked bounds in
-  the template, above the module's slot.
+- **the deck build** inlines all of it into template.html: the
+  engine and the relations module, then the map module, at the
+  `/*__FUND_MODULE__*/` marker, and the styles at
+  `/*__FUND_CSS__*/`. The shared helpers (`$`, `el`, `ic`,
+  `doorMeta`) sit inside marked bounds in the template, above
+  the module's slot.
 - **the isolated build** (`--only map`) lifts the shared helpers
-  out of the template, loads the module whole, feeds it the same
-  data, and renders it on a bare page with a report: one row per
-  circle — the full path down it lights when hovered, or an honest
-  bottom.
+  out of the template, loads the same three sources, feeds them
+  the same data, and renders them on a bare page with a report:
+  one row per circle — the full route down it (the tested
+  contract), or an honest bottom.
 
-Test the map with `--only map` until every hover is right, then
-build the deck: by construction the two render the same module, so
-what passed in isolation passes in the whole. And test the hover
-as logic first: `node tests/hover.js` runs the module's decision
-layer over the real data with no page at all, so the rule is
-believed before the wiring is.
+Test the map with `--only map` until the tap lights the right
+set, then build the deck: by construction the two render the
+same sources, so what passed in isolation passes in the whole.
+And test the layers as logic first: `node engine/tests/engine.js`
+runs the layout over 17 widths with no page at all,
+`node engine/tests/relations.js` pins the one-step set to
+fundEdges, and `node tests/hover.js` runs the module's pure
+decision layer over the real data, so every rule is believed
+before the wiring is.
 
-## The hover contract
+## The hover contract (kept for the official test)
 
-One rule for every circle: hovering lights the full path down —
-the land roads of the model (where the trail bottoms out, not the
-cross roads inside its steps), and beneath them the built-from
-roads read downward, from the built thing to the ingredient it is
-made of.
-Once any part of that construction is reached, the whole web it
-belongs to lights with it — a trail landing on the gate lights
-the machine the gate builds, adders, memory, the processor — but
-nothing above the hovered circle ever lights, and a circle with
-nothing beneath it — a promise, or the bedrock itself — rings
-alone, without dimming the map. The storeys are fork-aware:
-the left and right columns of the fork share one row, so nothing
-on the left is ever below anything on the right, and the web
-completion only adds circles strictly below the hovered circle's
-row — the seam is never lit across, in either direction.
+The map's tap lights one-step neighbours, but the full path down
+still exists, and the official test still pins it: the contract
+is the hover of 1.4.0, withdrawn from the page and kept as the
+tested guarantee that every circle has an honest route down.
+One rule for every circle: the path down lights — the land
+roads of the model (where the trail bottoms out, not the cross
+roads inside its steps), and beneath them the built-from roads
+read downward, from the built thing to the ingredient it is
+made of. Once any part of that construction is reached, the
+whole web it belongs to lights with it — a trail landing on
+the gate lights the machine the gate builds, adders, memory,
+the processor — but nothing above the hovered circle ever
+lights, and a circle with nothing beneath it — a promise, or
+the bedrock itself — rings alone, without dimming the map.
+The storeys are fork-aware: the left and right columns of the
+fork share one row, so nothing on the left is ever below
+anything on the right, and the web completion only adds circles
+strictly below the hovered circle's row — the seam is never lit
+across, in either direction. The lit route is one connected
+path of tracks, lines plus walks, every step of it drawn or
+traced by the old figure; the census reports it, and the logic
+harness (tests/hover.js) enforces it against an independent
+reimplementation of the same contract, all 51 circles.
 
-The lit route is ONE CONNECTED path of tracks. The drawn lines
-between lit circles light up, and every lit step the map leaves
-undrawn — a walk inside a band, or a landing that skips storeys —
-is traced live while hovered: a dashed path in the accent colour,
-drawn above the circles, existing only for the moment of the
-hover, and anchored on the facing rims of its two circles so it
-never crosses an icon, whichever way the walk runs. So the static map keeps its rule (walked, not drawn) and
-the hover still shows the whole way down as tracks; a landing
-that arrives by a long walk is followed, not scattered.
-
-The module is layered to make the rule checkable: a pure decision
-layer (fundHighlight and its pure helpers) computes what a hover
-lights, split into circles, lines, and walks; an application
-layer (applyHighlight) turns one decision into class toggles and
-dashed paths, owning no policy; the wiring (renderFundDAG)
-builds the page and listens to the mouse. The build enforces the
-contract from the data side twice over: every trail, hovered,
-must reach at least one primer, and every circle's route — lines
-plus walks — must connect the whole way down. The logic harness
-(tests/hover.js) enforces it from the module side, against an
-independent reimplementation of the same contract.
+The module is layered to make its rules checkable: the pure
+decision layer (fundHighlight, fundPaths and their pure
+helpers) computes what the contract lights, byte-unchanged
+since 1.4.0 and still tested; the application layer
+(applyHighlight) turns one decision into class toggles, owning
+no policy; the wiring (renderFundDAG) paints the engine's
+geometry, re-lays it out when the width changes, and listens
+for the tap, the panel and the dive. The relations module
+(engine/relations.js) owns the set the tap actually lights:
+fundEdges read from either end, one step each way. The build
+enforces the data side twice over: every trail's route must
+reach at least one primer, and every circle's route must
+connect the whole way down.
 
 ## Authoring
 
@@ -253,20 +347,23 @@ independent reimplementation of the same contract.
 - **The model: the territory and its roads.** Everything
   structural about the whole lives in `data/model.xml`: the
   strata, the nodes, the roads. A stratum runs the full width by
-  default; `col="left"` opens the fork (the abstract computers,
-  bottoming in mathematics itself) and `col="right"` continues the
-  machine-as-built side down to the bedrock. The order of the
-  nodes inside a stratum is the deck's canon — the trails page
-  walks it too — authored, then tuned against a simulation of the
-  drawing, and the tune never moves a node across strata and
-  never breaks the grammar (trails open each stratum, promises
-  close it). A road is `<edge from="…" to="…" kind="…"/>`:
-  `land` where a trail bottoms out (lit on hover, never drawn
-  climbing), `cross` a door inside a trail's steps (drawn only
-  when it descends exactly one storey, so no line on the map ever
-  rises), `build` from ingredient to built thing (a heavier
-  arrowed line climbing exactly one storey, read downward by the
-  hover). Change the model first; the rest follows. The build
+  default; `col="left"` opens the fork and builds the left
+  column (the machine as thought, bottoming in mathematics
+  itself) and `col="right"` continues the machine-as-built side
+  down to the bedrock (bottoming in physics itself, a voltage
+  high or low: each column closes on its own floor, and the
+  drawing names both); the two columns mirror one another,
+  storey for storey, and each carries its own built-from chain.
+  The order of the nodes inside a stratum is the deck's canon —
+  the trails page walks it too — authored, then tuned against a
+  simulation of the drawing, and the tune never moves a node
+  across strata and never breaks the grammar (trails open each
+  stratum, promises close it, a primer grounds it last). A road is `<edge from="…" to="…" kind="…"/>`:
+  `land` where a trail bottoms out (a road the tap's one-step
+  set does not carry: the views walk it), `cross` a door inside
+  a trail's steps (lit on tap when it crosses exactly one
+  storey), `build` from ingredient to built thing (lit on tap,
+  read from either end). Change the model first; the rest follows. The build
   refuses a road that ends nowhere, one the territory has twice,
   a landing that climbs, a door a trail opens that the model has
   no road for, and a built-from edge that skips a storey, crosses
@@ -274,8 +371,9 @@ independent reimplementation of the same contract.
 - **The live figures** (the interactive engines inside the
   primers) live in template.html, not the data. The build checks
   the page around them; it does not drive them. Exercise them by
-  hand after changing them. The map's hover is exercised by the
-  isolated build's report and by the logic harness instead.
+  hand after changing them. The map's tap, panel and dive are
+  exercised by the engine's own batteries and the demo smoke
+  test instead, and its pure layers by the logic harnesses.
 
 ## When the build refuses you
 
