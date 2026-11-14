@@ -11,7 +11,6 @@
     <placeholder id="p-input" level="1" icon="controller" title="how a press becomes a number" line="buttons, glass, and the row of numbers they speak"/>
     <placeholder id="p-memory" level="1" icon="save" title="how it remembers" line="numbers held against the off switch"/>
     <placeholder id="p-routes" level="1" icon="map" title="how a route finds its way" line="a recipe that contains a copy of itself"/>
-    <placeholder id="p-words" level="1" icon="remote" title="the one-word language" line="a language small enough for a keypad"/>
     <placeholder id="p-ledger" level="1" icon="save" title="how money moves" line="one ledger, no double spend, no one in charge"/>
     <placeholder id="p-drawing" level="1" icon="play" title="how the picture is drawn" line="triangles, a pipeline, a thousand small painters"/>
     <placeholder id="p-store" level="1" icon="save" title="how everything is kept" line="tables, and the shortcuts that find them again"/>
@@ -19,4 +18,9 @@
     <placeholder id="p-gpu" level="1" icon="chip" title="how a game chip learned math" line="built to paint, rehired to learn"/>
     <placeholder id="p-embed" level="1" icon="map" title="how a word becomes a place" line="every word a point, and its neighbours its meaning"/>
     <placeholder id="p-universal" level="1" icon="app" title="how one machine can be any machine" line="the same machine, wearing a different program"/>
+    <placeholder id="p-proof" level="1" icon="match" title="how a proof becomes a program" line="a proposition a type, a proof a program: one shape read three ways"/>
+    <placeholder id="p-selfcopy" level="1" icon="copy" title="how a machine copies itself" line="a description that describes the describer: the seed of every living thing"/>
+    <placeholder id="p-conway" level="1" icon="hands" title="how the team shapes the machine" line="the paths people talk along, copied into the code"/>
+    <placeholder id="p-theory" level="1" icon="envelope" title="how a program is a theory" line="the text is what is left; the knowing lives in the team"/>
+    <placeholder id="p-org" level="1" icon="pulse" title="how an organization runs" line="rules nobody wrote, compiled from its own doing"/>
   </placeholders>
